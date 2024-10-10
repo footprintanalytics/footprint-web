@@ -183,6 +183,16 @@ const AboutDataCoverage = () => {
       link: "/research/chain/btc-ecosystem-stats/bitcoin-overview",
     },
     {
+      title: "Gravity",
+      img: getOssUrl("fp-chains/gravity.png"),
+      link: "/research/chain/evm-chain-stats/gravity-overview",
+    },
+    {
+      title: "Viction",
+      img: getOssUrl("fp-chains/viction.png"),
+      link: "/research/chain/evm-chain-stats/viction-overview",
+    },
+    {
       title: "Solana",
       img: getOssUrl("home-v2/chain/img-chain-solana.png"),
       link: "",

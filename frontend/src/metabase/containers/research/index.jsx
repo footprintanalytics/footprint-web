@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import "./index.css";
 import FeaturesSide from "./components/FeaturesSide";
@@ -11,7 +11,7 @@ import { loginModalShowAction } from "metabase/redux/control";
 import myData from "./utils/data";
 import { push, replace } from "react-router-redux";
 import _ from "underscore";
-import { lowerCase } from "lodash";
+import { lowerCase, get } from "lodash";
 import { withRouter } from "react-router";
 import { Image, Select } from "antd";
 import Meta from "metabase/components/Meta";
@@ -31,14 +31,51 @@ const Index = props => {
     partner,
     replace,
   } = props;
+  let initChain = ""
+  if (classify === 'token') {
+    initChain = myData[classify]?.find(item => item.value === menu)?.subMenus?.find(subItem => subItem.value === subMenu)?.chain || "ethereum"
+  }
+  const [chain, setChain] = useState(initChain);
   const isPublic = window.location.pathname.startsWith("/public");
   const partnerStr = partner ? `/${partner}` : "";
   const prefixPath = isPublic ? "/public" : "";
   const isCustom = classify === "custom";
   const isShowChain = classify === "token";
-  const researchData = isCustom ? myData[classify][partner] : myData[classify];
   const metaInfo = myData["metaObject"][classify] || {};
   const type = "research";
+
+  const getResearchData = () => {
+    if (isCustom) {
+      return myData[classify][partner]
+    }
+    if (classify === 'token') {
+
+      return myData[classify].map(item => {
+        return {
+          ...item,
+          subMenus: item.subMenus?.filter(subItem => subItem.chain === chain || !subItem.chain)
+        }
+      });
+    }
+    return myData[classify];
+  }
+
+  const researchData = getResearchData();
+
+  useEffect(() => {
+    //如果url上面的path在chain里面没有，就跳转到第一个
+    const sameUrl = _.flatten(researchData).some(item => {
+      if (item.subMenus) {
+        if (item.subMenus.find(subItem => subItem.value === subMenu)) {
+          return true
+        }
+      }
+      return false;
+    })
+    if (!sameUrl) {
+      replace(`${prefixPath}/${type}/${classify}${partnerStr}/${researchData[0].value}/${researchData[0].subMenus[0].value}`);
+    }
+  }, [chain]);
 
   const findItemByData = ({ menu, subMenu }) => {
     const menuData = researchData?.find(item => item.value === menu);
@@ -76,9 +113,9 @@ const Index = props => {
       )
     }
     if (tempItem?.type === "chart") {
-      return <ChartArea key={`${tempItem?.publicUuid}${tempItem?.search}`} location={location} item={tempItem} />
+      return <ChartArea key={`${chain}${tempItem?.publicUuid}${tempItem?.search}`} location={location} item={tempItem} />
     }
-    return <DashboardArea key={`${tempItem?.publicUuid}${tempItem?.search}`} location={location} item={tempItem} />
+    return <DashboardArea key={`${chain}${tempItem?.publicUuid}${tempItem?.search}`} location={location} item={tempItem} />
   }
 
   const renderSelectClassify = () => {
@@ -113,6 +150,11 @@ const Index = props => {
       label: "Ethereum",
       icon: getOssUrl("fp-chains/ethereum.webp"),
     },
+    {
+      value: "bsc",
+      label: "BNB Chain",
+      icon: getOssUrl("fp-chains/bsc.webp"),
+    },
   ]
 
   const renderChainSelect = () => {
@@ -120,6 +162,9 @@ const Index = props => {
       <div className="features-side__chains">
         <Select
           defaultValue={"ethereum"}
+          onChange={value => {
+            setChain(value)
+          }}
           style={{ width: 200 }}
         >
           {chainData.map(n => (

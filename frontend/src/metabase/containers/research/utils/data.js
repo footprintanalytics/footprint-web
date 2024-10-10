@@ -657,6 +657,16 @@ const chainData = [
         "value": "combo-overview",
         "publicUuid": "be8e0a03-96c3-4f6f-8e3b-871561ba6139",
       },
+      {
+        "label": "Gravity Overview",
+        "value": "gravity-overview",
+        "publicUuid": "93139f09-c242-43d2-a7a7-db5608db3cc9",
+      },
+      {
+        "label": "Viction Overview",
+        "value": "viction-overview",
+        "publicUuid": "c69708db-158a-479f-95dc-71ec40700456",
+      },
     ],
   },
   {
@@ -772,33 +782,47 @@ const tokenData = [
       {
         "label": "Top Tokens by Market Cap",
         "value": "top-tokens-by-market-cap",
+        "chain": "ethereum",
         "publicUuid": "d76afe6f-0405-4aea-942e-32debdf83461",
       },
       {
         "label": "Token Exchange Net Flow",
         "value": "token-exchange-net-flow",
+        "chain": "ethereum",
         "publicUuid": "04dca6c5-272c-4e7f-994d-53127866a9c1",
       },
       {
         "label": "Top Tokens Traded on DEX",
         "value": "top-tokens-traded-on-dex",
+        "chain": "ethereum",
         "publicUuid": "42412c92-c181-4cac-8c41-e8a1180a9220",
       },
       {
         "label": "Top Tokens by Volume",
         "value": "top-tokens-by-volume",
+        "chain": "ethereum",
         "publicUuid": "bd12acce-a17a-4c3a-9508-c753140985f6",
       },
-      /*{
-        "label": "Token Sectors by Trading Volume",
-        "value": "token-sectors-by-trading-volume",
-        "publicUuid": "8e6a36c9-a256-4669-938a-9c5e00716cf9",
+      {
+        "label": "Top Tokens by Market Cap",
+        "value": "top-tokens-by-market-cap-bsc",
+        "chain": "bsc",
+        "type": "chart",
+        "publicUuid": "52fc7568-36ff-4b1f-a53e-e356bd10ed3d",
       },
       {
-        "label": "Token Sectors by CEX Net Flow on Ethereum",
-        "value": "token-sectors-by-cex-net-flow-on-ethereum",
-        "publicUuid": "2539c2f1-3bea-458e-89ac-5d0903742c62",
-      },*/
+        "label": "Top Tokens Traded on DEX",
+        "value": "top-tokens-traded-on-dex-bsc",
+        "chain": "bsc",
+        "publicUuid": "ef67311a-38fc-4134-9c67-b721c19d7bdc",
+      },
+      {
+        "label": "Top Tokens by Volume",
+        "value": "top-tokens-by-volume-bsc",
+        "chain": "bsc",
+        "type": "chart",
+        "publicUuid": "67c04db6-cb3c-42d9-8142-cc062d5b3e57",
+      },
     ],
   },
   {
@@ -810,24 +834,14 @@ const tokenData = [
         "value": "single-token",
         "publicUuid": "e12085c8-a2e4-455d-b9bf-51df33bf78dc",
       },
-      /*{
-        "label": "Single Token Sector",
-        "value": "single-token-sector",
-        "publicUuid": "4490df03-7a21-4439-b035-1aaa81ef8b56",
-      },*/
-    ],
-  },
-  /*{
-    "label": "Stablecoin",
-    "value": "stablecoin",
-    "subMenus": [
       {
-        "label": "Stablecoin Master",
-        "value": "stablecoin-master",
-        "publicUuid": "7487deeb-1208-4d9d-95f1-35efb7cd76d5",
+        "label": "Token Explorer",
+        "value": "token explorer",
+        "chain": "bsc",
+        "publicUuid": "7a9f997a-77f0-4a5e-9cb1-7d148ef91f3a",
       },
     ],
-  },*/
+  },
 ]
 
 const walletData = [
@@ -923,13 +937,18 @@ const walletData = [
 
 const defiData = [
   {
-    "label": "Single Protocol",
-    "value": "single-protocol",
+    "label": "Dex Protocol",
+    "value": "dex-protocol",
     "subMenus": [
       {
-        "label": "DEX Protocol",
-        "value": "dex-protocol",
+        "label": "Single DEX Protocol",
+        "value": "single-dex-protocol",
         "publicUuid": "b10579d9-8bf0-4502-87e5-51daf839d837",
+      },
+      {
+        "label": "Dex Pool",
+        "value": "dex-pool",
+        "publicUuid": "9b70e1f1-981d-4f8d-b81c-a725dc517f27",
       }
     ]
   },
@@ -948,6 +967,22 @@ const defiData = [
         "value": "dexes-on-rootstock",
         "publicUuid": "ff96c810-28c0-40a0-87bc-75f6335b9807",
         "search": "?chain=Rootstock",
+      }
+    ]
+  },
+  {
+    "label": "Featured Dashboards",
+    "value": "featured-dashboards",
+    "subMenus": [
+      {
+        "label": "Top Meme Tokens",
+        "value": "top-meme-tokens",
+        "publicUuid": "252bb774-f072-4e1f-8f05-d2f0a235e8e9",
+      },
+      {
+        "label": "BNB Chain Memes Pools Dashboard",
+        "value": "bnb-chain-memes-pools-dashboard",
+        "publicUuid": "43fe95da-474d-4b2d-b3e8-52a1aea03421",
       }
     ]
   },
