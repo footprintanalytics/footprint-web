@@ -195,7 +195,7 @@ const AboutDataCoverage = () => {
     {
       title: "Solana",
       img: getOssUrl("home-v2/chain/img-chain-solana.png"),
-      link: "",
+      link: "/research/chain/non-evm-stats/solana-overview",
     },
   ]
 
