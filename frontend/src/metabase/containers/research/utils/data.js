@@ -693,6 +693,11 @@ const chainData = [
         "value": "gala-chain-overview",
         "publicUuid": "6bb33916-a512-42ad-9d90-8c834e29e9cf",
       },
+      {
+        "label": "Solana Overview",
+        "value": "solana-overview",
+        "publicUuid": "f45e8d8d-8b51-42d8-9d6c-4dd8396f7987",
+      },
     ],
   },
   /*{
@@ -816,13 +821,6 @@ const tokenData = [
         "chain": "bsc",
         "publicUuid": "ef67311a-38fc-4134-9c67-b721c19d7bdc",
       },
-      {
-        "label": "Top Tokens by Volume",
-        "value": "top-tokens-by-volume-bsc",
-        "chain": "bsc",
-        "type": "chart",
-        "publicUuid": "67c04db6-cb3c-42d9-8142-cc062d5b3e57",
-      },
     ],
   },
   {
@@ -832,6 +830,7 @@ const tokenData = [
       {
         "label": "Single Token",
         "value": "single-token",
+        "chain": "ethereum",
         "publicUuid": "e12085c8-a2e4-455d-b9bf-51df33bf78dc",
       },
       {
@@ -971,6 +970,17 @@ const defiData = [
     ]
   },
   {
+    "label": "DEX Overview",
+    "value": "dex-overview",
+    "subMenus": [
+      {
+        "label": "DEX Metrics",
+        "value": "dex-metrics",
+        "publicUuid": "ff96c810-28c0-40a0-87bc-75f6335b9807",
+      }
+    ]
+  },
+  {
     "label": "Featured Dashboards",
     "value": "featured-dashboards",
     "subMenus": [
@@ -986,17 +996,6 @@ const defiData = [
       }
     ]
   },
-  {
-    "label": "DEX Overview",
-    "value": "dex-overview",
-    "subMenus": [
-      {
-        "label": "DEX Metrics",
-        "value": "dex-metrics",
-        "publicUuid": "ff96c810-28c0-40a0-87bc-75f6335b9807",
-      }
-    ]
-  }
 ]
 
 const customData = {
