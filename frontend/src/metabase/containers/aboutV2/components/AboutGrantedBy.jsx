@@ -6,7 +6,7 @@ import { Link } from "react-router";
 const AboutGrantedBy = () => {
   const data = [
     { image: "home-v2/img_by_sui.png?image_process=resize,w_330/crop,h_146/format,jpg", title: "sui" },
-    // { image: "home-v2/img_by_near_v2.png?image_process=resize,w_330/crop,h_146/format,jpg", title: "near" },
+    { image: "home-v2/img_by_near_v2.png?image_process=resize,w_330/crop,h_146/format,jpg", title: "near" },
     { image: "home-v2/img_by_cronos_v2.png?image_process=resize,w_330/crop,h_146/format,jpg", title: "cronos" },
     { image: "home-v2/img_by_arb.jpg?image_process=resize,w_330/crop,h_146/format,jpg", title: "arbitrum", link: "https://portal.arbitrum.io/?project=footprint-analytics" },
     { image: "home-v2/img_by_nautilus.png?image_process=resize,w_330/crop,h_146/format,jpg", title: "nautilus", link: "https://nautchain.xyz/#/ecosystem" },
