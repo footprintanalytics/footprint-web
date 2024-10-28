@@ -168,6 +168,8 @@ class Visualization extends React.PureComponent {
     if (storedSettings['common.title_extra_info']) {
       computedSettings['common.title_extra_info'] = storedSettings['common.title_extra_info']
     }
+
+    const isPay = series ? series[0]?.card?.id === 44302 || series[0]?.card?.id === 45035 : false
     this.setState({
       hovered: null,
       //clicked: null,
@@ -177,7 +179,7 @@ class Visualization extends React.PureComponent {
       series: series,
       visualization: visualization,
       computedSettings: computedSettings,
-      fgaFlowType: 'signin',
+      fgaFlowType: !isPay ? 'pay': 'integration',
     });
   }
 
@@ -517,8 +519,8 @@ class Visualization extends React.PureComponent {
     const changeFgaFlowType = (type) => {
       this.setState({fgaFlowType: type})
     }
-
-    const isCustom = [186,10].includes(this.props?.user?.id) && window.location.pathname.includes("acquisition_users") && (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'signin');
+    const isCustom = !(this.props.showNormalChartData && (series[0]?.card?.id === 44302 || series[0]?.card?.id === 45035))
+      && ( [186,10].includes(this.props?.user?.id) && window.location.pathname.includes("acquisition_users") && (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'signin'))
     const renderFgaFlowTypeLayout = (type) => {
       if (type === "signin") {
         return (
@@ -564,7 +566,7 @@ class Visualization extends React.PureComponent {
                 Modal.info({
                   content: (<div className="flex flex-col">
                     <Radio.Group style={{ width: '100%' }} className="flex flex-col">
-                      {['Basic', 'Advanced'].map((item, index) => (
+                      {['Advanced Package $300', 'Community Package $400'].map((item, index) => (
                         <Radio key={index} value={item}>
                           {item}
                         </Radio>
@@ -598,6 +600,7 @@ class Visualization extends React.PureComponent {
                   content: (<FgaFlowUploadLayout onSuccess={() => {
                     changeFgaFlowType("normal")
                     modalDestroy.destroy()
+                    this.props.fgaFlowInteractionSuccess?.()
                   }}/>),
                   okText: "OK",
                   footer: null,

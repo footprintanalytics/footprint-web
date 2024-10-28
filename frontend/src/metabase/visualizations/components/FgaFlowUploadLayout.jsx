@@ -15,14 +15,24 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
       key: 'user_id',
     },
     {
-      title: 'Name',
-      dataIndex: 'name',
+      title: 'Event Type',
+      dataIndex: 'event_type',
       key: 'name',
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
+      title: 'Sub Event',
+      dataIndex: 'sub_event',
       key: 'age',
+    },
+    {
+      title: 'Event Id',
+      dataIndex: 'event_id',
+      key: 'age2',
+    },
+    {
+      title: 'Timestamp',
+      dataIndex: 'timestamp',
+      key: 'age23',
     },
   ];
 
@@ -30,8 +40,34 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
     {
       key: '1',
       user_id: 1,
-      name: 'xxx',
-      age: 12,
+      event_type: 'Account',
+      sub_event: 'Login',
+      event_id: 1,
+      timestamp: 1730113928,
+    },
+    {
+      key: '1',
+      user_id: 2,
+      event_type: 'Account',
+      sub_event: 'Login',
+      event_id: 2,
+      timestamp: 1730113929,
+    },
+    {
+      key: '1',
+      user_id: 3,
+      event_type: 'Account',
+      sub_event: 'Login',
+      event_id: 3,
+      timestamp: 1730113923,
+    },
+    {
+      key: '1',
+      user_id: 4,
+      event_type: 'Account',
+      sub_event: 'Login',
+      event_id: 4,
+      timestamp: 1730113928,
     },
   ];
   const steps = [

@@ -601,6 +601,10 @@ class DashCard extends Component {
             zIndex: 1,
             padding: wrappedVisualizationPadding,
           }}
+          showNormalChartData={this.props.showNormalChartData}
+          fgaFlowInteractionSuccess={() => {
+            this.props.fgaFlowInteractionSuccess()
+          }}
           classNameWidgets={isEmbed && "text-light text-medium-hover"}
           error={errorMessage}
           headerIcon={headerIcon}

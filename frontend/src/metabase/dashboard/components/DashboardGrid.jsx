@@ -297,6 +297,10 @@ class DashboardGrid extends Component {
       <DashCard
         {...this.props}
         dashcard={dc}
+        showNormalChartData={this.state.showNormalChartData}
+        fgaFlowInteractionSuccess={() => {
+          this.setState({showNormalChartData: true})
+        }}
         headerIcon={this.getDashboardCardIcon(dc)}
         dashcardData={this.props.dashcardData}
         parameterValues={this.props.parameterValues}
