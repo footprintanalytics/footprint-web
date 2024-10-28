@@ -7,7 +7,8 @@ import { assoc } from "icepick";
 import _ from "underscore";
 import cx from "classnames";
 import { get } from "lodash";
-import { Avatar, Button } from "antd";
+import { LockFilled } from "@ant-design/icons";
+import { Avatar, Button, Modal, Result, Radio, message } from "antd";
 import ExplicitSize from "metabase/components/ExplicitSize";
 import ChartCaption from "metabase/visualizations/components/ChartCaption";
 import ChartTooltip from "metabase/visualizations/components/ChartTooltip";
@@ -56,6 +57,7 @@ import "./Visualization.css";
 import ResearchNoData from "metabase/visualizations/components/ResearchNoData";
 import { projectSubmitModalShowAction } from "metabase/redux/control";
 import { getAbWeb3DashboardCase } from "metabase/ab/utils/utils";
+import FgaFlowUploadLayout from "metabase/visualizations/components/FgaFlowUploadLayout";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
 
@@ -175,6 +177,7 @@ class Visualization extends React.PureComponent {
       series: series,
       visualization: visualization,
       computedSettings: computedSettings,
+      fgaFlowType: 'signin',
     });
   }
 
@@ -504,6 +507,125 @@ class Visualization extends React.PureComponent {
     const isResearch = window.location.pathname.startsWith("/research");
 
     const isABWeb3Dashboard = getAbWeb3DashboardCase(location);
+
+    const getFgaFlowType = () => {
+      // "normal"
+      // "pay"
+      // "integration"
+      return this.state.fgaFlowType
+    }
+    const changeFgaFlowType = (type) => {
+      this.setState({fgaFlowType: type})
+    }
+
+    const isCustom = [186,10].includes(this.props?.user?.id) && window.location.pathname.includes("acquisition_users") && (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'signin');
+    const renderFgaFlowTypeLayout = (type) => {
+      if (type === "signin") {
+        return (
+          <Result
+            style={{ padding: 0}}
+            icon={<div />}
+            subTitle={<div><LockFilled /> Sign in to assess this data<br/>This data is Only available for Footprint Subscribers</div>}
+            extra={[
+              <Button key='xxx' onClick={() => {
+                Modal.success({
+                  content: "Sign in successfully!",
+                  okText: "OK",
+                  onOk: () => {
+                    changeFgaFlowType("pay")
+                  },
+                });
+              }}>
+                Sign in
+              </Button>,
+              <Button key='yyy' onClick={() => {
+                Modal.success({
+                  content: "Sign up successfully!",
+                  okText: "OK",
+                  onOk: () => {
+                    changeFgaFlowType("pay")
+                  },
+                });
+              }}>
+                Sign up
+              </Button>
+            ]}
+          />
+        )
+      }
+      if (type === "pay") {
+        return (
+          <Result
+            style={{ padding: 0}}
+            icon={<div />}
+            subTitle={<div><LockFilled /> Subscribe to a plan to access this data.<br/>This data is Only available for Footprint Subscribers</div>}
+            extra={[
+              <Button key='xxx' onClick={() => {
+                Modal.info({
+                  content: (<div className="flex flex-col">
+                    <Radio.Group style={{ width: '100%' }} className="flex flex-col">
+                      {['Basic', 'Advanced'].map((item, index) => (
+                        <Radio key={index} value={item}>
+                          {item}
+                        </Radio>
+                      ))}
+                    </Radio.Group>
+                  </div>),
+                  okText: "OK",
+                  onOk: () => {
+                    message.success("Subscribe successfully!");
+                    changeFgaFlowType("integration")
+                  },
+                });
+              }}>
+                Pay a Plan
+              </Button>
+            ]}
+          />
+        )
+      }
+      if (type === "integration") {
+        return (
+          <Result
+            style={{ padding: 0}}
+            icon={<div />}
+            subTitle={<div><LockFilled /> Upload Your data to view this data. <br/>Just takes only one minute to access this analysis.</div>}
+            extra={[
+              <Button key='xxx' onClick={() => {
+                const modalDestroy = Modal.info({
+                  width: 700,
+                  icon: null,
+                  content: (<FgaFlowUploadLayout onSuccess={() => {
+                    changeFgaFlowType("normal")
+                    modalDestroy.destroy()
+                  }}/>),
+                  okText: "OK",
+                  footer: null,
+                  onOk: () => {
+                    changeFgaFlowType("normal")
+                  },
+                });
+              }}>Data Integration</Button>
+            ]}
+          />
+
+        )
+      }
+    }
+
+    const renderCustomLayout = () => {
+      const type = getFgaFlowType(series[0]?.card)
+      const cardName = get(series[0]?.card, 'originalCardName') || get(series[0]?.card, 'name')
+      return (
+        <div className="flex flex-col w-full h-full align-top text-white">
+          <div className="text-left">{cardName}</div>
+          <div className="flex-1 flex justify-center items-center h-full" style={{background: "#88888822"}}>
+            <div>{renderFgaFlowTypeLayout(type)}</div>
+          </div>
+        </div>
+
+      )
+    }
     const renderNoResult = () => {
       if (isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis) {
         return (
@@ -774,6 +896,11 @@ class Visualization extends React.PureComponent {
         {replacementContent ? (
           replacementContent
         ) : // on dashboards we should show the "No results!" warning if there are no rows or there's a MinRowsError and actualRows === 0
+        isCustom ? (
+          <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered">
+            {renderCustomLayout()}
+          </div>
+        ) :
         isDashboard && noResults ? (
           <div
             className={
