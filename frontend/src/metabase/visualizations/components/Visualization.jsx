@@ -520,14 +520,14 @@ class Visualization extends React.PureComponent {
       this.setState({fgaFlowType: type})
     }
     const isCustom = !(this.props.showNormalChartData && (series[0]?.card?.id === 44302 || series[0]?.card?.id === 45035))
-      && ( [186,10].includes(this.props?.user?.id) && window.location.pathname.includes("acquisition_users") && (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'signin'))
+      && ( [186,10, 52, 37,25].includes(this.props?.user?.id) && window.location.pathname.includes("acquisition_users") && (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'signin'))
     const renderFgaFlowTypeLayout = (type) => {
       if (type === "signin") {
         return (
           <Result
             style={{ padding: 0}}
             icon={<div />}
-            subTitle={<div><LockFilled /> Sign in to assess this data<br/>This data is Only available for Footprint Subscribers</div>}
+            subTitle={<div className={"text-white"}><LockFilled /> Sign in to assess this data<br/>This data is Only available for Footprint advanced plan</div>}
             extra={[
               <Button key='xxx' onClick={() => {
                 Modal.success({
@@ -560,14 +560,15 @@ class Visualization extends React.PureComponent {
           <Result
             style={{ padding: 0}}
             icon={<div />}
-            subTitle={<div><LockFilled /> Subscribe to a plan to access this data.<br/>This data is Only available for Footprint Subscribers</div>}
+            subTitle={<div className={"text-white"}><LockFilled /> Subscribe to a plan to access this data.<br/>This data is Only available for advanced plan</div>}
             extra={[
               <Button key='xxx' onClick={() => {
                 Modal.info({
+                  icon: null,
                   content: (<div className="flex flex-col">
-                    <Radio.Group style={{ width: '100%' }} className="flex flex-col">
+                    <Radio.Group style={{ width: '100%' }} className="flex flex-col" defaultValue={"Advanced Package $300"}>
                       {['Advanced Package $300', 'Community Package $400'].map((item, index) => (
-                        <Radio key={index} value={item}>
+                        <Radio key={index} value={item} >
                           {item}
                         </Radio>
                       ))}
@@ -580,7 +581,7 @@ class Visualization extends React.PureComponent {
                   },
                 });
               }}>
-                Pay a Plan
+                Upgrade
               </Button>
             ]}
           />
@@ -591,7 +592,7 @@ class Visualization extends React.PureComponent {
           <Result
             style={{ padding: 0}}
             icon={<div />}
-            subTitle={<div><LockFilled /> Upload Your data to view this data. <br/>Just takes only one minute to access this analysis.</div>}
+            subTitle={<div className={"text-white"}><LockFilled /> Upload Your data to view this data. <br/>Just takes only one minute to access this analysis.</div>}
             extra={[
               <Button key='xxx' onClick={() => {
                 const modalDestroy = Modal.info({
@@ -601,6 +602,31 @@ class Visualization extends React.PureComponent {
                     changeFgaFlowType("normal")
                     modalDestroy.destroy()
                     this.props.fgaFlowInteractionSuccess?.()
+
+                    setTimeout(() => {
+                      Modal.confirm(
+                        {
+                          width: 500,
+                          title: "Is the data correct?",
+                          content: (
+                            <div>
+                              Should we proceed with generating the full dataset?
+                              <div className="mt-4" />
+                              <br />Once generated, the data cannot be undone. The completion time is t-1. If it finish an email will be sent to your account.
+                              <div className="mt-4" />
+                            </div>
+                          ),
+                          cancelText: "Re-Upload Data",
+                          okText: "Produce Full Dataset",
+                          onCancel: () => {
+
+                          },
+                          onOk: () => {
+                            message.success("Data is being generated. If it finish an email will be sent to your account")
+                          }
+                        }
+                      )
+                    }, 2000)
                   }}/>),
                   okText: "OK",
                   footer: null,
@@ -622,7 +648,7 @@ class Visualization extends React.PureComponent {
       return (
         <div className="flex flex-col w-full h-full align-top text-white">
           <div className="text-left">{cardName}</div>
-          <div className="flex-1 flex justify-center items-center h-full" style={{background: "#88888822"}}>
+          <div className="flex-1 flex justify-center items-center h-full" >
             <div>{renderFgaFlowTypeLayout(type)}</div>
           </div>
         </div>
@@ -845,10 +871,11 @@ class Visualization extends React.PureComponent {
     }
 
     return (
+      <div className="flex flex-col full-height" style={{padding: "12px 0 4px"}}>
       <div
         id="html2canvas-Card"
         className={cx(className, "flex flex-column full-height")}
-        style={{ ...style, position: "relative", padding: "12px 0 4px" }}
+        style={{ ...style, position: "relative", filter: isCustom ? "blur(6px)" : "", pointerEvents: isCustom ? "none" : "" }}
       >
         {!isPublic && showDataUpdateTime && !isEditing && (
           <div className="Visualization__table-chart-info">
@@ -899,11 +926,6 @@ class Visualization extends React.PureComponent {
         {replacementContent ? (
           replacementContent
         ) : // on dashboards we should show the "No results!" warning if there are no rows or there's a MinRowsError and actualRows === 0
-        isCustom ? (
-          <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered">
-            {renderCustomLayout()}
-          </div>
-        ) :
         isDashboard && noResults ? (
           <div
             className={
@@ -1026,6 +1048,12 @@ class Visualization extends React.PureComponent {
         )}
         {location.pathname.startsWith("/guest/chart") && (
           <VisualizationShareFoot location={this.props.location} />
+        )}
+      </div>
+        {isCustom && (
+          <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered absolute w-full h-full" style={{background: "#444444cc", zIndex: 2}}>
+            {renderCustomLayout()}
+          </div>
         )}
       </div>
     );
