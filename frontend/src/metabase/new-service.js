@@ -866,3 +866,7 @@ export const getPeaTokenForTGAPI = (params, config) => {
 export const getMediaTagTop = (params, config) => {
   return POST(`api/v1/media/tagTop`, params, { silentFp: true, silent: true });
 };
+
+export const uploadCSVForFga = (params, config) => {
+  return POST(`api/v1/fga/event/upload/csv`, params, { silentFp: true, silent: true });
+};

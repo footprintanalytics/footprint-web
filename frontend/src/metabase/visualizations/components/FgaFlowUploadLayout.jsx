@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { Avatar, Button, Modal, Result, Radio, message, Timeline, Steps, theme, Table, Spin } from "antd";
+import { Avatar, Button, Modal, Result, Radio, message, Timeline, Steps, theme, Table, Spin, Upload } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import FgaFlowDataProcess from "metabase/visualizations/components/FgaFlowDataProcess";
 import FgaFlowProduceData from "metabase/visualizations/components/FgaFlowProduceData";
@@ -9,8 +9,15 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
   const [timeItems, setTimeItems] = useState([{ label: 'Step 1: Test connection done', completed: true }, { label: 'Step 2: Sync sample data done', completed: true }, { label: 'Step 3: ETL sample data done', completed: true }]);
   const { token } = theme.useToken();
   const [count, setCount] = useState(0);
+  const [csvData, setCSVData] = useState([]);
+  const [csvLoading, setCSVLoading] = useState([]);
   const [current, setCurrent] = useState(0);
   const columns = [
+    {
+      title: 'Project Name',
+      dataIndex: 'project_name',
+      key: 'project_name',
+    },
     {
       title: 'User ID',
       dataIndex: 'user_id',
@@ -72,6 +79,41 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
       timestamp: 1730113928,
     },
   ];
+  const propsUploadAvatarTcOss = {
+    name: 'file',
+    accept: '.csv',
+    showUploadList: false,
+    maxCount: 1,
+    method: 'post',
+    // eslint-disable-next-line no-undef
+    action: `/api/v1/fga/event/upload/csv`,
+    headers: {
+      // token: getUserToken(),
+    },
+    data: {
+      "projectName": "Mocaverse",
+    },
+    beforeUpload: async (file) => {
+      // const isLt2M = file.size / 1024 / 1024 < 10
+      // if (!isLt2M) {
+      //   message.error(t('File must smaller than 10MB!'))
+      //   return false
+      // }
+      setCSVLoading(true)
+    },
+    onChange(info) {
+      const data = info?.file?.response?.data;
+      if (data) {
+        setCSVData(data)
+        setCSVLoading(false)
+        message.success("Upload CSV successfully");
+        setTimeout(() => {
+          setCurrent(current + 1);
+        }, 1000);
+      }
+      console.log('upload onChange: ', info, data)
+    },
+  }
   const steps = [
     {
       title: 'Upload Data',
@@ -79,12 +121,13 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
       content: (
         <div className="flex flex-col justify-center" style={{ lineHeight: 1.5, padding: 20, width: 360, margin: "auto"}}>
           <div style={{marginBottom: 20}}>Choose a connector to upload your data:</div>
-          <Button onClick={() => {
-            message.success("Upload CSV successfully");
-            setTimeout(() => {
-              setCurrent(current + 1);
-            }, 1000);
-          }}>CSV</Button>
+
+            <Button className="w-full" loading={csvLoading}>
+              <Upload className="w-full" style={{width: "100%"}} name="avatar" {...propsUploadAvatarTcOss}>
+                <div style={{width: 300, height: 30}}>CSV</div>
+              </Upload>
+            </Button>
+
           <Button onClick={() => {
             message.success("Config Mysql successfully")
             setTimeout(() => {
@@ -111,7 +154,7 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
       title: 'Preview Data',
       content: (<div className="flex flex-col" style={{lineHeight: 1.5, padding: 20}}>
         <div>Here is what has been generated based on your data. Please confirm it is correct.</div>
-        <Table columns={columns} dataSource={data} pagination={false} />
+        <Table columns={columns} dataSource={csvData} pagination={false} />
         <div className={"flex justify-center "} style={{gap: 10, padding: 20}}>
           <Button onClick={() => setCurrent(0)}>Upload Data Again</Button>
           <Button type="primary" onClick={() => setCurrent(current + 1)}>Start to Produce Data</Button>
@@ -168,7 +211,7 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
 
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col" style={{width: 840}}>
       {/*<Button>Upload CSV</Button>*/}
      {/* <Timeline>
         {timeItems?.map((item, index) => (
