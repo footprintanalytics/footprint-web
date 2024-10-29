@@ -30,7 +30,7 @@ const FgaFlowDataProcess = ({ onSuccess, previewData }) => {
 
     return () => clearTimeout(timer);
   }, [current]);
-  console.log("current", current);
+
   return (
     <div className="flex flex-col items-center" style={{ padding: 20 }}>
       <div className="flex p-20" >
