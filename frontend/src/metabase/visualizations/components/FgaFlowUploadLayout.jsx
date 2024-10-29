@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { Avatar, Button, Modal, Result, Radio, message, Timeline, Steps, theme, Table } from "antd";
+import { Avatar, Button, Modal, Result, Radio, message, Timeline, Steps, theme, Table, Spin } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
+import FgaFlowDataProcess from "metabase/visualizations/components/FgaFlowDataProcess";
+import FgaFlowProduceData from "metabase/visualizations/components/FgaFlowProduceData";
 
 const FgaFlowUploadLayout = ({onSuccess}) => {
   const [timeItems, setTimeItems] = useState([{ label: 'Step 1: Test connection done', completed: true }, { label: 'Step 2: Sync sample data done', completed: true }, { label: 'Step 3: ETL sample data done', completed: true }]);
@@ -73,36 +75,55 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
   const steps = [
     {
       title: 'Upload Data',
-      content: (<div className="flex flex-col justify-center" style={{ padding: 20, width: 200, margin: "auto"}}>
-        <Button>Upload CSV</Button>
-        <Button>Connect Mysql</Button>
-        <Button>Connect Postgres</Button>
-      </div>),
-    },
-    {
-      title: 'Data Processing',
+      onClick: () => setCurrent(0),
       content: (
-        <div className="flex p-20" style={{padding: 20}}>
-        <Timeline>
-          {timeItems.map((item, index) => (
-            <Timeline.Item
-              key={index}
-              dot={item.completed ? <CheckCircleOutlined style={{ color: 'green' }} /> : <div />}
-            >
-              {item.label}
-            </Timeline.Item>
-          ))}
-        </Timeline>
+        <div className="flex flex-col justify-center" style={{ lineHeight: 1.5, padding: 20, width: 360, margin: "auto"}}>
+          <div style={{marginBottom: 20}}>Choose a connector to upload your data:</div>
+          <Button onClick={() => {
+            message.success("Upload CSV successfully");
+            setTimeout(() => {
+              setCurrent(current + 1);
+            }, 1000);
+          }}>CSV</Button>
+          <Button onClick={() => {
+            message.success("Config Mysql successfully")
+            setTimeout(() => {
+              setCurrent(current + 1);
+            }, 1000);
+          }}>Mysql</Button>
+          <Button onClick={() => {
+            message.success("Config Postgres successfully");
+            setTimeout(() => {
+              setCurrent(current + 1);
+            }, 1000);
+          }}>Postgres</Button>
         </div>
       ),
     },
     {
+      title: 'Data Processing',
+      content: (
+        <FgaFlowDataProcess previewData={() => setCurrent(current + 1)}/>
+      ),
+      onClick: () => setCurrent(1),
+    },
+    {
       title: 'Preview Data',
-      content: (<div><Table columns={columns} dataSource={data} pagination={false} /></div>),
+      content: (<div className="flex flex-col" style={{lineHeight: 1.5, padding: 20}}>
+        <div>Here is what has been generated based on your data. Please confirm it is correct.</div>
+        <Table columns={columns} dataSource={data} pagination={false} />
+        <div className={"flex justify-center "} style={{gap: 10, padding: 20}}>
+          <Button onClick={() => setCurrent(0)}>Upload Data Again</Button>
+          <Button type="primary" onClick={() => setCurrent(current + 1)}>Start to Produce Data</Button>
+        </div>
+      </div>),
+      onClick: () => setCurrent(2),
     },
     {
       title: 'Produce Data',
-      content: (<div className="flex justify-center line-height-2" style={{padding: 40, lineHeight: 1.5}}>Waiting for 5 minutes<br/>The data production was successful, and the associated chart has been unlocked.</div>),
+      content: (<FgaFlowProduceData onSuccess={() => {
+        onSuccess?.()
+      }}/>),
     },
   ];
   const next = () => {
@@ -160,22 +181,22 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
         ))}
       </Timeline>*/}
 
-      <Steps current={current} items={items} />
+      <Steps current={current} items={items} onChange={(index) => setCurrent(index)}/>
       <div style={contentStyle}>{steps[current].content}</div>
       <div className="flex justify-end" style={{ marginTop: 24 }}>
-        {current < steps.length - 1 && (
-          <Button type="primary" onClick={() => next()}>
-            Next
-          </Button>
-        )}
-        {current === steps.length - 1 && (
-          <Button type="primary" onClick={() => onSuccess?.()}>
-            Done
-          </Button>
-        )}
         {/*{current > 0 && (
           <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
             Previous
+          </Button>
+        )}*/}
+        {/*{current < steps.length - 1 && (
+          <Button type="primary" onClick={() => next()}>
+            Next
+          </Butwton>
+        )}*/}
+        {/*{current === steps.length - 1 && (
+          <Button type="primary" onClick={() => onSuccess?.()}>
+            View Dashboard
           </Button>
         )}*/}
       </div>
