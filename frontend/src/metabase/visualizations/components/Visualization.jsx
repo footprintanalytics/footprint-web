@@ -596,7 +596,7 @@ class Visualization extends React.PureComponent {
             extra={[
               <Button key='xxx' onClick={() => {
                 const modalDestroy = Modal.info({
-                  width: 700,
+                  width: 900,
                   icon: null,
                   content: (<FgaFlowUploadLayout onSuccess={() => {
                     changeFgaFlowType("normal")
