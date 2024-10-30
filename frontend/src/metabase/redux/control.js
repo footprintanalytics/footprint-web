@@ -210,9 +210,9 @@ export const LOAD_FGA_PROJECT_LIST =
   "metabase/user/LOAD_FGA_PROJECT_LIST";
 export const loadFgaProjectList = createThunkAction(
   LOAD_FGA_PROJECT_LIST,
-  (chain) =>
+  ({ from }) =>
     async (dispatch, getState) => {
-      let result = await getProjectList();
+      let result = await getProjectList({ from });
       return result;
     },
 );

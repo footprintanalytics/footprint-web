@@ -261,6 +261,7 @@ export const getProtocolList = async params => {
   return GET(`/api/v1/project/protocol/list`, params, {'Cache-Control': 'max-age=1800'});
 };
 export const getProjectList = async params => {
+  console.log("getProjectList", params)
   return [
       /*{
         "projectId": 1,
@@ -279,7 +280,7 @@ export const getProjectList = async params => {
         "logo": ""
       },*/
       {
-        "projectId": 3,
+        "projectId": params?.from === 'pro' ? 232: 3,
         "projectName": "Gaming Demo Project 2",
         "protocolName": "Gaming Demo Project 2",
         "protocolSlug": "Gaming Demo Project 2",

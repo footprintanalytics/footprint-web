@@ -303,7 +303,7 @@ export const REFRESH_CURRENT_FGA_PROJECT_NEW =
   "metabase/user/REFRESH_CURRENT_FGA_PROJECT_NEW";
 export const refreshCurrentFgaProjectNew = createThunkAction(
   REFRESH_CURRENT_FGA_PROJECT,
-  async protocolSlug => {
+  async (protocolSlug, from) => {
     try {
       let res
       if (isABPath()) {
@@ -533,7 +533,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
             "twitter": {},
             "discord": {},
             "ga": {},
-            "id": 3,
+            "id": from === 'pro' ? 232 : 3,
             "existsWeb2Data": true,
             "walletRetentionChain": "Polygon"
           }
@@ -777,7 +777,7 @@ export const LOAD_CURRENT_FGA_PROJECT_NEW =
   "metabase/user/LOAD_CURRENT_FGA_PROJECT_NEW";
 export const loadCurrentFgaProjectNew = createThunkAction(
   LOAD_CURRENT_FGA_PROJECT_NEW,
-  (protocolSlug, force = false, clearCurrent = true) =>
+  (protocolSlug, from, force = false, clearCurrent = true) =>
     async (dispatch, getState) => {
       if (
         force ||
@@ -788,7 +788,7 @@ export const loadCurrentFgaProjectNew = createThunkAction(
           dispatch(clearCurrentFgaProject());
         }
         // await dispatch(refreshCurrentFgaProject(project_id));
-        await dispatch(refreshCurrentFgaProjectNew(protocolSlug));
+        await dispatch(refreshCurrentFgaProjectNew(protocolSlug, from));
       }
     },
 );

@@ -417,6 +417,28 @@ const GaIconLayout = ({children}) => {
 }
 
 export const fga_menu_data_v2 = (businessType, project, chain, user) => {
+  if (businessType === "pro") {
+    const menuTabs = [
+      getItem("User", "user", ReactIcons.assetIcon, [
+        // project?.nftCollectionAddress?.length > 0 &&
+        getItem("User Acquisition", "acquisition_users_pro", null),
+        getItem("User Engagement", "engagement_users_pro", null),
+        getItem("User Retention", "Retention_users_pro", null),
+      ]),
+    ]
+    const keys = getKeys([...menuTabs]);
+    return {
+      dashboardMap: new Map([
+          ["acquisition_users_pro", "e7e9eaee-676a-4c4e-94a0-4828c7cc8f2a"],
+          ["engagement_users_pro", "7d97d9d7-d75e-44ea-b1c7-4cfcf68f6ce1"],
+          ["Retention_users_pro", "31bae1fb-5eee-4f05-8c30-d049a68765dc"],
+        ]
+      ),
+      menuTabs: menuTabs,
+      keys,
+      menuTitle: "Project",
+    }
+  }
   if (businessType === "vc") {
     return {
       dashboardMap: new Map([
@@ -515,7 +537,7 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
       menuTitle: "",
     }
   }
-  const dashboardMap = getDashboardMap(project, chain);
+  const dashboardMap = getDashboardMap("", project, chain);
 
   const gameProjectData = {
     "platformMenuTabs": [

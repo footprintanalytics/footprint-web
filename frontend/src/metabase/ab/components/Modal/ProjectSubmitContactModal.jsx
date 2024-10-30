@@ -75,7 +75,7 @@ const ProjectSubmitContactModal = props => {
         backAction={() => setState(2)}
         onSuccess={(projectName) => {
           setState(4);
-          loadCurrentFgaProjectNew(project.protocolSlug, true, false);
+          loadCurrentFgaProjectNew(project.protocolSlug, "", true, false);
           setDecodingProcessOpen({ open: false, param: null });
         }}
       ></ContractDecoding>)}

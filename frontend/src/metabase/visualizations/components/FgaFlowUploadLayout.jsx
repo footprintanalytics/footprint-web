@@ -10,7 +10,7 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
   const { token } = theme.useToken();
   const [count, setCount] = useState(0);
   const [csvData, setCSVData] = useState([]);
-  const [csvLoading, setCSVLoading] = useState([]);
+  const [file, setFile] = useState()
   const [current, setCurrent] = useState(0);
   const columns = [
     {
@@ -99,13 +99,14 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
       //   message.error(t('File must smaller than 10MB!'))
       //   return false
       // }
-      setCSVLoading(true)
+      setFile(file);
+      setCurrent(current + 1)
+      return false
     },
     onChange(info) {
       const data = info?.file?.response?.data;
       if (data) {
         setCSVData(data)
-        setCSVLoading(false)
         message.success("Upload CSV successfully");
         setTimeout(() => {
           setCurrent(current + 1);
@@ -122,7 +123,7 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
         <div className="flex flex-col justify-center" style={{ lineHeight: 1.5, padding: 20, width: 360, margin: "auto"}}>
           <div style={{marginBottom: 20}}>Choose a connector to upload your data:</div>
 
-            <Button className="w-full" loading={csvLoading}>
+            <Button className="w-full" >
               <Upload className="w-full" style={{width: "100%"}} name="avatar" {...propsUploadAvatarTcOss}>
                 <div style={{width: 300, height: 30}}>CSV</div>
               </Upload>
@@ -146,7 +147,10 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
     {
       title: 'Data Processing',
       content: (
-        <FgaFlowDataProcess previewData={() => setCurrent(current + 1)}/>
+        <FgaFlowDataProcess previewData={(data) => {
+          setCSVData(data)
+          setCurrent(current + 1)
+        }} file={file}/>
       ),
       onClick: () => setCurrent(1),
     },
@@ -154,7 +158,7 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
       title: 'Preview Data',
       content: (<div className="flex flex-col" style={{lineHeight: 1.5, padding: 20}}>
         <div>Here is what has been generated based on your data. Please confirm it is correct.</div>
-        <Table columns={columns} dataSource={csvData} pagination={false} />
+        <Table columns={columns} dataSource={csvData} pagination={false} scroll={{ y: 300 }}/>
         <div className={"flex justify-center "} style={{gap: 10, padding: 20}}>
           <Button onClick={() => setCurrent(0)}>Upload Data Again</Button>
           <Button type="primary" onClick={() => setCurrent(current + 1)}>Start to Produce Data</Button>
@@ -187,6 +191,7 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
     borderRadius: token.borderRadiusLG,
     border: `1px dashed ${token.colorBorder}`,
     marginTop: 16,
+    height: "100%",
   };
   const getTimeItemsFromCount = (count) => {
     if (count === 0) {
@@ -211,7 +216,7 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
 
 
   return (
-    <div className="flex flex-col" style={{width: 840}}>
+    <div className="flex flex-col" style={{width: 840, height: 560}}>
       {/*<Button>Upload CSV</Button>*/}
      {/* <Timeline>
         {timeItems?.map((item, index) => (

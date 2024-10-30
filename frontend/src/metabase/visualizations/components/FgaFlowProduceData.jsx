@@ -11,17 +11,18 @@ const FgaFlowProduceData = ({ onSuccess, previewData }) => {
   }, []);
   return (
     <div className="flex flex-col justify-center line-height-2" style={{padding: 40, lineHeight: 1.5}}>
-      {!showViewDashboard && (<Result
+      <Result
         icon={<Spin/>}
         title={"Produce Data"}
-        subTitle={<span>The data is being generated, just including the recent 7 days.<br/>It will take approximately 5 minutes.</span>}
+        subTitle={
+          <div className={"flex flex-col items-center"}>
+            <span>The data is being generated, just including the recent 7 days.<br/>It will take approximately 5 minutes.</span>
+            <span>You can continue waiting until the task is completed, or check out the data on other dashboards.</span>
+            <Button type="primary" style={{width: 200, marginTop: 20}} onClick={() => onSuccess?.()}>View Dashboard</Button>
+          </div>
+        }
       >
-      </Result>)}
-
-      {showViewDashboard && (<div className="flex flex-col items-center">
-        The data for the past 7 days can be generated, <br/>and the related chart has been unlocked.
-        <Button type="primary" style={{width: 200, marginTop: 20}} onClick={() => onSuccess?.()}>View Dashboard</Button>
-      </div>)}
+      </Result>
     </div>
   );
 };
