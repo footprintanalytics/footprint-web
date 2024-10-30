@@ -88,7 +88,7 @@ const Project = props => {
       setGaMenuTabs(menuData);
       if (
         !currentMenu ||
-        (liveKeys.includes(currentMenu) && !menuKeys.includes(currentMenu))
+        (liveKeys?.includes(currentMenu) && !menuKeys?.includes(currentMenu))
       ) {
         const firstMenu = menuKeys[0];
         setCurrentMenu(firstMenu);
@@ -250,7 +250,7 @@ const Project = props => {
       getProjectObject()?.protocolSlug ? (
         <>
           <PublicDashboard
-            params={{ uuid: getDashboardMap(businessType, projectObject, chain)?.get(current_tab) }}
+            params={{ uuid: fga_menu_data_v2(businessType, projectObject, chain, user).dashboardMap?.get(current_tab) }}
             location={location}
             project={getProjectObject()}
             router={router}

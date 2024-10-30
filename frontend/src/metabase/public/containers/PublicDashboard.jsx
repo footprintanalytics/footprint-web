@@ -95,8 +95,13 @@ const mapStateToProps = (state, props) => {
     let currentChain = null;
     // switch protocol
     if (id) {
+      const type = parameters?.find(parameter => parameter.slug === "project_id")?.type
+      let projectIdValue = id
+      if (type === "string/=") {
+        projectIdValue = `${id}`
+      }
       updateDashboardPara(parameters, parameterValues, "project_id", [
-        id,
+        projectIdValue,
       ]);
     }
     updateDashboardPara(parameters, parameterValues, "gamefi", [

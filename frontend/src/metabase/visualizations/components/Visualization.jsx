@@ -57,7 +57,6 @@ import "./Visualization.css";
 import ResearchNoData from "metabase/visualizations/components/ResearchNoData";
 import { projectSubmitModalShowAction } from "metabase/redux/control";
 import { getAbWeb3DashboardCase } from "metabase/ab/utils/utils";
-import FgaFlowUploadLayout from "metabase/visualizations/components/FgaFlowUploadLayout";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
 
@@ -169,7 +168,6 @@ class Visualization extends React.PureComponent {
       computedSettings['common.title_extra_info'] = storedSettings['common.title_extra_info']
     }
 
-    const isPay = series ? series[0]?.card?.id === 44302 || series[0]?.card?.id === 45035 : false
     this.setState({
       hovered: null,
       //clicked: null,
@@ -179,7 +177,6 @@ class Visualization extends React.PureComponent {
       series: series,
       visualization: visualization,
       computedSettings: computedSettings,
-      fgaFlowType: !isPay ? 'pay': 'integration',
     });
   }
 
@@ -510,151 +507,6 @@ class Visualization extends React.PureComponent {
 
     const isABWeb3Dashboard = getAbWeb3DashboardCase(location);
 
-    const getFgaFlowType = () => {
-      // "normal"
-      // "pay"
-      // "integration"
-      return this.state.fgaFlowType
-    }
-    const changeFgaFlowType = (type) => {
-      this.setState({fgaFlowType: type})
-    }
-    const isCustom = !(this.props.showNormalChartData && (series[0]?.card?.id === 44302 || series[0]?.card?.id === 45035))
-      && ( [186,10, 52, 37,25].includes(this.props?.user?.id) && window.location.pathname.includes("acquisition_users") && (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'signin'))
-    const renderFgaFlowTypeLayout = (type) => {
-      if (type === "signin") {
-        return (
-          <Result
-            style={{ padding: 0}}
-            icon={<div />}
-            subTitle={<div className={"text-white"}><LockFilled /> Sign in to assess this data<br/>This data is Only available for Footprint advanced plan</div>}
-            extra={[
-              <Button key='xxx' onClick={() => {
-                Modal.success({
-                  content: "Sign in successfully!",
-                  okText: "OK",
-                  onOk: () => {
-                    changeFgaFlowType("pay")
-                  },
-                });
-              }}>
-                Sign in
-              </Button>,
-              <Button key='yyy' onClick={() => {
-                Modal.success({
-                  content: "Sign up successfully!",
-                  okText: "OK",
-                  onOk: () => {
-                    changeFgaFlowType("pay")
-                  },
-                });
-              }}>
-                Sign up
-              </Button>
-            ]}
-          />
-        )
-      }
-      if (type === "pay") {
-        return (
-          <Result
-            style={{ padding: 0}}
-            icon={<div />}
-            subTitle={<div className={"text-white"}><LockFilled /> Subscribe to a plan to access this data.<br/>This data is Only available for advanced plan</div>}
-            extra={[
-              <Button key='xxx' onClick={() => {
-                Modal.info({
-                  icon: null,
-                  content: (<div className="flex flex-col">
-                    <Radio.Group style={{ width: '100%' }} className="flex flex-col" defaultValue={"Advanced Package $300"}>
-                      {['Advanced Package $300', 'Community Package $400'].map((item, index) => (
-                        <Radio key={index} value={item} >
-                          {item}
-                        </Radio>
-                      ))}
-                    </Radio.Group>
-                  </div>),
-                  okText: "OK",
-                  onOk: () => {
-                    message.success("Subscribe successfully!");
-                    changeFgaFlowType("integration")
-                  },
-                });
-              }}>
-                Upgrade
-              </Button>
-            ]}
-          />
-        )
-      }
-      if (type === "integration") {
-        return (
-          <Result
-            style={{ padding: 0}}
-            icon={<div />}
-            subTitle={<div className={"text-white"}><LockFilled /> Upload Your data to view this data. <br/>Just takes only one minute to access this analysis.</div>}
-            extra={[
-              <Button key='xxx' onClick={() => {
-                const modalDestroy = Modal.info({
-                  width: 900,
-                  icon: null,
-                  content: (<FgaFlowUploadLayout onSuccess={() => {
-                    changeFgaFlowType("normal")
-                    modalDestroy.destroy()
-                    this.props.fgaFlowInteractionSuccess?.()
-
-                    setTimeout(() => {
-                      Modal.confirm(
-                        {
-                          width: 500,
-                          title: "Is the data correct?",
-                          content: (
-                            <div>
-                              Should we proceed with generating the full dataset?
-                              <div className="mt-4" />
-                              <br />Once generated, the data cannot be undone. The completion time is t-1. If it finish an email will be sent to your account.
-                              <div className="mt-4" />
-                            </div>
-                          ),
-                          cancelText: "Re-Upload Data",
-                          okText: "Produce Full Dataset",
-                          onCancel: () => {
-
-                          },
-                          onOk: () => {
-                            message.success("Data is being generated. If it finish an email will be sent to your account")
-                          }
-                        }
-                      )
-                    }, 2000)
-                  }}/>),
-                  okText: "OK",
-                  footer: null,
-                  onOk: () => {
-                    changeFgaFlowType("normal")
-                  },
-                });
-              }}>Data Integration</Button>
-            ]}
-          />
-
-        )
-      }
-    }
-
-    const renderCustomLayout = () => {
-      const type = getFgaFlowType(series[0]?.card)
-      const cardName = get(series[0]?.card, 'originalCardName') || get(series[0]?.card, 'name')
-      return (
-        <div className="flex flex-col w-full h-full align-top text-white">
-          <div className="text-left">{cardName}</div>
-          <div className="flex-1 flex justify-center items-center h-full" >
-            <div>{renderFgaFlowTypeLayout(type)}</div>
-          </div>
-        </div>
-
-      )
-    }
     const renderNoResult = () => {
       if (isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis) {
         return (
@@ -871,11 +723,10 @@ class Visualization extends React.PureComponent {
     }
 
     return (
-      <div className="flex flex-col full-height" style={{padding: "12px 0 4px"}}>
       <div
         id="html2canvas-Card"
         className={cx(className, "flex flex-column full-height")}
-        style={{ ...style, position: "relative", filter: isCustom ? "blur(6px)" : "", pointerEvents: isCustom ? "none" : "" }}
+        style={{ ...style, position: "relative", padding: "12px 0 4px"}}
       >
         {!isPublic && showDataUpdateTime && !isEditing && (
           <div className="Visualization__table-chart-info">
@@ -1048,12 +899,6 @@ class Visualization extends React.PureComponent {
         )}
         {location.pathname.startsWith("/guest/chart") && (
           <VisualizationShareFoot location={this.props.location} />
-        )}
-      </div>
-        {isCustom && (
-          <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered absolute w-full h-full" style={{background: "#444444cc", zIndex: 2}}>
-            {renderCustomLayout()}
-          </div>
         )}
       </div>
     );

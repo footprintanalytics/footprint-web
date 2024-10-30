@@ -20,7 +20,7 @@ const InfoGenerate = props => {
     const {token} = await tokenGeneral({ projectId: project?.id });
     hide();
     setToken(token)
-    loadCurrentFgaProjectNew(project?.protocolSlug, true, false)
+    loadCurrentFgaProjectNew(project?.protocolSlug, "", true, false)
   }
   return (
     <div className="flex flex-col">

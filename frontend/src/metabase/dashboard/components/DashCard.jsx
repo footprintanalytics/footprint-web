@@ -9,6 +9,7 @@ import { t } from "ttag";
 import cx from "classnames";
 import _ from "underscore";
 import { getIn } from "icepick";
+import { DatabaseOutlined, LockFilled } from "@ant-design/icons";
 import visualizations, { getVisualizationRaw } from "metabase/visualizations";
 import { mergeSettings } from "metabase/visualizations/lib/settings";
 import Visualization, {
@@ -53,6 +54,10 @@ import QueryRefreshButton from "metabase/query_builder/components/QueryRefreshBu
 import { isFgaPath } from "metabase/growth/utils/utils";
 import { isABPath, isFGAVCPath } from "metabase/ab/utils/utils";
 import { IFRAMED_IN_SELF } from "metabase/lib/dom";
+import { Button, message, Modal, Radio, Spin } from "antd";
+import { fgaPlanMapping } from "metabase/visualizations/util/data";
+import FgaProResult from "metabase/visualizations/components/FgaProResult";
+import FgaFlowUploadLayout from "metabase/visualizations/components/FgaFlowUploadLayout";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -85,10 +90,13 @@ class DashCard extends Component {
 
   constructor(props) {
     super(props);
-
+    const card = props?.dashcard?.card
+    const isPay = card ? fgaPlanMapping?.filter(i => i.type === 'standard')?.map(i => i.cardId)?.includes(card?.id) : false
+    const fgaFlowType = !isPay ? 'pay': 'integration'
     this.state = {
       isPreviewingCard: false,
       isLoading: false,
+      fgaFlowType,
     };
   }
 
@@ -359,6 +367,7 @@ class DashCard extends Component {
     const showChartInfo = false;
     const showChartRefresh = !isPublic && !singleDisplay;
     const showStatusButton = showChartRefresh;
+    const showProduceFullData = this.state.fgaFlowType === 'normal';
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -373,6 +382,119 @@ class DashCard extends Component {
       isEditing,
       mainCard,
     });
+
+    // fga
+
+    const getFgaFlowType = () => {
+      // "normal"
+      // "pay"
+      // "integration"
+      return this.state.fgaFlowType
+    }
+    const changeFgaFlowType = (type) => {
+      this.setState({fgaFlowType: type})
+    }
+    const isCustom =
+      // !(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935)) &&
+      ( [186,10, 52, 37,25].includes(this.props?.user?.id) && window.location.pathname.includes("acquisition_users_pro") && (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'loading'))
+
+    const showIntegrationDialog = () => {
+      const modalDestroy = Modal.info({
+        width: 900,
+        icon: null,
+        content: (<FgaFlowUploadLayout onSuccess={() => {
+          changeFgaFlowType("loading")
+          // changeFgaFlowType("normal")
+          modalDestroy.destroy()
+          this.props.fgaFlowInteractionSuccess?.()
+        }}/>),
+        okText: "OK",
+        footer: null,
+        onOk: () => {
+          changeFgaFlowType("loading")
+          // changeFgaFlowType("normal")
+        },
+      });
+    }
+  console.log("this.propsthis.propsthis.props", this.props)
+    const renderFgaFlowTypeLayout = (type) => {
+      if (type === "pay") {
+        return (
+          <FgaProResult
+            cardId={dashcard.card.id}
+            height={this.props.height}
+            width={this.props.gridItemWidth}
+            subTitle={<div className={"text-white"}><LockFilled /> Subscribe to a plan to access this data.<br/>This data is Only available for advanced plan</div>}
+            extra={[
+              <Button key='xxx' onClick={() => {
+                Modal.info({
+                  icon: null,
+                  content: (<div className="flex flex-col">
+                    <Radio.Group style={{ width: '100%' }} className="flex flex-col" defaultValue={"Advanced Package $300"}>
+                      {['Advanced Package $300', 'Community Package $400'].map((item, index) => (
+                        <Radio key={index} value={item} >
+                          {item}
+                        </Radio>
+                      ))}
+                    </Radio.Group>
+                  </div>),
+                  okText: "OK",
+                  onOk: () => {
+                    message.success("Subscribe successfully!");
+                    changeFgaFlowType("integration")
+                  },
+                });
+              }}>
+                Upgrade
+              </Button>
+            ]}
+          />
+        )
+      }
+      if (type === "integration") {
+        return (
+          <FgaProResult
+            cardId={dashcard.card.id}
+            height={this.props.height}
+            width={this.props.width}
+            subTitle={<div className={"text-white"}><LockFilled /> Upload Your data to view this data. <br/>Just takes only 5 minutes.</div>}
+            extra={[
+              <Button key='xxx' onClick={() => {
+                showIntegrationDialog()
+              }}>Data Integration</Button>
+            ]}
+          />
+
+        )
+      }
+      if (type === "loading") {
+        return (
+          <FgaProResult
+            icon={<Spin key="xxx"/>}
+            cardId={dashcard.card.id}
+            height={this.props.height}
+            width={this.props.width}
+            subTitle={<div className={"text-white"}>The data is being generated! <br />please wait a few minutes. <br />You can refresh the dashboard</div>}
+          />
+
+        )
+      }
+    }
+
+    const renderCustomLayout = () => {
+      const type = getFgaFlowType(series[0]?.card)
+      const cardName = get(series[0]?.card, 'originalCardName') || get(series[0]?.card, 'name')
+      return (
+        <div className="flex flex-col w-full h-full align-top text-white">
+          <div className="text-left">{cardName}</div>
+          <div className="flex-1 flex justify-center items-center h-full overflow-hidden" >
+            {renderFgaFlowTypeLayout(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935) ? "loading": type)}
+          </div>
+        </div>
+      )
+    }
+
+    // end fga
 
     const notShowReplacementContent =
       isImageDisplay ||
@@ -389,6 +511,7 @@ class DashCard extends Component {
     const isGrowth = isFgaPath();
     const isAB = isABPath() || isFGAVCPath();
     const showButtons = !isGrowth || !isAB;
+
     return (
       <DashCardRoot
         id={id}
@@ -547,6 +670,36 @@ class DashCard extends Component {
                 </a>
               </Tooltip>
             )}
+          {showProduceFullData && (
+            <Tooltip key="produceFullData" tooltip={t`Produce Full Data`}>
+              <DatabaseOutlined
+                onClick={() => {
+                  Modal.confirm(
+                    {
+                      width: 500,
+                      title: "Is the data correct?",
+                      content: (
+                        <div>
+                          Should we proceed with generating the full dataset?
+                          <div className="mt-4" />
+                          <br />Once generated, the data cannot be undone. The completion time is t-1. If it finish an email will be sent to your account.
+                          <div className="mt-4" />
+                        </div>
+                      ),
+                      cancelText: "Re-Upload Data",
+                      okText: "Produce Full Dataset",
+                      onCancel: () => {
+                        showIntegrationDialog()
+                      },
+                      onOk: () => {
+                        message.success("Data is being generated. If it finish an email will be sent to your account")
+                      }
+                    }
+                  )
+                }}
+              />
+            </Tooltip>
+          )}
           {/* {!hideDownload && (
             <a
               className="html2canvas-filter"
@@ -569,6 +722,11 @@ class DashCard extends Component {
             </a>
           )} */}
         </div>)}
+        {isCustom && (
+          <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered absolute w-full h-full" style={{background: "#1B1B1E", zIndex: 2}}>
+            {renderCustomLayout()}
+          </div>
+        )}
         {isEditingDashboardLayout ? (
           <DashboardCardActionsPanel onMouseDown={this.preventDragging}>
             <DashCardActionButtons

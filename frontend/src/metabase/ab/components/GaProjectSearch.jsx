@@ -34,6 +34,7 @@ const GaProjectSearch = props => {
   const [currentProject, setCurrentProject] = useState(projectPath);
   const ref1 = useRef(null);
   const [tourOpen, setTourOpen] = useState(false);
+  const from = location?.pathname?.startsWith("/fga/pro") ? "pro" : "";
   const steps = [
     {
       title: 'Switch Project',
@@ -49,7 +50,7 @@ const GaProjectSearch = props => {
     }
 
   const loadProjectDetail = protocolSlug => {
-    loadCurrentFgaProjectNew(protocolSlug);
+    loadCurrentFgaProjectNew(protocolSlug, from);
   };
 
   useEffect(() => {
@@ -83,7 +84,7 @@ const GaProjectSearch = props => {
   }, [fgaProjectList]);
 
   useEffect(() => {
-    loadFgaProjectList();
+    loadFgaProjectList({ from });
   }, [user?.id])
 
   useEffect(() => {
