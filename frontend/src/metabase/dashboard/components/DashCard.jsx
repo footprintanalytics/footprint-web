@@ -403,16 +403,16 @@ class DashCard extends Component {
         width: 900,
         icon: null,
         content: (<FgaFlowUploadLayout onSuccess={() => {
-          changeFgaFlowType("loading")
-          // changeFgaFlowType("normal")
+          // changeFgaFlowType("loading")
+          changeFgaFlowType("normal")
           modalDestroy.destroy()
           this.props.fgaFlowInteractionSuccess?.()
         }}/>),
         okText: "OK",
         footer: null,
         onOk: () => {
-          changeFgaFlowType("loading")
-          // changeFgaFlowType("normal")
+          // changeFgaFlowType("loading")
+          changeFgaFlowType("normal")
         },
       });
     }
@@ -488,7 +488,7 @@ class DashCard extends Component {
         <div className="flex flex-col w-full h-full align-top text-white">
           <div className="text-left">{cardName}</div>
           <div className="flex-1 flex justify-center items-center h-full overflow-hidden" >
-            {renderFgaFlowTypeLayout(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935) ? "loading": type)}
+            {renderFgaFlowTypeLayout(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935) ? "normal": type)}
           </div>
         </div>
       )
