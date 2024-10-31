@@ -16,7 +16,7 @@ const FgaFlowDataProcess = ({ onSuccess, previewData, file }) => {
       },
       { label: "Step 3: ETL data "},
     ]
-
+  const projectId = 1
 
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ const FgaFlowDataProcess = ({ onSuccess, previewData, file }) => {
 
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('projectName', 'anichess');
+      formData.append('projectId', projectId + "");
 
       try {
         const data = await axios.post('/api/v1/fga/event/upload/csv', formData, {

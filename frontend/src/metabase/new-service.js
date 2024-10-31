@@ -280,7 +280,7 @@ export const getProjectList = async params => {
         "logo": ""
       },*/
       {
-        "projectId": params?.from === 'pro' ? 232: 3,
+        "projectId": params?.from === 'pro' ? 1: 3,
         "projectName": "Gaming Demo Project 2",
         "protocolName": "Gaming Demo Project 2",
         "protocolSlug": "Gaming Demo Project 2",
@@ -868,6 +868,6 @@ export const getMediaTagTop = (params, config) => {
   return POST(`api/v1/media/tagTop`, params, { silentFp: true, silent: true });
 };
 
-export const uploadCSVForFga = (params, config) => {
-  return POST(`api/v1/fga/event/upload/csv`, params, { silentFp: true, silent: true });
+export const fgaEventConfirmCsv = (params) => {
+  return POST(`api/v1/fga/event/confirm/csv`, params);
 };

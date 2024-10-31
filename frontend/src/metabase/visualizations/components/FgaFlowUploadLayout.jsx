@@ -4,19 +4,23 @@ import { Avatar, Button, Modal, Result, Radio, message, Timeline, Steps, theme, 
 import { CheckCircleOutlined } from "@ant-design/icons";
 import FgaFlowDataProcess from "metabase/visualizations/components/FgaFlowDataProcess";
 import FgaFlowProduceData from "metabase/visualizations/components/FgaFlowProduceData";
+import { fgaEventConfirmCsv } from "metabase/new-service";
 
 const FgaFlowUploadLayout = ({onSuccess}) => {
   const [timeItems, setTimeItems] = useState([{ label: 'Step 1: Test connection done', completed: true }, { label: 'Step 2: Sync sample data done', completed: true }, { label: 'Step 3: ETL sample data done', completed: true }]);
   const { token } = theme.useToken();
   const [count, setCount] = useState(0);
+  const [confirmCsvLoading, setConfirmCsvLoading] = useState();
   const [csvData, setCSVData] = useState([]);
   const [file, setFile] = useState()
   const [current, setCurrent] = useState(0);
+  const projectId = 1
+  const fileName = file?.name
   const columns = [
     {
-      title: 'Project Name',
-      dataIndex: 'project_name',
-      key: 'project_name',
+      title: 'Project Id',
+      dataIndex: 'project_id',
+      key: 'project_id',
     },
     {
       title: 'User ID',
@@ -91,7 +95,7 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
       // token: getUserToken(),
     },
     data: {
-      "projectName": "Mocaverse",
+      "projectId": projectId + "",
     },
     beforeUpload: async (file) => {
       // const isLt2M = file.size / 1024 / 1024 < 10
@@ -100,6 +104,7 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
       //   return false
       // }
       setFile(file);
+      console.log("xxxxxxxx", file)
       setCurrent(current + 1)
       return false
     },
@@ -114,6 +119,16 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
       }
       console.log('upload onChange: ', info, data)
     },
+  }
+
+  const handleConfirmCSV = async () => {
+    setConfirmCsvLoading(true)
+    await fgaEventConfirmCsv({
+      "projectId": projectId + "",
+      "fileName": fileName,
+    })
+    setConfirmCsvLoading(false)
+    setCurrent(current + 1)
   }
   const steps = [
     {
@@ -161,7 +176,9 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
         <Table columns={columns} dataSource={csvData} pagination={false} scroll={{ y: 300 }}/>
         <div className={"flex justify-center "} style={{gap: 10, padding: 20}}>
           <Button onClick={() => setCurrent(0)}>Upload Data Again</Button>
-          <Button type="primary" onClick={() => setCurrent(current + 1)}>Start to Produce Data</Button>
+          <Button loading={confirmCsvLoading} type="primary" onClick={() => {
+            handleConfirmCSV()
+          }}>Start to Produce Data</Button>
         </div>
       </div>),
       onClick: () => setCurrent(2),
