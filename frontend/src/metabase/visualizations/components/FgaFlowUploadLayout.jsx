@@ -6,7 +6,7 @@ import FgaFlowDataProcess from "metabase/visualizations/components/FgaFlowDataPr
 import FgaFlowProduceData from "metabase/visualizations/components/FgaFlowProduceData";
 import { fgaEventConfirmCsv } from "metabase/new-service";
 
-const FgaFlowUploadLayout = ({onSuccess}) => {
+const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
   const [timeItems, setTimeItems] = useState([{ label: 'Step 1: Test connection done', completed: true }, { label: 'Step 2: Sync sample data done', completed: true }, { label: 'Step 3: ETL sample data done', completed: true }]);
   const { token } = theme.useToken();
   const [count, setCount] = useState(0);
@@ -14,7 +14,7 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
   const [csvData, setCSVData] = useState([]);
   const [file, setFile] = useState()
   const [current, setCurrent] = useState(0);
-  const projectId = 631
+  const projectId = projectObject?.id
   const fileName = file?.name
   const columns = [
     {
@@ -162,10 +162,13 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
     {
       title: 'Data Processing',
       content: (
-        <FgaFlowDataProcess previewData={(data) => {
-          setCSVData(data)
-          setCurrent(current + 1)
-        }} file={file}/>
+        <FgaFlowDataProcess
+          projectObject={projectObject}
+          previewData={(data) => {
+            setCSVData(data)
+            setCurrent(current + 1)
+          }} file={file}
+        />
       ),
       onClick: () => setCurrent(1),
     },

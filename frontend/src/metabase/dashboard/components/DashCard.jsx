@@ -58,6 +58,7 @@ import { Button, message, Modal, Radio, Spin } from "antd";
 import { fgaPlanMapping } from "metabase/visualizations/util/data";
 import FgaProResult from "metabase/visualizations/components/FgaProResult";
 import FgaFlowUploadLayout from "metabase/visualizations/components/FgaFlowUploadLayout";
+import { getFgaProject } from "metabase/selectors/user";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -224,7 +225,6 @@ class DashCard extends Component {
       chartStyle,
       realtimeList,
     } = this.props;
-
     const mainCard = {
       ...dashcard.card,
       visualization_settings: mergeSettings(
@@ -404,7 +404,9 @@ class DashCard extends Component {
       const modalDestroy = Modal.info({
         width: 900,
         icon: null,
-        content: (<FgaFlowUploadLayout onSuccess={() => {
+        content: (<FgaFlowUploadLayout
+          projectObject={this.props.projectObject}
+          onSuccess={() => {
           // changeFgaFlowType("loading")
           changeFgaFlowType("normal")
           modalDestroy.destroy()
@@ -1097,6 +1099,7 @@ const ClickBehaviorSidebarOverlay = ({
 };
 
 const mapStateToProps = state => ({
+  projectObject: getFgaProject(state),
   realtimeList: getRealtimeList(state),
 });
 
