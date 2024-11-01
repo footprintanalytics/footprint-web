@@ -280,7 +280,7 @@ export const getProjectList = async params => {
         "logo": ""
       },*/
       {
-        "projectId": params?.from === 'pro' ? 1: 3,
+        "projectId": params?.from === 'pro' ? 631: 3,
         "projectName": "Gaming Demo Project 2",
         "protocolName": "Gaming Demo Project 2",
         "protocolSlug": "Gaming Demo Project 2",

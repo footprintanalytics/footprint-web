@@ -367,7 +367,8 @@ class DashCard extends Component {
     const showChartInfo = false;
     const showChartRefresh = !isPublic && !singleDisplay;
     const showStatusButton = showChartRefresh;
-    const showProduceFullData = this.state.fgaFlowType === 'normal';
+    const showProduceFullData = this.props.showNormalChartData;
+    // const showProduceFullData = this.state.fgaFlowType === 'normal';
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -396,6 +397,7 @@ class DashCard extends Component {
     }
     const isCustom =
       // !(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935)) &&
+      !(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935)) &&
       ( [186,10, 52, 37,25].includes(this.props?.user?.id) && window.location.pathname.includes("acquisition_users_pro") && (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'loading'))
 
     const showIntegrationDialog = () => {
@@ -416,7 +418,7 @@ class DashCard extends Component {
         },
       });
     }
-  console.log("this.propsthis.propsthis.props", this.props)
+
     const renderFgaFlowTypeLayout = (type) => {
       if (type === "pay") {
         return (
@@ -488,7 +490,8 @@ class DashCard extends Component {
         <div className="flex flex-col w-full h-full align-top text-white">
           <div className="text-left">{cardName}</div>
           <div className="flex-1 flex justify-center items-center h-full overflow-hidden" >
-            {renderFgaFlowTypeLayout(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935) ? "normal": type)}
+            {renderFgaFlowTypeLayout(type)}
+            {/*{renderFgaFlowTypeLayout(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935) ? "normal": type)}*/}
           </div>
         </div>
       )
@@ -723,7 +726,7 @@ class DashCard extends Component {
           )} */}
         </div>)}
         {isCustom && (
-          <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered absolute w-full h-full" style={{background: "#1B1B1E", zIndex: 2}}>
+          <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered absolute w-full h-full" style={{background: "#282828", zIndex: 2}}>
             {renderCustomLayout()}
           </div>
         )}
