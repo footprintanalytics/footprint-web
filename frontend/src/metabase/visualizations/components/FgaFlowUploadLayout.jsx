@@ -14,7 +14,7 @@ const FgaFlowUploadLayout = ({onSuccess}) => {
   const [csvData, setCSVData] = useState([]);
   const [file, setFile] = useState()
   const [current, setCurrent] = useState(0);
-  const projectId = 1
+  const projectId = 631
   const fileName = file?.name
   const columns = [
     {

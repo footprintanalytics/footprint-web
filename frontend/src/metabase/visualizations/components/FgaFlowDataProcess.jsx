@@ -3,8 +3,15 @@ import React, { useState, useEffect } from "react";
 import { Timeline, message, Spin, Button } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
-
-const FgaFlowDataProcess = ({ onSuccess, previewData, file }) => {
+import { getFgaProject, getUser } from "metabase/selectors/user";
+import { getFgaChain } from "metabase/selectors/control";
+import _ from "underscore";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { push } from "react-router-redux";
+import { loginTelegram } from "metabase/auth/actions";
+const FgaFlowDataProcess = ({ onSuccess, previewData, file, project }) => {
+  console.log('project', project)
   const timeItems =
     [
       // { label: " Step 1: Test connection "},
@@ -16,7 +23,7 @@ const FgaFlowDataProcess = ({ onSuccess, previewData, file }) => {
       },
       { label: "Step 3: ETL data "},
     ]
-  const projectId = 1
+  const projectId = 631
 
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
