@@ -37,7 +37,8 @@ export function formatUrl(value: string, options: OptionsType = {}) {
   const url = getLinkUrl(value, options);
   if (jsx && rich && url) {
     const text = getLinkText(value, options);
-    const targetObject = IFRAMED ? { target: "_self" } : {};
+    const targetObject = IFRAMED && !'growthly'.includes(url.toLowerCase()) ? { target: "_blank" } : {};
+    console.log('targetObject=>', targetObject)
     let formatedURL = formatUrl2Growth(location?.pathname, url);
     formatedURL = formatUrl2AB(location?.pathname, formatedURL);
     if (formatedURL.startsWith("/fga")
