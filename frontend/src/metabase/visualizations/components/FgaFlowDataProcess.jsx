@@ -3,8 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Timeline, message, Spin, Button } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
-
-const FgaFlowDataProcess = ({ onSuccess, previewData, file }) => {
+const FgaFlowDataProcess = ({ projectObject, previewData, file }) => {
   const timeItems =
     [
       // { label: " Step 1: Test connection "},
@@ -16,7 +15,7 @@ const FgaFlowDataProcess = ({ onSuccess, previewData, file }) => {
       },
       { label: "Step 3: ETL data "},
     ]
-
+  const projectId = projectObject?.id
 
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -30,7 +29,7 @@ const FgaFlowDataProcess = ({ onSuccess, previewData, file }) => {
 
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('projectName', 'anichess');
+      formData.append('projectId', projectId + "");
 
       try {
         const data = await axios.post('/api/v1/fga/event/upload/csv', formData, {

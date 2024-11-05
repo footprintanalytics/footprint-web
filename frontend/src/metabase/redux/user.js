@@ -533,7 +533,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
             "twitter": {},
             "discord": {},
             "ga": {},
-            "id": from === 'pro' ? 232 : 3,
+            "id": from === 'pro' ? 631 : 3,
             "existsWeb2Data": true,
             "walletRetentionChain": "Polygon"
           }

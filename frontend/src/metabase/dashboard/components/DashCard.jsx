@@ -58,6 +58,7 @@ import { Button, message, Modal, Radio, Spin } from "antd";
 import { fgaPlanMapping } from "metabase/visualizations/util/data";
 import FgaProResult from "metabase/visualizations/components/FgaProResult";
 import FgaFlowUploadLayout from "metabase/visualizations/components/FgaFlowUploadLayout";
+import { getFgaProject } from "metabase/selectors/user";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -224,7 +225,6 @@ class DashCard extends Component {
       chartStyle,
       realtimeList,
     } = this.props;
-
     const mainCard = {
       ...dashcard.card,
       visualization_settings: mergeSettings(
@@ -367,7 +367,8 @@ class DashCard extends Component {
     const showChartInfo = false;
     const showChartRefresh = !isPublic && !singleDisplay;
     const showStatusButton = showChartRefresh;
-    const showProduceFullData = this.state.fgaFlowType === 'normal';
+    const showProduceFullData = this.props.showNormalChartData;
+    // const showProduceFullData = this.state.fgaFlowType === 'normal';
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -396,27 +397,30 @@ class DashCard extends Component {
     }
     const isCustom =
       // !(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935)) &&
+      !(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935)) &&
       ( [186,10, 52, 37,25].includes(this.props?.user?.id) && window.location.pathname.includes("acquisition_users_pro") && (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'loading'))
 
     const showIntegrationDialog = () => {
       const modalDestroy = Modal.info({
         width: 900,
         icon: null,
-        content: (<FgaFlowUploadLayout onSuccess={() => {
-          changeFgaFlowType("loading")
-          // changeFgaFlowType("normal")
+        content: (<FgaFlowUploadLayout
+          projectObject={this.props.projectObject}
+          onSuccess={() => {
+          // changeFgaFlowType("loading")
+          changeFgaFlowType("normal")
           modalDestroy.destroy()
           this.props.fgaFlowInteractionSuccess?.()
         }}/>),
         okText: "OK",
         footer: null,
         onOk: () => {
-          changeFgaFlowType("loading")
-          // changeFgaFlowType("normal")
+          // changeFgaFlowType("loading")
+          changeFgaFlowType("normal")
         },
       });
     }
-  console.log("this.propsthis.propsthis.props", this.props)
+
     const renderFgaFlowTypeLayout = (type) => {
       if (type === "pay") {
         return (
@@ -488,7 +492,8 @@ class DashCard extends Component {
         <div className="flex flex-col w-full h-full align-top text-white">
           <div className="text-left">{cardName}</div>
           <div className="flex-1 flex justify-center items-center h-full overflow-hidden" >
-            {renderFgaFlowTypeLayout(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935) ? "loading": type)}
+            {renderFgaFlowTypeLayout(type)}
+            {/*{renderFgaFlowTypeLayout(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935) ? "normal": type)}*/}
           </div>
         </div>
       )
@@ -723,7 +728,7 @@ class DashCard extends Component {
           )} */}
         </div>)}
         {isCustom && (
-          <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered absolute w-full h-full" style={{background: "#1B1B1E", zIndex: 2}}>
+          <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered absolute w-full h-full" style={{background: "#282828", zIndex: 2}}>
             {renderCustomLayout()}
           </div>
         )}
@@ -1094,6 +1099,7 @@ const ClickBehaviorSidebarOverlay = ({
 };
 
 const mapStateToProps = state => ({
+  projectObject: getFgaProject(state),
   realtimeList: getRealtimeList(state),
 });
 
