@@ -37,7 +37,7 @@ export function formatUrl(value: string, options: OptionsType = {}) {
   const url = getLinkUrl(value, options);
   if (jsx && rich && url) {
     const text = getLinkText(value, options);
-    const targetObject = IFRAMED ? { target: "_blank" } : {};
+    const targetObject = IFRAMED ? { target: "_self" } : {};
     let formatedURL = formatUrl2Growth(location?.pathname, url);
     formatedURL = formatUrl2AB(location?.pathname, formatedURL);
     if (formatedURL.startsWith("/fga")
