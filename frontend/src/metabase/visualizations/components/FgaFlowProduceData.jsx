@@ -13,10 +13,10 @@ const FgaFlowProduceData = ({ onSuccess, previewData }) => {
     <div className="flex flex-col justify-center line-height-2" style={{padding: 40, lineHeight: 1.5}}>
       <Result
         icon={<Spin/>}
-        title={"The data is being generated !"}
+        title={"Data Brewing!"}
         subTitle={
           <div className={"flex flex-col items-center"}>
-            <span>Data Brewing! <br/>Hang tight for about 3 minutes, or explore other dashboards and refresh later</span>
+            <span>Hang tight for about 3 minutes, or explore other dashboards and refresh later</span>g
             <Button type="primary" style={{width: 200, marginTop: 20}} onClick={() => onSuccess?.()}>View Dashboard</Button>
           </div>
         }
