@@ -115,7 +115,13 @@ const GaProjectSearch = props => {
   }, [fgaProjectList]);
 
   useEffect(() => {
-    loadFgaProjectList({ from });
+    if (isProFga) {
+      if (user?.id) {
+        loadFgaProjectList({ from });
+      }
+    } else {
+      loadFgaProjectList({ from });
+    }
   }, [user?.id])
 
   useEffect(() => {
