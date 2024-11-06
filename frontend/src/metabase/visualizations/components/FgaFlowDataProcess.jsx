@@ -8,12 +8,12 @@ const FgaFlowDataProcess = ({ projectObject, previewData, file }) => {
     [
       // { label: " Step 1: Test connection "},
       {
-        label: "Step 1: Upload data ",
+        label: "Step 1: Uploading Data ",
       },
       {
-        label: "Step 2: AI recognize data ",
+        label: "Step 2: AI Analyzing Now ",
       },
-      { label: "Step 3: ETL data "},
+      { label: "Step 3: AI Transforming Now "},
     ]
   const projectId = projectObject?.id
 

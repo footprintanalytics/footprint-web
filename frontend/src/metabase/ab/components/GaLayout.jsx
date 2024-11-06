@@ -75,9 +75,6 @@ const LayoutView = props => {
         imageHeight={630}
         siteName="Footprint Growth Analytics"
       />
-      {/*<Button onClick={() => {
-        props.setCreateFgaProjectModalShowAction({ show: true, projectObject: props.projectObject });
-      }}>ssss</Button>*/}
       <Layout
         hasSider
         className={`ga-layout ab-page h-full ${

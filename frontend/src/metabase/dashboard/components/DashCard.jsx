@@ -561,7 +561,7 @@ class DashCard extends Component {
             cardId={dashcard.card.id}
             height={this.props.height}
             width={this.props.gridItemWidth}
-            subTitle={<div className={"text-white"}><LockFilled />This data is Only available for advanced plan</div>}
+            subTitle={<div className={"text-white"}><LockFilled />your plan to unlock more exclusive insights</div>}
             extra={[
               <Button key='xxx' onClick={() => {
                 Modal.info({
@@ -599,11 +599,11 @@ class DashCard extends Component {
             cardId={dashcard.card.id}
             height={this.props.height}
             width={this.props.width}
-            subTitle={<div className={"text-white"}><LockFilled /> Upload Your data to view this data. </div>}
+            subTitle={<div className={"text-white"}><LockFilled />your web2 data to view standard analysis</div>}
             extra={[
               <Button key='xxx' onClick={() => {
                 showIntegrationDialog()
-              }}>Data Integration</Button>
+              }}>Upload</Button>
             ]}
           />
 
