@@ -449,7 +449,8 @@ class DashCard extends Component {
     const changeFgaFlowType = (type) => {
       this.setState({fgaFlowType: type})
     }
-    const isCustom =
+
+    const isCustom = !['text', 'image', 'filter'].includes(series[0]?.card?.display) &&
       // !(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935)) &&
       // !(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935)) &&
       (
