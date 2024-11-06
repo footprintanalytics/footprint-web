@@ -43,9 +43,9 @@ const FgaProResult = ({
         {extra}
       </Result>*/}
       <div className="flex flex-col justify-center items-center" style={{ padding: 0, width: "50%", flex: 1, gap: 10}}>
+        {extra}
         <div>{icon}</div>
         <div>{subTitle}</div>
-        {extra}
       </div>
     </div>
   )

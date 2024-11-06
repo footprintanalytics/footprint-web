@@ -135,7 +135,7 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
       onClick: () => setCurrent(0),
       content: (
         <div className="flex flex-col justify-center" style={{ lineHeight: 1.5, padding: 20, width: 360, margin: "auto"}}>
-          <div style={{marginBottom: 20}}>Choose a connector to upload your data:</div>
+          <div style={{marginBottom: 20}}>Pick Your Connector and Sync Your Data:</div>
 
             <Button className="w-full" >
               <Upload className="w-full" style={{width: "100%"}} name="avatar" {...propsUploadAvatarTcOss}>
@@ -177,10 +177,10 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
         <div>Here is what has been generated based on your data. Please confirm it is correct.</div>
         <Table columns={columns} dataSource={csvData} pagination={false} scroll={{ y: 300 }}/>
         <div className={"flex justify-center "} style={{gap: 10, padding: 20}}>
-          <Button onClick={() => setCurrent(0)}>Upload Data Again</Button>
+          <Button onClick={() => setCurrent(0)}>Not quite right? Upload Again</Button>
           <Button loading={confirmCsvLoading} type="primary" onClick={() => {
             handleConfirmCSV()
-          }}>Start to Produce Data</Button>
+          }}>{`Perfect! Let's Process the Data`}</Button>
         </div>
       </div>),
       onClick: () => setCurrent(2),
