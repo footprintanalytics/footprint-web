@@ -22,7 +22,7 @@ import ContractDecoding from "./ContractDecoding";
 import InputContractModal from "metabase/submit/contract/components/InputContractModal";
 import ContractInput from "metabase/submit/contract/components/ContractInput";
 
-const CHAIN_LIST = [
+export const CHAIN_LIST = [
   { value: "Ethereum", label: "Ethereum" },
   { value: "Polygon", label: "Polygon" },
   { value: "Optimism", label: "Optimism" },

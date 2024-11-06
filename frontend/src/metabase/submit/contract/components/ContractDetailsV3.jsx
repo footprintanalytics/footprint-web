@@ -56,7 +56,7 @@ const PROTOCOL_CATEGORY_LIST = [
   { value: "Others", label: "Others" },
 ];
 
-const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCategoryList, hideMoreOptions, hideProjectName, projectName, projectId, fromFgaAddProject, backAction }) => {
+const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCategoryList, hideMoreOptions, hideProjectCategory, hideWebsite, hideProjectName, projectName, projectId, fromFgaAddProject, backAction }) => {
   const [refresh, setRefresh] = useState(0);
   const [open, setOpen] = useState();
   const [contract, setContract] = useState([]);
@@ -372,7 +372,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
             }
           />
         </Form.Item>
-        <Form.Item
+        {!hideProjectCategory && (<Form.Item
           label="Project category"
           rules={[{ required: true, message: "Select project category" }]}
           name="projectCategory"
@@ -382,7 +382,8 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
             options={protocolCategoryList || PROTOCOL_CATEGORY_LIST}
           />
         </Form.Item>
-        <Form.Item
+        )}
+        {!hideWebsite && <Form.Item
           label="Website"
           name="website"
           tooltip="Please provide the website of the project you are submitting. This will help us verify the project and mapping more contract for this project."
@@ -405,6 +406,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
         >
           <Input placeholder="https://project-website.com" />
         </Form.Item>
+        }
         <Form.Item
           hidden={hideEmail}
           label="Your Email Address"

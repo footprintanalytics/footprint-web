@@ -1,14 +1,18 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from "react";
 import { connect } from "react-redux";
-import { Layout } from "antd";
+import _ from "lodash";
+import { Button, Card, Layout } from "antd";
 import { Content } from "antd/lib/layout/layout";
-import { getUser } from "metabase/selectors/user";
+import { getFgaProject, getUser } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
 import Meta from "metabase/components/Meta";
 import { StateProvider, StateContext } from "./StateProvider";
 import "../css/index.css";
 import GaSidebar from "./GaSidebar";
+import { createFgaProjectModalShowAction, loadFgaProjectList, loginModalShowAction } from "metabase/redux/control";
+import { push } from "react-router-redux";
+import { getUserExtend } from "metabase/selectors/control";
 
 const ABLayout = props => {
   const pathname = location.pathname;
@@ -22,6 +26,7 @@ const ABLayout = props => {
 
 const LayoutView = props => {
   const { isOpenSubMenu } = useContext(StateContext);
+  const { user, projectObject, setLoginModalShow, setCreateFgaProjectModalShowAction, userExtend, loadFgaProjectList } = props;
   const isGamesManage = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-manage")
   const isProjectList = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-list")
   const isBindGame = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("bind-game")
@@ -32,6 +37,33 @@ const LayoutView = props => {
     "Footprint Analytics, web3 gaming, web3 gaming analytics, web3 gaming data, NFT game, Web3 marketing, web3 growth marketing, wallet profile, Growth Marketing, cross chain data, blockchain data api, Zero coding analytics";
   const title =
     "Growth Analytics | Unlock your growth potential in a web3 world";
+  const isProFga = window.location.pathname.startsWith("/fga/pro")
+
+  // useEffect(() => {
+  //   if (isProFga) {
+  //     if (!user) {
+  //       setLoginModalShow({ show: true, from: "" });
+  //       return
+  //     }
+  //
+  //     if (!projectObject?.id) {
+  //       setCreateFgaProjectModalShowAction({ show: true });
+  //       return
+  //     }
+  //   }
+  // }, [setLoginModalShow, user, projectObject]);
+  //
+  if (isProFga && (!user || _.isEmpty(loadFgaProjectList))) {
+    return (
+      <div className="flex flex-col h-full justify-center items-center" >
+        <Card className="flex flex-col justify-center p-10 items-center" style={{gap: 30}}>
+          <h1>Welcome to FGA</h1>
+          {/*<Button>Create Project</Button>*/}
+        </Card>
+      </div>
+    )
+  }
+
   return (
     <>
       <Meta
@@ -43,6 +75,9 @@ const LayoutView = props => {
         imageHeight={630}
         siteName="Footprint Growth Analytics"
       />
+      {/*<Button onClick={() => {
+        props.setCreateFgaProjectModalShowAction({ show: true, projectObject: props.projectObject });
+      }}>ssss</Button>*/}
       <Layout
         hasSider
         className={`ga-layout ab-page h-full ${
@@ -65,7 +100,16 @@ const LayoutView = props => {
 const mapStateToProps = state => {
   return {
     user: getUser(state),
+    userExtend: getUserExtend(state),
+    projectObject: getFgaProject(state),
+    loadFgaProjectList: loadFgaProjectList,
   };
 };
 
-export default connect(mapStateToProps)(ABLayout);
+const mapDispatchToProps = {
+  onChangeLocation: push,
+  setLoginModalShow: loginModalShowAction,
+  setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ABLayout);

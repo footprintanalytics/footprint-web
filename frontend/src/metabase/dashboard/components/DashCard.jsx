@@ -54,11 +54,21 @@ import QueryRefreshButton from "metabase/query_builder/components/QueryRefreshBu
 import { isFgaPath } from "metabase/growth/utils/utils";
 import { isABPath, isFGAVCPath } from "metabase/ab/utils/utils";
 import { IFRAMED_IN_SELF } from "metabase/lib/dom";
-import { Button, message, Modal, Radio, Spin } from "antd";
+import { Button, Form, Input, message, Modal, Radio, Spin } from "antd";
 import { fgaPlanMapping } from "metabase/visualizations/util/data";
 import FgaProResult from "metabase/visualizations/components/FgaProResult";
 import FgaFlowUploadLayout from "metabase/visualizations/components/FgaFlowUploadLayout";
 import { getFgaProject } from "metabase/selectors/user";
+import { createFgaProjectModalShowAction, loginModalShowAction, setUserExtend } from "metabase/redux/control";
+import {
+  getFgaChartTypeMappingById, getWeb3TypeText,
+  isAdvancedCard,
+  isStandardCard,
+  isWeb2Card,
+  isWeb3Card, isWeb3DataCreated,
+} from "metabase/ab/utils/mapping-utils";
+import { getPeaToken, getUserExtend } from "metabase/selectors/control";
+import FgaFlowCreateProject from "metabase/visualizations/components/FgaFlowCreateProject";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -89,15 +99,15 @@ class DashCard extends Component {
     isNightMode: PropTypes.bool,
   };
 
+
   constructor(props) {
     super(props);
-    const card = props?.dashcard?.card
-    const isPay = card ? fgaPlanMapping?.filter(i => i.type === 'standard')?.map(i => i.cardId)?.includes(card?.id) : false
-    const fgaFlowType = !isPay ? 'pay': 'integration'
+    // const fgaFlowType = !userId ? "login" : !isPay ? 'pay': 'integration'
+
     this.state = {
       isPreviewingCard: false,
       isLoading: false,
-      fgaFlowType,
+      fgaFlowType: '',
     };
   }
 
@@ -386,19 +396,69 @@ class DashCard extends Component {
 
     // fga
 
-    const getFgaFlowType = () => {
+    /*const getFgaFlowType = () => {
       // "normal"
       // "pay"
       // "integration"
       return this.state.fgaFlowType
+
+    }*/
+    const getFgaFlowType = (props, cardId) => {
+      if (!cardId) {
+        return null
+      }
+      const userId = props.user?.id
+      if (!userId) {
+        return "login"
+      }
+      // 如果 projectid 为空 创建一个 project
+      if (!props.projectObject?.id) {
+      // if (!props.userExtend?.project) {
+        return "createProject"
+      }
+      // const isNotStandardUser = props.userExtend?.plan !== 'standard' && props.userExtend?.plan !== 'advanced'
+      const isNotStandardUser = false
+      const standardCard = isStandardCard(cardId)
+      // 如果当前用户不是付费用户
+      if (isNotStandardUser && standardCard) {
+        return 'pay'
+      }
+      const isNotAdvancedUser = props.userExtend?.plan !== 'advanced'
+      const advancedCard = isAdvancedCard(cardId)
+      // 如果当前用户是standard付费用户 并且当前卡片是advanced卡片
+      if (isNotAdvancedUser && advancedCard) {
+        return 'advancedPay'
+      }
+      const web2Card = isWeb2Card(cardId)
+      const isWeb2DataCreated = !!props.userExtend?.web2Data
+      // 如果当前card是web2，web2 数据没有创建 {
+      if (web2Card && !isWeb2DataCreated) {
+        return 'integration'
+      }
+      const web3Card = isWeb3Card(cardId)
+      const web3DataCreated = isWeb3DataCreated(cardId, this.props.projectObject)
+      // // 如果当前card是web3，web3 数据没有创建 {
+      if (web3Card && !web3DataCreated) {
+        return 'submitProjectInfo'
+      }
+      if (web2Card && isWeb2DataCreated) {
+        return 'normal'
+      }
+      return 'normal'
     }
     const changeFgaFlowType = (type) => {
       this.setState({fgaFlowType: type})
     }
     const isCustom =
       // !(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935)) &&
-      !(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935)) &&
-      ( [186,10, 52, 37,25].includes(this.props?.user?.id) && window.location.pathname.includes("acquisition_users_pro") && (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'loading'))
+      // !(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935)) &&
+      (
+        window.location.pathname.startsWith("/fga/pro")
+        && getFgaFlowType(this.props, series[0]?.card?.id) !== 'normal'
+        // [186,10, 52, 37,25].includes(this.props?.user?.id) &&
+        // window.location.pathname.includes("acquisition_users_pro") &&
+        // (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'login' || getFgaFlowType() === 'loading')
+      )
 
     const showIntegrationDialog = () => {
       const modalDestroy = Modal.info({
@@ -408,31 +468,105 @@ class DashCard extends Component {
           projectObject={this.props.projectObject}
           onSuccess={() => {
           // changeFgaFlowType("loading")
-          changeFgaFlowType("normal")
+          // changeFgaFlowType("normal")
+            this.props.setUserExtend({
+              ...(this.props.userExtend || {}),
+              web2Data: true
+            })
           modalDestroy.destroy()
-          this.props.fgaFlowInteractionSuccess?.()
+          // this.props.fgaFlowInteractionSuccess?.()
         }}/>),
         okText: "OK",
         footer: null,
         onOk: () => {
           // changeFgaFlowType("loading")
-          changeFgaFlowType("normal")
+          this.props.setUserExtend({
+            ...(this.props.userExtend || {}),
+            web2Data: true
+          })
+          // changeFgaFlowType("normal")
         },
       });
     }
 
     const renderFgaFlowTypeLayout = (type) => {
+      if (type === "login") {
+        return (
+          <FgaProResult
+            cardId={dashcard.card.id}
+            height={this.props.height}
+            width={this.props.gridItemWidth}
+            subTitle={<div className={"text-white"}><LockFilled /> Login to access this data.<br/>This data is Only available for Footprint user</div>}
+            extra={[
+              <Button key='xxx' onClick={() => {
+                this.props.setLoginModalShow({
+                  show: true,
+                  from: `FGA Pro`,
+                })
+              }}>
+                Sign in
+              </Button>
+            ]}
+          />
+        )
+      }
       if (type === "pay") {
         return (
           <FgaProResult
             cardId={dashcard.card.id}
             height={this.props.height}
             width={this.props.gridItemWidth}
-            subTitle={<div className={"text-white"}><LockFilled /> Subscribe to a plan to access this data.<br/>This data is Only available for advanced plan</div>}
+            subTitle={<div className={"text-white"}><LockFilled />This data is Only available for standard plan</div>}
             extra={[
               <Button key='xxx' onClick={() => {
                 Modal.info({
                   icon: null,
+                  title: "Choose a plan",
+                  content: (<div className="flex flex-col">
+                    <Radio.Group style={{ width: '100%' }} className="flex flex-col" defaultValue={"Standard Package $120"}>
+                      {['Standard Package $120'].map((item, index) => (
+                        <Radio key={index} value={item} >
+                          {item}
+                        </Radio>
+                      ))}
+                    </Radio.Group>
+                    {/*<Radio.Group style={{ width: '100%' }} className="flex flex-col" defaultValue={"Advanced Package $300"}>
+                      {['Advanced Package $300', 'Community Package $400'].map((item, index) => (
+                        <Radio key={index} value={item} >
+                          {item}
+                        </Radio>
+                      ))}
+                    </Radio.Group>*/}
+                  </div>),
+                  okText: "OK",
+                  onOk: () => {
+                    message.success("Subscribe successfully!");
+                    // changeFgaFlowType("integration")
+                    this.props.setUserExtend({
+                      ...(this.props.userExtend || {}),
+                      plan: 'standard'
+                    })
+                  },
+                });
+              }}>
+                Subscribe
+              </Button>
+            ]}
+          />
+        )
+      }
+      if (type === "advancedPay") {
+        return (
+          <FgaProResult
+            cardId={dashcard.card.id}
+            height={this.props.height}
+            width={this.props.gridItemWidth}
+            subTitle={<div className={"text-white"}><LockFilled />This data is Only available for advanced plan</div>}
+            extra={[
+              <Button key='xxx' onClick={() => {
+                Modal.info({
+                  icon: null,
+                  title: "Choose a plan",
                   content: (<div className="flex flex-col">
                     <Radio.Group style={{ width: '100%' }} className="flex flex-col" defaultValue={"Advanced Package $300"}>
                       {['Advanced Package $300', 'Community Package $400'].map((item, index) => (
@@ -445,7 +579,11 @@ class DashCard extends Component {
                   okText: "OK",
                   onOk: () => {
                     message.success("Subscribe successfully!");
-                    changeFgaFlowType("integration")
+                    // changeFgaFlowType("integration")
+                    this.props.setUserExtend({
+                      ...(this.props.userExtend || {}),
+                      plan: 'advanced'
+                    })
                   },
                 });
               }}>
@@ -461,7 +599,7 @@ class DashCard extends Component {
             cardId={dashcard.card.id}
             height={this.props.height}
             width={this.props.width}
-            subTitle={<div className={"text-white"}><LockFilled /> Upload Your data to view this data. <br/>Just takes only 5 minutes.</div>}
+            subTitle={<div className={"text-white"}><LockFilled /> Upload Your data to view this data. </div>}
             extra={[
               <Button key='xxx' onClick={() => {
                 showIntegrationDialog()
@@ -483,14 +621,86 @@ class DashCard extends Component {
 
         )
       }
+      if (type === "createProject") {
+        return (
+          <FgaProResult
+            cardId={dashcard.card.id}
+            height={this.props.height}
+            width={this.props.gridItemWidth}
+            subTitle={<div className={"text-white"}><LockFilled />Create Project to access this data.</div>}
+            extra={[
+              <Button key='xxx' onClick={() => {
+                Modal.info({
+                  icon: null,
+                  title: "Create Project",
+                  content: (<div className="flex flex-col">
+                    <Form>
+                      <Form.Item label="Project Name">
+                        <Input placeholder={"please input your project name"}/>
+                      </Form.Item>
+                    </Form>
+                  </div>),
+                  okText: "OK",
+                  onOk: () => {
+                    message.success("Crate Project successfully!");
+                    // changeFgaFlowType("normal")
+                    this.props.setUserExtend({
+                      ...(this.props.userExtend || {}),
+                      project: true
+                    })
+                  },
+                });
+              }}>
+                Create Project
+              </Button>
+            ]}
+          />
+        )
+      }
+      if (type === "submitProjectInfo") {
+        return (
+          <FgaProResult
+            cardId={dashcard.card.id}
+            height={this.props.height}
+            width={this.props.gridItemWidth}
+            subTitle={<div className={"text-white"}><LockFilled />Submit project web3 info</div>}
+            extra={[
+              <Button key='xxx' onClick={() => {
+                this.props.setCreateFgaProjectModalShowAction({ show: true, projectObject: this.props.projectObject });
+                // Modal.info({
+                //   icon: null,
+                //   width: 600,
+                //   title: "Submit NFT/Token Info",
+                //   content: (<div className="flex flex-col">
+                //    <FgaFlowCreateProject />
+                //   </div>),
+                //   okText: "OK",
+                //   onOk: () => {
+                //     message.success("Submit successfully!");
+                //     // changeFgaFlowType("normal")
+                //     this.props.setUserExtend({
+                //       ...(this.props.userExtend || {}),
+                //       web3Data: true
+                //     })
+                //   },
+                // });
+              }}>
+                Submit {getWeb3TypeText(dashcard.card.id)}
+              </Button>
+            ]}
+          />
+        )
+      }
     }
 
     const renderCustomLayout = () => {
-      const type = getFgaFlowType(series[0]?.card)
+      const type = getFgaFlowType(this.props, series[0]?.card?.id)
       const cardName = get(series[0]?.card, 'originalCardName') || get(series[0]?.card, 'name')
+      // const card = this.props?.dashcard?.card
+      // const fgaFlowType = this.getFgaFlowType(this.props, card?.id)
       return (
         <div className="flex flex-col w-full h-full align-top text-white">
-          <div className="text-left">{cardName}</div>
+          <div className="text-left mt1 ml1" style={{fontWeight: "bold"}}>{cardName}</div>
           <div className="flex-1 flex justify-center items-center h-full overflow-hidden" >
             {renderFgaFlowTypeLayout(type)}
             {/*{renderFgaFlowTypeLayout(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935) ? "normal": type)}*/}
@@ -1101,11 +1311,15 @@ const ClickBehaviorSidebarOverlay = ({
 const mapStateToProps = state => ({
   projectObject: getFgaProject(state),
   realtimeList: getRealtimeList(state),
+  userExtend: getUserExtend(state)
 });
 
 const mapDispatchToProps = {
   toggleSidebar,
   addTextDashCardToDashboard,
+  setLoginModalShow: loginModalShowAction,
+  setUserExtend: setUserExtend,
+  setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashCard);

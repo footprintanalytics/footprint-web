@@ -261,7 +261,9 @@ export const getProtocolList = async params => {
   return GET(`/api/v1/project/protocol/list`, params, {'Cache-Control': 'max-age=1800'});
 };
 export const getProjectList = async params => {
-  console.log("getProjectList", params)
+  if (window.location.pathname.startsWith('/fga/pro')) {
+    return GET(`/api/v1/project/list`, params);
+  }
   return [
       /*{
         "projectId": 1,
@@ -297,7 +299,6 @@ export const getProjectList = async params => {
       },*/
     ]
 
-  // return GET(`/api/v1/project/list`, params);
 };
 export const postProject = async params => {
   return POST(`/api/v1/project`, params);
@@ -307,6 +308,10 @@ export const deleteProject = async params => {
 };
 export const getProtocolDetail = async params => {
   return GET(`/api/v1/project/protocol/detail`, params);
+};
+export const getProtocolDetailById = async params => {
+  return GET(`/api/v1/project/protocol/detail-by-id`, params);
+  // return GET(`/mock/api/v1/project/protocol/detail-by-id`, params);
 };
 
 export const tokenGeneral = params => {
@@ -766,6 +771,10 @@ export const submitRefProtocols = params => {
 
 export const submitFGAProtocols = params => {
   return POST(`/api/v1/project/protocol/submit`, params);
+};
+
+export const submitFGAContractForPro = params => {
+  return POST(`/api/v1/project/contract/submit`, params);
 };
 
 // get audit list ,status = ['reviewing'] type = contract | protocol

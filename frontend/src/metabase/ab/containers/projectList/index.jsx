@@ -36,7 +36,7 @@ const projectList = props => {
     await deleteProject({
       projectId: record.projectId,
     })
-    await loadFgaProjectList();
+    await loadFgaProjectList({from: "pro"});
     hide();
     message.success("Delete project successfully");
     console.log("deleteAction", record, projectObject)
@@ -164,12 +164,12 @@ const projectList = props => {
   );
 };
 
-const mapDispatchToProps = {
+const mapDispatchToProps = dispatch => ({
   setGames: setGames,
   loadCurrentFgaProjectNew,
   loadFgaFavoriteList,
-  loadFgaProjectList: loadFgaProjectList,
-};
+  loadFgaProjectList: dispatch(loadFgaProjectList),
+});
 
 const mapStateToProps = (state, props) => {
   return {

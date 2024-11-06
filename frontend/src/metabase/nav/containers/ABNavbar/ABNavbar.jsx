@@ -16,7 +16,7 @@ import {
   getCreateFgaProjectModalShow,
   getLoginModalShow,
   getSubmitAddrZkspaceModal,
-  getLoginModalDefaultRegister, getProjectSubmitModalShow,
+  getLoginModalDefaultRegister, getProjectSubmitModalShow, getUserExtend,
 } from "metabase/selectors/control";
 import {
   cancelFeedbackAction,
@@ -50,6 +50,7 @@ import { isBusinessTypePath } from "../../../ab/utils/utils";
 import CreateProjectModal2 from "metabase/ab/components/Modal/CreateProjectModal2";
 import ProjectSubmitContactModal from "metabase/ab/components/Modal/ProjectSubmitContactModal";
 import { getFgaProject } from "metabase/selectors/user";
+import CreateProjectModalForDemo from "metabase/ab/components/Modal/CreateProjectModalForDemo";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -66,6 +67,7 @@ const mapStateToProps = (state, props) => ({
   getIsUserFeedbackBlock: getIsUserFeedbackBlock(state, props),
   getSubmitAddrZkspaceModal: getSubmitAddrZkspaceModal(state, props),
   channel: getChannel(state) || "homepage",
+  userExtend: getUserExtend(state),
 });
 
 const mapDispatchToProps = {
@@ -460,7 +462,8 @@ class ABNavbar extends Component {
     };
     const showSearch = window.location.pathname.startsWith("/fga")
     const isGrowthFga = window.location.pathname.startsWith("/growthly")
-// className={ "dark"}
+    const isProFga = window.location.pathname.startsWith("/fga/pro")
+    const showAddProject = isProFga
     return (
       <div className="fga-Nav" style={{ display: rootDisplay,backgroundColor:'#1B1B1E' }}>
         <div className="Nav__left" style={{ borderRight: "1px solid #ffffff20" }}>
@@ -483,7 +486,8 @@ class ABNavbar extends Component {
         </div>
         <React.Fragment>
           {/*<div className="flex justify-start" style={{ paddingLeft: 30, fontSize: 20, color: "#FFFFFF" }}>{`👏 Welcome`}</div>*/}
-          <div className="Nav__search-bar" style={{ width: "100%", justifyContent: "center" }}>
+          <div className="Nav__search-bar" style={{ width: "100%", justifyContent: "center",  }}>
+          {/*<div className="Nav__search-bar" style={{ width: "100%", justifyContent: "center", display: !isProFga ? "" : this.props.userExtend?.project ? "" : "none" }}>*/}
             {showSearch && (<GaProjectSearch
               location={location}
               logout={this.props.logout}
@@ -492,7 +496,7 @@ class ABNavbar extends Component {
               }
             />
             )}
-            {/*<Button
+            {showAddProject && (<Button
               className="ml1"
               onClick={() => {
                 if (!user) {
@@ -502,7 +506,8 @@ class ABNavbar extends Component {
                 }
                 setCreateFgaProjectModalShowAction({ show: true });
               }}
-            >+ Add Project</Button>*/}
+            >+ Add Project</Button>
+            )}
           </div>
           <div className="Nav__mobile-logo">
             <Link
@@ -527,9 +532,10 @@ class ABNavbar extends Component {
         {this.renderModal()}
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}
-        <CreateProjectModal2
+        <CreateProjectModalForDemo
           open={createFgaProjectModalShow?.show}
           force={createFgaProjectModalShow?.force}
+          projectObject={createFgaProjectModalShow?.projectObject}
           location={location}
           onSuccess={() => {
             setCreateFgaProjectModalShowAction({ show: false });
