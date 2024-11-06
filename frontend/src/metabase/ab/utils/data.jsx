@@ -460,7 +460,7 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
           ["token_trading", "87efcdde-b574-48b4-a7ea-ff62a6ff3d78"],
           ["token_holders", "5a8acaed-c1b7-4995-9560-11b716ec6dff"],
           ["token_leaderboard", "f36c338b-d213-4071-9d92-66c7d575f7cb"],
-          ["nft_sales", "354b9c63-8904-4cc9-acea-3fb399748ff8"],
+          ["nft_sales", "f402d300-7a8b-46bd-8a39-5d0eb2066c3e"],
           ["nft_listing", "c09a2a49-a90b-4bd2-94b7-fbe192ad0eb7"],
           ["nft_nft_holder", "f4346e62-3191-4e08-b201-2abcc8d5956c"],
           ["nft_leaderboard", "21a0555b-4e8b-45cc-858d-ae41861ba9ee"],
