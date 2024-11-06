@@ -449,6 +449,9 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
           ]
         ),
       ]),
+      getItem("Settings", "settings", <SettingOutlined />, [
+        getItem("Project Info", "general", null),
+      ]),
     ]
     const keys = getKeys([...menuTabs]);
     return {
