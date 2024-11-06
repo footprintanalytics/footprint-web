@@ -92,20 +92,22 @@ const GaProjectSearch = props => {
       const projects = fgaProjectList;
       const index = projects.findIndex(i => i.projectName === currentProject);
       const projectIndex = index === -1 ? projects.length - 1 : index;
-      let project = defaultProject;
-        project = projects[projectIndex];
-      setCurrentProject(project.projectName);
-      saveLatestGAProject(project.projectName);
-      loadProjectDetail(project.projectId);
+      let project = projects[projectIndex];
+      if (project.projectId !== 1) {
+        setCurrentProject(project.projectName);
+        saveLatestGAProject(project.projectName);
+        console.log("project.projectIdproject.projectId", project.projectId, project)
+        loadProjectDetail(project.projectId);
 
-      setUserProject(projects);
-      if (
-        index === -1 && location.pathname.startsWith("/fga/") && location.pathname.includes("/project")
-      ) {
-        router?.push({
-          pathname: getGrowthProjectPath(project.projectName, menu),
-          query: router?.location?.query,
-        });
+        setUserProject(projects);
+        if (
+          index === -1 && location.pathname.startsWith("/fga/") && location.pathname.includes("/project")
+        ) {
+          router?.push({
+            pathname: getGrowthProjectPath(project.projectName, menu),
+            query: router?.location?.query,
+          });
+        }
       }
     }
   }, [fgaProjectList]);
@@ -129,15 +131,15 @@ const GaProjectSearch = props => {
     // saveLatestGAProject(option.protocolSlug);
     // setCurrentProject(option.protocolSlug);
     saveLatestGAProjectId(option.projectId);
-    loadProjectDetail(option.projectId);
+    // loadProjectDetail(option.projectId);
     const keys = fga_menu_data_v2(businessType, projectObject, null, user).keys
     const currentPath = props.menu
     const path = keys.includes(currentPath) ? currentPath : keys[0]
-    if (option.projectName) {
-      router?.push({
-        pathname: getGrowthProjectPath(option.projectName, path),
-      });
-    }
+    // if (option.projectName) {
+    //   router?.push({
+    //     pathname: getGrowthProjectPath(option.projectName, path),
+    //   });
+    // }
   };
 
 
@@ -146,9 +148,9 @@ const GaProjectSearch = props => {
         <>
           {/*{userProject?.length > 0 && (*/}
             <Select
+              style={{ width: 360, "display": fgaProjectList?.length > 1 ? "" : "none"}}
               showSearch
               ref={selectRef}
-              style={{ width: 360 }}
               dropdownStyle={{
                 background: "#1C1C1E",
                 color: "white",
@@ -176,7 +178,11 @@ const GaProjectSearch = props => {
               }
               // options={selectOptions}
             >
-              {fgaProjectList?.map(item => {
+              {fgaProjectList
+                ?.filter(item => item.projectId !== 1)
+                ?.filter(item => item.projectId !== 1)
+                ?.slice(-1)
+                ?.map(item => {
                 const logo = item.logo;
                 return (
                   <Select.Option key={item.projectId} label={item.projectName} value={item.projectId}>

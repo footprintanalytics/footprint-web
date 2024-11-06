@@ -225,6 +225,15 @@ export const loadFgaProjectList = createThunkAction(
       return result;
     },
 );
+export const LOAD_FGA_DASHBOARD_KEY =
+  "metabase/user/LOAD_FGA_DASHBOARD_KEY";
+export const setFgaDashboardKey = createThunkAction(
+  LOAD_FGA_DASHBOARD_KEY,
+  ({ key }) =>
+    async (dispatch, getState) => {
+      return key;
+    },
+);
 
 export const resetFgaProtocolList = createThunkAction(
   LOAD_FGA_PROTOCOL_LIST,
@@ -420,6 +429,14 @@ export const control = handleActions(
         return {
           ...state,
           fgaProjectList: payload,
+        };
+      },
+    },
+    [LOAD_FGA_DASHBOARD_KEY]: {
+      next: (state, { payload }) => {
+        return {
+          ...state,
+          fgaDashboardKey: payload,
         };
       },
     },

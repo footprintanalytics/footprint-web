@@ -37,12 +37,12 @@ import GameList from "./gameList";
 import BindGame from "./bindGame";
 import {
   getBindGameMapping,
-  getFgaChain,
+  getFgaChain, getFgaDashboardKey,
   getFgaFavoriteList,
   getFgaProjectList,
   getGamesByRedux,
 } from "metabase/selectors/control";
-import { loginModalShowAction, setGames } from "metabase/redux/control";
+import { loginModalShowAction, setFgaDashboardKey, setGames } from "metabase/redux/control";
 import ProjectList from "metabase/ab/containers/projectList";
 import KeysIds from "metabase/ab/components/KeysIds";
 import MySubmitProject from "metabase/ab/containers/MySubmitProject";
@@ -65,6 +65,7 @@ const Project = props => {
     favoriteList,
     fgaProjectList,
     businessType,
+    fgaDashboardKey,
   } =
     props;
   const [currentMenu, setCurrentMenu] = useState(menu);
@@ -260,7 +261,7 @@ const Project = props => {
             projectList={fgaProjectList}
             isFullscreen={false}
             hideTitle={true}
-            key={`${chain}${projectObject?.protocolSlug}${current_tab}`}
+            key={`${chain}${projectObject?.protocolSlug}${current_tab}${fgaDashboardKey ? fgaDashboardKey: ""}`}
             hideFooter
           />
           {/* all dashboart except twitter and discord , need a mask when no protocol */}
@@ -721,6 +722,7 @@ const mapStateToProps = (state, props) => {
     bindGameMapping: getBindGameMapping(state),
     favoriteList: getFgaFavoriteList(state),
     fgaProjectList: getFgaProjectList(state),
+    fgaDashboardKey: getFgaDashboardKey(state),
   };
 };
 

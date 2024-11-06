@@ -377,8 +377,8 @@ class DashCard extends Component {
     const showChartInfo = false;
     const showChartRefresh = !isPublic && !singleDisplay;
     const showStatusButton = showChartRefresh;
-    const showProduceFullData = this.props.showNormalChartData;
-    // const showProduceFullData = this.state.fgaFlowType === 'normal';
+    // const showProduceFullData = this.props.showNormalChartData;
+    const showProduceFullData = this.props.userExtend?.web2Data;
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);

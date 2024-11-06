@@ -519,7 +519,7 @@ class Visualization extends React.PureComponent {
         return (
           <div className="noResults">
             The data is not yet available, please.
-            <br />
+            {/*<br />
             {isABWeb3Dashboard ? (<>
               {" "}
               <Link onClick={() => {
@@ -539,7 +539,7 @@ class Visualization extends React.PureComponent {
                 BD team
               </Link>
               {" "}
-            </>)}
+            </>)}*/}
           </div>
         );
       }
