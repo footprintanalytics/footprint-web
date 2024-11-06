@@ -699,7 +699,7 @@ const Project = props => {
         </>
       ) : (
         <div style={{ marginTop: 40 }}>
-          <LoadingSpinner message="Loading project data..." />
+          <LoadingSpinner message="Loading Project Data..." />
         </div>
       )}
     </>

@@ -489,13 +489,13 @@ class ABNavbar extends Component {
           {/*<div className="flex justify-start" style={{ paddingLeft: 30, fontSize: 20, color: "#FFFFFF" }}>{`👏 Welcome`}</div>*/}
           <div className="Nav__search-bar" style={{ width: "100%", justifyContent: "center",  }}>
           {/*<div className="Nav__search-bar" style={{ width: "100%", justifyContent: "center", display: !isProFga ? "" : this.props.userExtend?.project ? "" : "none" }}>*/}
-            {showSearch && (<GaProjectSearch
-              location={location}
-              logout={this.props.logout}
-              setCreateFgaProjectModalShowAction={
-                setCreateFgaProjectModalShowAction
-              }
-            />
+            {showSearch && (
+              <GaProjectSearch
+                style={{ display: isProFga ? "none": "" }}
+                location={location}
+                logout={this.props.logout}
+                setCreateFgaProjectModalShowAction={setCreateFgaProjectModalShowAction}
+              />
             )}
             {/*{showAddProject && (<Button
               className="ml1"
@@ -509,7 +509,7 @@ class ABNavbar extends Component {
               }}
             >+ Add Project</Button>
             )}*/}
-            {showAddProject && this.props.fgaProjectList?.length > 1 && (
+            {/*{showAddProject && this.props.fgaProjectList?.length > 1 && (
               <Button
                 className="ml1"
                 onClick={() => {
@@ -523,7 +523,7 @@ class ABNavbar extends Component {
               >
                 Edit Project
               </Button>
-            )}
+            )}*/}
 
           </div>
           <div className="Nav__mobile-logo">

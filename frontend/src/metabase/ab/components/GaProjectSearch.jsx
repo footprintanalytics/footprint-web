@@ -28,6 +28,8 @@ const GaProjectSearch = props => {
     loadFgaProjectList,
     enableTour = false,
     projectObject,
+    width = 360,
+    style,
   } = props;
   const selectRef = useRef();
   const [userProject, setUserProject] = useState([]);
@@ -144,11 +146,11 @@ const GaProjectSearch = props => {
 
 
   return (
-    <div className="flex flex-column items-center ga-project-search" ref={ref1} >
+    <div className="flex flex-column items-center ga-project-search" ref={ref1} style={style}>
         <>
           {/*{userProject?.length > 0 && (*/}
             <Select
-              style={{ width: 360, "display": fgaProjectList?.length > 1 ? "" : "none"}}
+              style={{ width: width, "display": fgaProjectList?.length > 1 ? "" : "none"}}
               showSearch
               ref={selectRef}
               dropdownStyle={{
