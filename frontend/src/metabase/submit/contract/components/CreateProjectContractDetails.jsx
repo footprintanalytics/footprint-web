@@ -146,7 +146,6 @@ const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject 
     const array = ["ERC1155", "ERC721", "ERC20"];
     return contracts?.map(i => i?.standard).every(i => array.includes(i));
   }
-  console.log("projectObject", projectObject, contract)
 
   useEffect(() => {
     if (projectObject) {
@@ -166,8 +165,12 @@ const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject 
         });
       });
       setContract(output.contracts);
+      const addressItemValues = output.contracts.reduce((acc, item, index) => {
+        acc[`addressItem${index}`] = item.address;
+        return acc
+      }, {})
       form.setFieldsValue({
-        contracts: output.contracts,
+        ...addressItemValues,
       })
     }
   }, [projectObject])
@@ -317,7 +320,7 @@ const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject 
                     <Form.Item
                       label=""
                       // rules={[{ required: true, message: "" }]}
-                      name={`contracts.addressText[${index}]`}
+                      name={`addressItem${index}`}
                     >
                       <Input.TextArea
                         placeholder={`0x123456789ABCDEF,ERC1155`}
@@ -338,7 +341,7 @@ const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject 
           <div className="w-full flex flex-row-reverse justify-between align-center">
             <div className="flex align-center gap-2 mt-1">
               <Button type="primary" htmlType="submit">
-                Add Project
+                {`${projectObject ? 'Edit': "Add"}`} Project
               </Button>
             </div>
           </div>
