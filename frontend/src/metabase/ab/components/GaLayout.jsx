@@ -13,6 +13,7 @@ import GaSidebar from "./GaSidebar";
 import { createFgaProjectModalShowAction, loadFgaProjectList, loginModalShowAction } from "metabase/redux/control";
 import { push } from "react-router-redux";
 import { getFgaProjectList, getUserExtend } from "metabase/selectors/control";
+import FgaCreateProjectGuide from "metabase/ab/components/FgaCreateProjectGuide";
 
 const ABLayout = props => {
   const pathname = location.pathname;
@@ -55,7 +56,7 @@ const LayoutView = props => {
   // }, [setLoginModalShow, user, projectObject]);
   //
 
-  useEffect(() => {
+/*  useEffect(() => {
     const showCreateProjectModal = async () => {
       if (!isFirst) {
         return
@@ -72,27 +73,11 @@ const LayoutView = props => {
       showCreateProjectModal()
 
     }
-  }, [fgaProjectList, user])
+  }, [fgaProjectList, user])*/
 
-  console.log("loadFgaProjectListloadFgaProjectList", !user, fgaProjectList)
   if (isProFga && (!user || (fgaProjectList?.length <= 1))) {
     return (
-      <div className="flex flex-col h-full justify-center items-center" style={{background: '#101014'}}>
-        <Card className="flex flex-col justify-center p-10 items-center" style={{gap: 30}}>
-          <div className="flex flex-col justify-center p-10 items-center" style={{gap: 30}}>
-            <h1>Welcome to FGA</h1>
-            <span>Unlock your growth potential in a web3 world. <br/>Dive into data insights and get an edge in your marketing <br/>strategy with Footprint GA by bringing all of your <br/>Web2 and Wed3 data sources together.</span>
-            <Button onClick={() => {
-              if (!user) {
-                message.info("Kindly login first, please");
-                setLoginModalShow({ show: true });
-                return;
-              }
-              setCreateFgaProjectModalShowAction({ show: true });
-            }}>Create Project</Button>
-          </div>
-        </Card>
-      </div>
+      <FgaCreateProjectGuide user={user} setLoginModalShow={setLoginModalShow} setCreateFgaProjectModalShowAction={setCreateFgaProjectModalShowAction}/>
     )
   }
 

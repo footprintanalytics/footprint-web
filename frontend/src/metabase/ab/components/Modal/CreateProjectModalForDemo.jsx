@@ -7,12 +7,13 @@ import Link from "metabase/core/components/Link";
 import { getProtocolList, postProject, submitFGAContractForPro } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
 import { getGrowthProjectPath, saveLatestGAProject, saveLatestGAProjectId } from "../../utils/utils";
-import ContractDetailsV3 from "metabase/submit/contract/components/ContractDetailsV3";
+import _ from "lodash";
 import { loadFgaProjectList, setFgaDashboardKey, setUserExtend } from "metabase/redux/control";
 import PaymentDecoding from "metabase/ab/components/Modal/PaymentDecoding";
 import { getUserExtend } from "metabase/selectors/control";
 import CreateProjectContractDetails from "metabase/submit/contract/components/CreateProjectContractDetails";
 import { loadCurrentFgaProjectById } from "metabase/redux/user";
+import { push, replace } from "react-router-redux";
 
 const layout = {
   labelCol: { span: 6 },
@@ -23,7 +24,7 @@ const tailLayout = {
 };
 
 const CreateProjectModalForDemo = props => {
-  const { open, onCancel, onSuccess, router, location, user, force, setFgaDashboardKey, setUserExtend, userExtend, projectObject, loadCurrentFgaProjectById } = props;
+  const { open, onCancel, onSuccess, router, replace, loadFgaProjectList, force, setFgaDashboardKey, setUserExtend, userExtend, projectObject, loadCurrentFgaProjectById, isModal = true } = props;
   const [form] = Form.useForm();
   const [loadingData, setLoadingData] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -31,6 +32,7 @@ const CreateProjectModalForDemo = props => {
   const [submitProtocol, setSubmitProtocol] = useState();
   const [protocolList, setProtocolList] = useState();
   const [input, setInput] = useState();
+  const [projectResult, setProjectResult] = useState();
   useEffect(() => {
     if (open) {
       setLoadingData(true);
@@ -71,7 +73,8 @@ const CreateProjectModalForDemo = props => {
       })
     }
 
-    if (params.contracts) {
+    if (!_.isEmpty(params.contracts)) {
+      console.log("params.contracts", params.contracts)
       await submitFGAContractForPro({
         projectId: result?.projectId || projectObject?.id,
         contractList: params.contracts,
@@ -83,10 +86,12 @@ const CreateProjectModalForDemo = props => {
     if (result) {
       saveLatestGAProject(result.projectName);
       saveLatestGAProjectId(result.projectId);
+      setProjectResult(result);
     }
     onSuccess?.();
     if (!projectObject) {
-      window.location.reload();
+      setState(2)
+      // window.location.reload();
       // router.push(getGrowthProjectPath(result?.projectName || projectObject?.name, "asset_overview_pro"));
     } else {
       await loadFgaProjectList({ from: "pro" });
@@ -94,6 +99,177 @@ const CreateProjectModalForDemo = props => {
       // await loadCurrentFgaProjectById(result?.projectId || projectObject?.id, "edit-project")
       setFgaDashboardKey({ key: "pro" });
     }
+  }
+  const refreshData = async () => {
+    setLoading(true);
+    await loadFgaProjectList({ from: "pro" });
+    setLoading(false)
+  }
+
+  const renderContent = () => {
+    return (
+      <div className="flex flex-column" style={{ width: "100%" }}>
+        {state === 1 && (
+          <div className="flex flex-column">
+            {!projectObject && (<span className="mb2">You can create a new project to explore by entering key information, such as NFT or TOKEN, and we will help you generate a series of reports.</span>)}
+            <CreateProjectContractDetails
+              projectObject={projectObject}
+              onClosed={(params) => {
+                createProject(params);
+              }}
+            />
+          </div>
+
+          /*<div className="flex flex-col">
+            <Divider />
+            <Form
+              {...layout}
+              labelAlign="left"
+              colon={false}
+              labelWrap
+              form={form}
+              name="control-hooks"
+              onFinish={onFinish}
+            >
+              <Form.Item
+                name="projectName"
+                required={true}
+                label={
+                  <>Project {" "}
+                    {loadingData && (
+                      <LoadingSpinner />
+                    )}
+                  </>
+                }
+              >
+                <div className="flex align-center">
+                  <AutoComplete
+                    showSearch
+                    placeholder={"Enter project name"}
+                    dropdownStyle={{
+                      background: "#1C1C1E",
+                      color: "white",
+                      border: "1px solid #ffffff30",
+                    }}
+                    onChange={handleProjectChange}
+                  />
+                </div>
+              </Form.Item>
+
+              <Form.Item {...tailLayout}>
+                <div
+                  className="flex flex-column"
+                  style={{
+                    width: "100%",
+                    alignItems: "center",
+                    justifyItems: "center",
+                    marginTop: 20,
+                  }}
+                >
+                  <Button type="primary" htmlType="submit" loading={loading} style={{ width: 120 }}>
+                    {"Create Now"}
+                  </Button>
+                </div>
+              </Form.Item>
+            </Form>
+          </div>*/
+        )}
+        {state === 2 && (
+          <div className="flex flex-column justify-center">
+            <Result
+              status="success"
+              title={`${projectResult?.projectName} is created successfully.`}
+              extra={
+                <div className="flex justify-between" style={{ gap: 20 }}>
+                  <div
+                    loading={loading}
+                    className="mt3"
+                    onClick={async () => {
+                      await refreshData();
+                    }}
+                  >
+                    <Button>View Dashboard Overview</Button>
+                  </div>
+                </div>
+              }
+            />
+          </div>
+        )}
+        {/*{state === 2 && (
+          <ContractDetailsV3
+            user={user}
+            fromFgaAddProject={true}
+            backAction={() => setState(1)}
+            hideEmail={true}
+            hideMoreOptions={true}
+            hideProjectName={true}
+            hideWebsite={true}
+            hideProjectCategory={true}
+            projectName={input}
+            protocolCategoryList={[
+              { value: "NFT", label: "NFT" },
+              { value: "GameFi", label: "GameFi" },
+              { value: "Marketplace", label: "Marketplace" },
+              { value: "Others", label: "Others" },
+            ]}
+            onClosed={param => {
+              // setDecodingProcessOpen({ open: true, param: param });
+              setUserExtend({
+                ...(userExtend || {}),
+                web3Data: true
+              })
+              setState(3);
+            }}
+            onFinish={(param) => {
+              // props.router.push("/submit/contract/success");
+            }}
+          />
+        )}*/}
+        {state === 3 && (
+          <PaymentDecoding
+            onSuccess={(protocol) => {
+              setState(4);
+              setUserExtend({
+                ...(userExtend || {}),
+                plan: 'standard'
+              })
+              message.success("Payment is successfully.");
+            }}
+          />
+        )}
+        {state === 4 && (
+          <div>
+            <Result
+              status="success"
+              title="Your project is created successfully."
+              extra={
+                <div className="flex flex-col">
+                  <Link
+                    className="mt3"
+                    to={getGrowthProjectPath(submitProtocol, "project_summary")}
+                    onClick={() => {
+                      // onCancel()
+                    }}
+                  >
+                    <Button onClick={() => {
+                      setUserExtend({
+                        ...(userExtend || {}),
+                        project: {}
+                      })
+                      onSuccess?.()
+                    }}>View Project Summary</Button>
+                  </Link>
+                </div>
+              }
+            />
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  if (!isModal) {
+    return renderContent();
   }
 
   return (
@@ -108,137 +284,7 @@ const CreateProjectModalForDemo = props => {
       // onOk={handleOk}
       onCancel={onCancel}
     >
-      {state === 1 && (
-        <CreateProjectContractDetails
-          projectObject={projectObject}
-          onClosed={(params) => {
-            createProject(params);
-          }}
-        />
-
-        /*<div className="flex flex-col">
-          <Divider />
-          <Form
-            {...layout}
-            labelAlign="left"
-            colon={false}
-            labelWrap
-            form={form}
-            name="control-hooks"
-            onFinish={onFinish}
-          >
-            <Form.Item
-              name="projectName"
-              required={true}
-              label={
-                <>Project {" "}
-                  {loadingData && (
-                    <LoadingSpinner />
-                  )}
-                </>
-              }
-            >
-              <div className="flex align-center">
-                <AutoComplete
-                  showSearch
-                  placeholder={"Enter project name"}
-                  dropdownStyle={{
-                    background: "#1C1C1E",
-                    color: "white",
-                    border: "1px solid #ffffff30",
-                  }}
-                  onChange={handleProjectChange}
-                />
-              </div>
-            </Form.Item>
-
-            <Form.Item {...tailLayout}>
-              <div
-                className="flex flex-column"
-                style={{
-                  width: "100%",
-                  alignItems: "center",
-                  justifyItems: "center",
-                  marginTop: 20,
-                }}
-              >
-                <Button type="primary" htmlType="submit" loading={loading} style={{ width: 120 }}>
-                  {"Create Now"}
-                </Button>
-              </div>
-            </Form.Item>
-          </Form>
-        </div>*/
-      )}
-      {state === 2 && (
-        <ContractDetailsV3
-          user={user}
-          fromFgaAddProject={true}
-          backAction={() => setState(1)}
-          hideEmail={true}
-          hideMoreOptions={true}
-          hideProjectName={true}
-          hideWebsite={true}
-          hideProjectCategory={true}
-          projectName={input}
-          protocolCategoryList={[
-            { value: "NFT", label: "NFT" },
-            { value: "GameFi", label: "GameFi" },
-            { value: "Marketplace", label: "Marketplace" },
-            { value: "Others", label: "Others" },
-          ]}
-          onClosed={param => {
-            // setDecodingProcessOpen({ open: true, param: param });
-            setUserExtend({
-              ...(userExtend || {}),
-              web3Data: true
-            })
-            setState(3);
-          }}
-          onFinish={(param) => {
-            // props.router.push("/submit/contract/success");
-          }}
-        />
-      )}
-      {state === 3 && (
-        <PaymentDecoding
-          onSuccess={(protocol) => {
-            setState(4);
-            setUserExtend({
-              ...(userExtend || {}),
-              plan: 'standard'
-            })
-            message.success("Payment is successfully.");
-          }}
-        />
-      )}
-      {state === 4 && (
-        <div>
-          <Result
-            status="success"
-            title="Your project is created successfully."
-            extra={
-              <div className="flex flex-col">
-                <Link
-                  className="mt3"
-                  to={getGrowthProjectPath(submitProtocol, "project_summary")}
-                  onClick={() => {
-                    onCancel()
-                  }}
-                >
-                  <Button onClick={() => {
-                    setUserExtend({
-                      ...(userExtend || {}),
-                      project: {}
-                    })
-                    onSuccess?.()
-                  }}>View Project Summary</Button>
-                </Link>
-              </div>
-            }
-          />
-        </div>
-      )}
+      {renderContent()}
     </Modal>
   );
 };
@@ -255,6 +301,8 @@ const mapDispatchToProps = {
   setUserExtend: setUserExtend,
   setFgaDashboardKey,
   loadCurrentFgaProjectById,
+  onChangeLocation: push,
+  replace
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateProjectModalForDemo));

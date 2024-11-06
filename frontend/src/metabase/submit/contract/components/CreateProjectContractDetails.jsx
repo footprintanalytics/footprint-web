@@ -260,6 +260,7 @@ const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject 
             label="Project Name"
             name="projectName"
             required={true}
+            rules={[{ required: true, message: 'Please input your project name!' }]}
             style={{marginBottom: 20}}
           >
             <Input
@@ -273,7 +274,7 @@ const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject 
         }
         <Form.Item
           className="mt-4"
-          label="Contracts"
+          label="Project Contracts"
           name="chain"
         >
           <Select
@@ -359,7 +360,7 @@ const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject 
         )}
         <Form.Item>
           <div className="w-full flex flex-row-reverse justify-between align-center">
-            <div className="flex align-center gap-2 mt-1">
+            <div className="flex align-center gap-2 mt4">
               <Button type="primary" htmlType="submit">
                 {`${projectObject ? 'Edit': "Create"}`} Project
               </Button>

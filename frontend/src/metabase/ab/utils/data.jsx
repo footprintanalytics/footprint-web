@@ -423,11 +423,11 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
       getItem("User Acquisition", "user_acquisition_parent", ReactIcons.trendingIcon14, [
         getItem("User Acquisition", "acquisition_users_pro", null),
         getItem("User Retention", "Retention_users_pro", null),
-        getItem("Wallet Retention", "wallet_retention", null),
+        // getItem("Wallet Retention", "wallet_retention", null),
       ]),
       getItem("User Engagement", "user_engagement_parent", ReactIcons.growthIcon, [
         getItem("User Engagement", "engagement_users_pro", null),
-        getItem("Wallet Engagement", "wallet_engagement", null),
+        // getItem("Wallet Engagement", "wallet_engagement", null),
       ]),
       getItem("Assets", "assets", ReactIcons.assetIcon, [
         getItem("Token", "token", null, [
