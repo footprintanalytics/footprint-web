@@ -7,12 +7,9 @@ export const getControl = state => state.control;
 export const getCreateFgaProjectModalShow = createSelector(
   [getControl],
   ({
-    createFgaProjectModalShow = false,
-    createFgaProjectModalForce = false,
+    createFgaProjectModalShow = {},
   }) => {
     return createFgaProjectModalShow
-      ? { show: createFgaProjectModalShow, force: createFgaProjectModalForce }
-      : null;
   },
 );
 export const getProjectSubmitModalShow = createSelector(
@@ -158,4 +155,8 @@ export const getFgaProtocolList = createSelector([getControl], (data) => {
 
 export const getFgaProjectList = createSelector([getControl], (data) => {
   return data?.fgaProjectList || [];
+});
+
+export const getUserExtend = createSelector([getControl], (data) => {
+  return data?.userExtend || [];
 });

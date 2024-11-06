@@ -104,7 +104,6 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
       //   return false
       // }
       setFile(file);
-      console.log("xxxxxxxx", file)
       setCurrent(current + 1)
       return false
     },

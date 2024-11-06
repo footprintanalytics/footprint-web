@@ -42,7 +42,7 @@ import {
   getFgaProjectList,
   getGamesByRedux,
 } from "metabase/selectors/control";
-import { setGames } from "metabase/redux/control";
+import { loginModalShowAction, setGames } from "metabase/redux/control";
 import ProjectList from "metabase/ab/containers/projectList";
 import KeysIds from "metabase/ab/components/KeysIds";
 import MySubmitProject from "metabase/ab/containers/MySubmitProject";
@@ -94,14 +94,14 @@ const Project = props => {
         setCurrentMenu(firstMenu);
         router.push({
           pathname: getGrowthProjectPath(
-            projectObject?.protocolSlug,
+            projectPath,
             firstMenu,
           ),
         });
       } else {
         router.replace({
           pathname: getGrowthProjectPath(
-            projectObject?.protocolSlug,
+            projectPath,
             currentMenu,
           ),
           query: { ...location.query },
@@ -273,7 +273,7 @@ const Project = props => {
           {/*  <DashboardMask currentMenu={"web2_connect"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>*/}
           {/*)}*/}
           {/*Enterprise*/}
-          {renderDashboardMask()}
+          {/*{renderDashboardMask()}*/}
         </>
       ) : (
         <LoadingSpinner message="Loading..." />
