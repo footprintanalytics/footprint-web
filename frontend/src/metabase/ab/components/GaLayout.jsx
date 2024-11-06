@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { Button, Card, Layout, message, Skeleton } from "antd";
@@ -30,6 +30,7 @@ const LayoutView = props => {
   const isGamesManage = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-manage")
   const isProjectList = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-list")
   const isBindGame = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("bind-game")
+  const [isFirst, setFirst] = useState(true);
   const showSidebar = !props.isChart || isGamesManage || isBindGame || isProjectList;
   const defaultDesc =
     "Unlock your growth potential in a web3 world. Dive into data insights and get an edge in your marketing strategy with Footprint GA by bringing all of your Web2 and Wed3 data sources together.";
@@ -56,7 +57,11 @@ const LayoutView = props => {
 
   useEffect(() => {
     const showCreateProjectModal = async () => {
+      if (!isFirst) {
+        return
+      }
       const result = await loadFgaProjectList({ from: "pro" });
+      setFirst(false)
       const projectList = result?.payload
       if (projectList?.length === 1) {
         setCreateFgaProjectModalShowAction({ show: true });
