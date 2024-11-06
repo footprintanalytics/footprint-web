@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { AutoComplete, Button, Divider, Form, Input, message, Modal, Result, Tooltip } from "antd";
+import { Button, Form, message, Modal, Result } from "antd";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import Link from "metabase/core/components/Link";
@@ -8,14 +8,11 @@ import { getProtocolList, postProject, submitFGAContractForPro } from "metabase/
 import { getUser } from "metabase/selectors/user";
 import { getGrowthProjectPath, saveLatestGAProject, saveLatestGAProjectId } from "../../utils/utils";
 import ContractDetailsV3 from "metabase/submit/contract/components/ContractDetailsV3";
-import ContractDecoding from "metabase/submit/contract/components/ContractDecoding";
-import { toLower } from "lodash";
-import Icon from "metabase/components/Icon";
-import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
-import { loadFgaProjectList, setUserExtend } from "metabase/redux/control";
+import { loadFgaProjectList, setFgaDashboardKey, setUserExtend } from "metabase/redux/control";
 import PaymentDecoding from "metabase/ab/components/Modal/PaymentDecoding";
 import { getUserExtend } from "metabase/selectors/control";
 import CreateProjectContractDetails from "metabase/submit/contract/components/CreateProjectContractDetails";
+import { loadCurrentFgaProjectById } from "metabase/redux/user";
 
 const layout = {
   labelCol: { span: 6 },
@@ -26,7 +23,7 @@ const tailLayout = {
 };
 
 const CreateProjectModalForDemo = props => {
-  const { open, onCancel, onSuccess, router, location, user, force, loadFgaProjectList, setUserExtend, userExtend, projectObject } = props;
+  const { open, onCancel, onSuccess, router, location, user, force, setFgaDashboardKey, setUserExtend, userExtend, projectObject, loadCurrentFgaProjectById } = props;
   const [form] = Form.useForm();
   const [loadingData, setLoadingData] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -88,14 +85,20 @@ const CreateProjectModalForDemo = props => {
       saveLatestGAProjectId(result.projectId);
     }
     onSuccess?.();
-    loadFgaProjectList({ from: "pro" });
-    router.push(getGrowthProjectPath(result?.projectName || projectObject?.name, "asset_overview_pro"));
-
+    if (!projectObject) {
+      window.location.reload();
+      // router.push(getGrowthProjectPath(result?.projectName || projectObject?.name, "asset_overview_pro"));
+    } else {
+      await loadFgaProjectList({ from: "pro" });
+      await loadCurrentFgaProjectById(projectObject?.id, "edit-project")
+      // await loadCurrentFgaProjectById(result?.projectId || projectObject?.id, "edit-project")
+      setFgaDashboardKey({ key: "pro" });
+    }
   }
 
   return (
     <Modal
-      title={projectObject ? "Edit your project": "Add your project"}
+      title={projectObject ? "Edit your project": "Create your project"}
       open={open}
       destroyOnClose
       footer={null}
@@ -250,6 +253,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   loadFgaProjectList: loadFgaProjectList,
   setUserExtend: setUserExtend,
+  setFgaDashboardKey,
+  loadCurrentFgaProjectById,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateProjectModalForDemo));

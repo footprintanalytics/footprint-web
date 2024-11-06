@@ -154,7 +154,11 @@ export const getFgaProtocolList = createSelector([getControl], (data) => {
 });
 
 export const getFgaProjectList = createSelector([getControl], (data) => {
-  return data?.fgaProjectList || [];
+  return data?.fgaProjectList;
+});
+
+export const getFgaDashboardKey = createSelector([getControl], (data) => {
+  return data?.fgaDashboardKey;
 });
 
 export const getUserExtend = createSelector([getControl], (data) => {

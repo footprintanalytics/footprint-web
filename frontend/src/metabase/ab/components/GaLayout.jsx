@@ -2,7 +2,7 @@
 import React, { useContext, useEffect } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { Button, Card, Layout } from "antd";
+import { Button, Card, Layout, message, Skeleton } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
@@ -12,7 +12,7 @@ import "../css/index.css";
 import GaSidebar from "./GaSidebar";
 import { createFgaProjectModalShowAction, loadFgaProjectList, loginModalShowAction } from "metabase/redux/control";
 import { push } from "react-router-redux";
-import { getUserExtend } from "metabase/selectors/control";
+import { getFgaProjectList, getUserExtend } from "metabase/selectors/control";
 
 const ABLayout = props => {
   const pathname = location.pathname;
@@ -26,7 +26,7 @@ const ABLayout = props => {
 
 const LayoutView = props => {
   const { isOpenSubMenu } = useContext(StateContext);
-  const { user, projectObject, setLoginModalShow, setCreateFgaProjectModalShowAction, userExtend, loadFgaProjectList } = props;
+  const { user, projectObject, setLoginModalShow, setCreateFgaProjectModalShowAction, userExtend, fgaProjectList, loadFgaProjectList } = props;
   const isGamesManage = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-manage")
   const isProjectList = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-list")
   const isBindGame = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("bind-game")
@@ -53,13 +53,48 @@ const LayoutView = props => {
   //   }
   // }, [setLoginModalShow, user, projectObject]);
   //
-  if (isProFga && (!user || _.isEmpty(loadFgaProjectList))) {
+
+  useEffect(() => {
+    const showCreateProjectModal = async () => {
+      const result = await loadFgaProjectList({ from: "pro" });
+      const projectList = result?.payload
+      if (projectList?.length === 1) {
+        setCreateFgaProjectModalShowAction({ show: true });
+      }
+    }
+    if (isProFga && user && fgaProjectList?.length === 1) {
+      console.log("auto create project", fgaProjectList)
+      showCreateProjectModal()
+
+    }
+  }, [fgaProjectList, user])
+
+  console.log("loadFgaProjectListloadFgaProjectList", !user, fgaProjectList)
+  if (isProFga && (!user || (fgaProjectList?.length <= 1))) {
     return (
-      <div className="flex flex-col h-full justify-center items-center" >
+      <div className="flex flex-col h-full justify-center items-center" style={{background: '#101014'}}>
         <Card className="flex flex-col justify-center p-10 items-center" style={{gap: 30}}>
-          <h1>Welcome to FGA</h1>
-          {/*<Button>Create Project</Button>*/}
+          <div className="flex flex-col justify-center p-10 items-center" style={{gap: 30}}>
+            <h1>Welcome to FGA</h1>
+            <span>Unlock your growth potential in a web3 world. <br/>Dive into data insights and get an edge in your marketing <br/>strategy with Footprint GA by bringing all of your <br/>Web2 and Wed3 data sources together.</span>
+            <Button onClick={() => {
+              if (!user) {
+                message.info("Kindly login first, please");
+                setLoginModalShow({ show: true });
+                return;
+              }
+              setCreateFgaProjectModalShowAction({ show: true });
+            }}>Create Project</Button>
+          </div>
         </Card>
+      </div>
+    )
+  }
+
+  if (isProFga && !fgaProjectList) {
+    return (
+      <div className="flex flex-col h-full " style={{background: '#101014', padding: 20}}>
+        <Skeleton active />
       </div>
     )
   }
@@ -99,7 +134,7 @@ const mapStateToProps = state => {
     user: getUser(state),
     userExtend: getUserExtend(state),
     projectObject: getFgaProject(state),
-    loadFgaProjectList: loadFgaProjectList,
+    fgaProjectList: getFgaProjectList(state),
   };
 };
 
@@ -107,6 +142,7 @@ const mapDispatchToProps = {
   onChangeLocation: push,
   setLoginModalShow: loginModalShowAction,
   setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
+  loadFgaProjectList: loadFgaProjectList,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ABLayout);

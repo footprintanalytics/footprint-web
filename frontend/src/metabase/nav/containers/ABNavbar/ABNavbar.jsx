@@ -16,7 +16,7 @@ import {
   getCreateFgaProjectModalShow,
   getLoginModalShow,
   getSubmitAddrZkspaceModal,
-  getLoginModalDefaultRegister, getProjectSubmitModalShow, getUserExtend,
+  getLoginModalDefaultRegister, getProjectSubmitModalShow, getUserExtend, getFgaProjectList,
 } from "metabase/selectors/control";
 import {
   cancelFeedbackAction,
@@ -68,6 +68,7 @@ const mapStateToProps = (state, props) => ({
   getSubmitAddrZkspaceModal: getSubmitAddrZkspaceModal(state, props),
   channel: getChannel(state) || "homepage",
   userExtend: getUserExtend(state),
+  fgaProjectList: getFgaProjectList(state),
 });
 
 const mapDispatchToProps = {
@@ -496,7 +497,7 @@ class ABNavbar extends Component {
               }
             />
             )}
-            {showAddProject && (<Button
+            {/*{showAddProject && (<Button
               className="ml1"
               onClick={() => {
                 if (!user) {
@@ -507,7 +508,23 @@ class ABNavbar extends Component {
                 setCreateFgaProjectModalShowAction({ show: true });
               }}
             >+ Add Project</Button>
+            )}*/}
+            {showAddProject && this.props.fgaProjectList?.length > 1 && (
+              <Button
+                className="ml1"
+                onClick={() => {
+                  if (!user) {
+                    message.info("Kindly login first, please");
+                    setLoginModalShow({ show: true });
+                    return;
+                  }
+                  setCreateFgaProjectModalShowAction({ show: true, projectObject: project });
+                }}
+              >
+                Edit Project
+              </Button>
             )}
+
           </div>
           <div className="Nav__mobile-logo">
             <Link

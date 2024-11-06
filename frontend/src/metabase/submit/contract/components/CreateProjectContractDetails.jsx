@@ -161,14 +161,33 @@ const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject 
         output.contracts.push({
           address: `${item.address},${item.standard}`,
           chain: item.chain,
-          isValid: false
+          isValid: true
         });
       });
-      setContract(output.contracts);
-      const addressItemValues = output.contracts.reduce((acc, item, index) => {
-        acc[`addressItem${index}`] = item.address;
-        return acc
-      }, {})
+      const addressItemValues = {};
+      //处理上部分tab
+      const newContracts = output.contracts.reduce((acc, current) => {
+        const existing = acc.find(item => item.chain === current.chain);
+
+        if (existing) {
+          existing.address += `\n${current.address}`;
+        } else {
+          acc.push({...current});
+        }
+
+        return acc;
+      }, []);
+      setContract(newContracts);
+      //处理下部分输入的内容
+      output.chain.forEach((chainName, index) => {
+        const addresses = output.contracts
+          .filter(contract => contract.chain === chainName)
+          .map(contract => contract.address)
+          .join('\n');
+
+        addressItemValues[`addressItem${index}`] = addresses;
+      });
+      console.log("addressItemValues", JSON.stringify(output), JSON.stringify(addressItemValues))
       form.setFieldsValue({
         ...addressItemValues,
       })
@@ -241,6 +260,7 @@ const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject 
             label="Project Name"
             name="projectName"
             required={true}
+            style={{marginBottom: 20}}
           >
             <Input
               placeholder="Project Name"
@@ -341,7 +361,7 @@ const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject 
           <div className="w-full flex flex-row-reverse justify-between align-center">
             <div className="flex align-center gap-2 mt-1">
               <Button type="primary" htmlType="submit">
-                {`${projectObject ? 'Edit': "Add"}`} Project
+                {`${projectObject ? 'Edit': "Create"}`} Project
               </Button>
             </div>
           </div>
