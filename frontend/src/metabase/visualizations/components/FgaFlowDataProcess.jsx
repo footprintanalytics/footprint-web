@@ -68,7 +68,7 @@ const FgaFlowDataProcess = ({ projectObject, callbackData, file, cardId }) => {
 
   return (
     <div className="flex flex-col items-center" style={{ padding: 40 }}>
-      <div className="flex p-20" >
+      <div className="flex p-20 mt4" >
         <Timeline>
           {timeItems.map((item, index) => (
             <Timeline.Item
