@@ -218,7 +218,6 @@ const CreateProjectModalForFgaPro = props => {
     }
 
     if (!_.isEmpty(contractData)) {
-      console.log("params.contracts", contractData)
       await submitFGAContractForPro({
         projectId: result?.projectId,
         contractList: contractData,
@@ -232,7 +231,6 @@ const CreateProjectModalForFgaPro = props => {
       saveLatestGAProjectId(result.projectId);
     }
     onSuccess?.();
-    console.log("xxxxxxxx")
     await loadFgaProjectList({ from: "pro" });
     await loadCurrentFgaProjectById(result?.projectId, "edit-project")
     setFgaDashboardKey({ key: "pro" });
