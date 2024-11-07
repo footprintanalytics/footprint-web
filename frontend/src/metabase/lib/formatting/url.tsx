@@ -35,10 +35,13 @@ export function formatUrl(value: string, options: OptionsType = {}) {
   const { jsx, rich } = options;
 
   const url = getLinkUrl(value, options);
+  const isGrowthly = document.referrer.includes('growthly')
   if (jsx && rich && url) {
     const text = getLinkText(value, options);
-    const targetObject = IFRAMED && !'growthly'.includes(url.toLowerCase()) ? { target: "_blank" } : {};
+    const targetObject = IFRAMED && !isGrowthly ? { target: "_blank" } : {};
     console.log('targetObject=>', targetObject)
+    console.log('document.referrer=>', document.referrer)
+    console.log('isGrowthly=>', isGrowthly)
     let formatedURL = formatUrl2Growth(location?.pathname, url);
     formatedURL = formatUrl2AB(location?.pathname, formatedURL);
     if (formatedURL.startsWith("/fga")
