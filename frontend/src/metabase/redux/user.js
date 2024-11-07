@@ -1,19 +1,17 @@
-import {
-  createAction,
-  createThunkAction,
-  handleActions,
-} from "metabase/lib/redux";
+import { createAction, createThunkAction, handleActions } from "metabase/lib/redux";
 import { UserApi } from "metabase/services";
 // import { CLOSE_QB_NEWB_MODAL } from "metabase/query_builder/actions";
 import Users from "metabase/entities/users";
 import {
-  getUserVipInfo,
   getDataApiVipInfo,
-  GetFgaProjectDetail, getPublicChainProjectDetail, getProtocolDetail,
+  GetFgaProjectDetail,
+  getProjectChartTypeStatus,
+  getProtocolDetail,
+  getProtocolDetailById,
+  getUserVipInfo,
 } from "metabase/new-service";
 import arms from "metabase/lib/arms";
-import { clearGACache } from "metabase/growth/utils/utils";
-import { isABPath, isBusinessTypePath } from "metabase/ab/utils/utils";
+import { isABPath } from "metabase/ab/utils/utils";
 
 export const REFRESH_CURRENT_USER = "metabase/user/REFRESH_CURRENT_USER";
 /*export const refreshCurrentUser = createAction(REFRESH_CURRENT_USER, () => {
@@ -170,6 +168,8 @@ export const currentUser = handleActions(
 
 export const REFRESH_CURRENT_FGA_PROJECT =
   "metabase/user/REFRESH_CURRENT_FGA_PROJECT";
+export const REFRESH_CURRENT_FGA_PROJECT_CHART_TYPE =
+  "metabase/user/REFRESH_CURRENT_FGA_PROJECT_CHART_TYPE";
 export const refreshCurrentFgaProject = createThunkAction(
   REFRESH_CURRENT_FGA_PROJECT,
   async project_id => {
@@ -753,6 +753,36 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
     }
   },
 );
+export const refreshCurrentFgaProjectById = createThunkAction(
+  REFRESH_CURRENT_FGA_PROJECT,
+  async (projectId, from) => {
+    try {
+      const res = await getProtocolDetailById({ "projectId": projectId });
+      if(!res?.protocolSlug || res?.protocolSlug === ''){
+        res.protocolSlug = 'default';
+      }
+      window.localStorage.setItem("IsFgaDemoProject", res?.isDemo);
+      window.localStorage.setItem("LatestGAProjectId", res?.id);
+      // res.id=153;
+      return res;
+    } catch (e) {
+      console.log(e)
+      return null;
+    }
+  },
+);
+export const refreshCurrentFgaProjectChartType = createThunkAction(
+  REFRESH_CURRENT_FGA_PROJECT_CHART_TYPE,
+  async (projectId, from) => {
+    try {
+      return await getProjectChartTypeStatus({ "projectId": 1 });
+      // return await getProjectChartTypeStatus({ "projectId": projectId });
+    } catch (e) {
+      console.log(e)
+      return null;
+    }
+  },
+);
 
 export const LOAD_CURRENT_FGA_PROJECT =
   "metabase/user/LOAD_CURRENT_FGA_PROJECT";
@@ -792,6 +822,24 @@ export const loadCurrentFgaProjectNew = createThunkAction(
       }
     },
 );
+export const loadCurrentFgaProjectById = createThunkAction(
+  LOAD_CURRENT_FGA_PROJECT_NEW,
+  (projectId, from, force = false, clearCurrent = true) =>
+    async (dispatch, getState) => {
+      if (
+        force ||
+        !getState().currentFgaProject ||
+        getState().currentFgaProject?.projectId !== projectId
+      ) {
+        if (clearCurrent) {
+          dispatch(clearCurrentFgaProject());
+        }
+        // await dispatch(refreshCurrentFgaProject(project_id));
+        await dispatch(refreshCurrentFgaProjectById(projectId, from));
+        await dispatch(refreshCurrentFgaProjectChartType(projectId))
+      }
+    },
+);
 
 export const CLEAR_CURRENT_FGA_PROJECT =
   "metabase/user/CLEAR_CURRENT_FGA_PROJECT";
@@ -806,6 +854,11 @@ export const currentFgaProject = handleActions(
           return payload;
         }
         return { ...state, ...payload };
+      },
+    },
+    [REFRESH_CURRENT_FGA_PROJECT_CHART_TYPE]: {
+      next: (state, { payload }) => {
+        return { ...state, chartTypeStatus: payload };
       },
     },
     [REFRESH_CURRENT_FGA_PROJECT_NEW]: {

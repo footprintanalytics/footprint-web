@@ -261,7 +261,9 @@ export const getProtocolList = async params => {
   return GET(`/api/v1/project/protocol/list`, params, {'Cache-Control': 'max-age=1800'});
 };
 export const getProjectList = async params => {
-  console.log("getProjectList", params)
+  if (window.location.pathname.startsWith('/fga/pro')) {
+    return GET(`/api/v1/project/list`, params);
+  }
   return [
       /*{
         "projectId": 1,
@@ -297,7 +299,6 @@ export const getProjectList = async params => {
       },*/
     ]
 
-  // return GET(`/api/v1/project/list`, params);
 };
 export const postProject = async params => {
   return POST(`/api/v1/project`, params);
@@ -307,6 +308,10 @@ export const deleteProject = async params => {
 };
 export const getProtocolDetail = async params => {
   return GET(`/api/v1/project/protocol/detail`, params);
+};
+export const getProtocolDetailById = async params => {
+  return GET(`/api/v1/project/protocol/detail-by-id`, params);
+  // return GET(`/mock/api/v1/project/protocol/detail-by-id`, params);
 };
 
 export const tokenGeneral = params => {
@@ -768,6 +773,10 @@ export const submitFGAProtocols = params => {
   return POST(`/api/v1/project/protocol/submit`, params);
 };
 
+export const submitFGAContractForPro = params => {
+  return POST(`/api/v1/project/contract`, params);
+};
+
 // get audit list ,status = ['reviewing'] type = contract | protocol
 export const getRefAuditList = params => {
   return GET(`${getRefBaseApi()}/api/v1/protocol/audit/list`, params);
@@ -868,6 +877,23 @@ export const getMediaTagTop = (params, config) => {
   return POST(`api/v1/media/tagTop`, params, { silentFp: true, silent: true });
 };
 
-export const fgaEventConfirmCsv = (params) => {
-  return POST(`api/v1/fga/event/confirm/csv`, params);
+export const getProjectChartTypeStatus = async params => {
+  return POST(`/api/v1/fga/event/data/integration/chart/status`, params);
+  // return GET(`/mock/api/v1/project/protocol/detail-by-id`, params);
 };
+
+export const fgaEventConfirmCsv = (params) => {
+  return POST(`/api/v1/fga/event/confirm/csv`, params);
+};
+
+export const fgaEventRecordDetail = (params) => {
+  return POST(`/api/v1/fga/event/data/integration/record/detail`, params);
+};
+
+//projectName
+export const findContractMatchByName = (params) => {
+  return GET(`api/v1/project/contract/match-by-name`, params);
+  // return GET(`api/v1/project/contract/match-by-name`, params);
+};
+
+export const fgaUploadCsvUrl = '/api/v1/fga/event/upload/csv'

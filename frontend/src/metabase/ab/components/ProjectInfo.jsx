@@ -10,11 +10,11 @@ import { getFgaProject, getUser } from "metabase/selectors/user";
 import "../css/index.css";
 import UpdateProjectModal from "./Modal/UpdateProjectModal";
 import ProjectSubmitContactModal from "metabase/ab/components/Modal/ProjectSubmitContactModal";
-import { projectSubmitModalShowAction } from "metabase/redux/control";
+import { createFgaProjectModalShowAction, projectSubmitModalShowAction } from "metabase/redux/control";
 import InfoGenerate from "metabase/ab/components/InfoGenerate";
 
 const ProjectInfo = props => {
-  const { router, project, location, user, businessType, setProjectSubmitModalShowAction } = props;
+  const { router, project, location, user, businessType, setProjectSubmitModalShowAction, setCreateFgaProjectModalShowAction } = props;
   const [currentProject, setCurrentProject] = useState(project);
   const [tourOpen, setTourOpen] = useState(false);
   const ref1 = useRef(null);
@@ -22,6 +22,7 @@ const ProjectInfo = props => {
     show: false,
     force: false,
   });
+  const isProFga = window.location.pathname.startsWith("/fga/pro")
   useEffect(() => {
     if (project) {
       setCurrentProject(project);
@@ -95,7 +96,11 @@ const ProjectInfo = props => {
                 message.error("Kindle add your project to submit, please");
               }
               // router?.push({ pathname: "/fga/game/submit/contract/add" });
-              setProjectSubmitModalShowAction({ show: true })
+              if (isProFga) {
+                setCreateFgaProjectModalShowAction({ show: true, projectObject: project });
+              } else {
+                setProjectSubmitModalShowAction({ show: true })
+              }
             }}
           >
             Submit Now
@@ -127,7 +132,11 @@ const ProjectInfo = props => {
                   // } else {
                   //   router?.push({ pathname: "/submit/contract/add" });
                   // }
-                  setProjectSubmitModalShowAction({ show: true })
+                  if (isProFga) {
+                    setCreateFgaProjectModalShowAction({ show: true, projectObject: project });
+                  } else {
+                    setProjectSubmitModalShowAction({ show: true })
+                  }
                 }}
               >
                 click here{" "}
@@ -201,14 +210,14 @@ const ProjectInfo = props => {
             <div className="flex flex-col">
               <div className="flex flex-row justify-between">
                 <div className="flex align-center">
-                  <img
+                  <Avatar
                     src={
                       currentProject?.logo ??
                       "https://static.footprint.network/logo80.png"
                     }
-                    width={80}
-                    height={80}
                     style={{
+                      width: 80,
+                      height: 80,
                       borderRadius: 40,
                       borderWidth: 0.5,
                       padding: 5,
@@ -289,10 +298,10 @@ const ProjectInfo = props => {
               <Button
                 type="primary"
                 onClick={() => {
-                  setProjectModalShow({ show: true });
+                  setCreateFgaProjectModalShowAction({ show: true, projectObject: project });
                 }}
               >
-                Set up now
+                Submit Now
               </Button>
             </Empty>
           )}
@@ -325,5 +334,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   setProjectSubmitModalShowAction: projectSubmitModalShowAction,
+  setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfo);

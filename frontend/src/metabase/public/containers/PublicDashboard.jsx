@@ -637,12 +637,12 @@ class PublicDashboard extends Component {
     //fga multi select header
     const keyObject = this.getFgaMultiKeyObject();
     if (keyObject) {
-      header = this.handleFgaMultiAddressUiSelectHeader("nft", keyObject);
+      header = !_.isEmpty(project?.nftCollectionAddress) && this.handleFgaMultiAddressUiSelectHeader("nft", keyObject);
       hideParametersForCustom = `${hideParametersForCustom},${keyObject.slug}`;
     }
     const keyObjectToken = this.getFgaMultiKeyObjectToken();
     if (keyObjectToken) {
-      header = this.handleFgaMultiAddressUiSelectHeader("token", keyObjectToken);
+      header = !_.isEmpty(project?.tokenAddress) && this.handleFgaMultiAddressUiSelectHeader("token", keyObjectToken);
       hideParametersForCustom = `${hideParametersForCustom},${keyObjectToken.slug}`;
     }
     const keyProject = this.getFgaMultiKeyProject();

@@ -3,17 +3,19 @@ import React, { useState, useEffect } from "react";
 import { Timeline, message, Spin, Button } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
-const FgaFlowDataProcess = ({ projectObject, previewData, file }) => {
+import { fgaUploadCsvUrl } from "metabase/new-service";
+import { getFgaChartTypeMappingById } from "metabase/ab/utils/mapping-utils";
+const FgaFlowDataProcess = ({ projectObject, callbackData, file, cardId }) => {
   const timeItems =
     [
       // { label: " Step 1: Test connection "},
       {
-        label: "Step 1: Upload data ",
+        label: "Step 1: Uploading Data ",
       },
       {
-        label: "Step 2: AI recognize data ",
+        label: "Step 2: AI Analyzing Now ",
       },
-      { label: "Step 3: ETL data "},
+      { label: "Step 3: AI Transforming Now "},
     ]
   const projectId = projectObject?.id
 
@@ -30,9 +32,11 @@ const FgaFlowDataProcess = ({ projectObject, previewData, file }) => {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('projectId', projectId + "");
+      const chartType = getFgaChartTypeMappingById(cardId)?.chartType || "";
+      formData.append('chartType', chartType);
 
       try {
-        const data = await axios.post('/api/v1/fga/event/upload/csv', formData, {
+        const data = await axios.post(fgaUploadCsvUrl, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -40,7 +44,7 @@ const FgaFlowDataProcess = ({ projectObject, previewData, file }) => {
         setLoading(false);
         setCurrent(pre => pre + 1);
         setTimeout(() => {
-          previewData?.(data)
+          callbackData?.(data?.previewData, data?.pipelineId);
         }, 1000)
       } catch (error) {
         console.error('Upload failed:', error);

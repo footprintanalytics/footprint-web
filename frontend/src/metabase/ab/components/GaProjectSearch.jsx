@@ -5,10 +5,10 @@ import { connect } from "react-redux";
 import { Avatar, Select, Tour } from "antd";
 import { withRouter } from "react-router";
 import { getFgaProject, getUser } from "metabase/selectors/user";
-import { loadCurrentFgaProjectNew } from "metabase/redux/user";
+import { loadCurrentFgaProjectById, loadCurrentFgaProjectNew } from "metabase/redux/user";
 import "../css/index.css";
 import { head } from "lodash";
-import { getGrowthProjectPath, saveLatestGAProject } from "../utils/utils";
+import { getGrowthProjectPath, getLatestGAProject, saveLatestGAProject, saveLatestGAProjectId } from "../utils/utils";
 import _ from "underscore";
 import { getFgaChain, getFgaProjectList, getGamesByRedux, getHistoryGamesByRedux } from "metabase/selectors/control";
 import { loadFgaProjectList, loginModalShowAction, setGames, setHistoryGames } from "metabase/redux/control";
@@ -22,11 +22,14 @@ const GaProjectSearch = props => {
     menu,
     projectPath,
     loadCurrentFgaProjectNew,
+    loadCurrentFgaProjectById,
     businessType,
     fgaProjectList,
     loadFgaProjectList,
     enableTour = false,
     projectObject,
+    width = 360,
+    style,
   } = props;
   const selectRef = useRef();
   const [userProject, setUserProject] = useState([]);
@@ -35,6 +38,7 @@ const GaProjectSearch = props => {
   const ref1 = useRef(null);
   const [tourOpen, setTourOpen] = useState(false);
   const from = location?.pathname?.startsWith("/fga/pro") ? "pro" : "";
+  const isProFga = location?.pathname?.startsWith("/fga/pro");
   const steps = [
     {
       title: 'Switch Project',
@@ -49,42 +53,75 @@ const GaProjectSearch = props => {
       protocolName: "Gaming Demo Project 2",
     }
 
-  const loadProjectDetail = protocolSlug => {
-    loadCurrentFgaProjectNew(protocolSlug, from);
+  const loadProjectDetail = projectId => {
+    if (isProFga) {
+      loadCurrentFgaProjectById(projectId, from);
+    } else {
+      const protocolSlug = fgaProjectList?.find(item => item.projectId === projectId)?.protocolSlug;
+      loadCurrentFgaProjectNew(protocolSlug, from);
+    }
   };
 
-  useEffect(() => {
+/*  useEffect(() => {
     if (projectPath) {
       loadProjectDetail(projectPath);
     }
-  }, [projectPath])
+  }, [projectPath])*/
 
+  useEffect(() => {
+    if (projectPath && projectPath !== "undefined") {
+      setCurrentProject(projectPath);
+      saveLatestGAProject(projectPath);
+    } else {
+      const temp_project =
+        getLatestGAProject() ??
+        (userProject?.length > 0 ? userProject[0].projectName : null);
+      if (temp_project) {
+        saveLatestGAProject(temp_project);
+        setCurrentProject(temp_project);
+        // if (
+        //   location.pathname.startsWith("/project/") ||
+        //   location.pathname === "/ab"
+        // ) {
+        //   router?.push({
+        //     pathname: getGrowthProjectPath(temp_project),
+        //   });
+        // }
+      }
+    }
+  }, [projectPath]);
   useEffect(() => {
     if (fgaProjectList?.length > 0) {
       const projects = fgaProjectList;
-      const index = projects.findIndex(i => i.protocolSlug === currentProject);
-      const projectIndex = index === -1 ? 0 : index;
-      let project = defaultProject;
-      if (index >= 0) {
-        project = projects[projectIndex];
-      }
-      setCurrentProject(project.protocolSlug);
-      saveLatestGAProject(project.protocolSlug);
+      const index = projects.findIndex(i => i.projectName === currentProject);
+      const projectIndex = index === -1 ? projects.length - 1 : index;
+      let project = projects[projectIndex];
+      if (project.projectId !== 1) {
+        setCurrentProject(project.projectName);
+        saveLatestGAProject(project.projectName);
+        loadProjectDetail(project.projectId);
 
-      setUserProject(projects);
-      if (
-        index === -1 && location.pathname.startsWith("/fga/") && location.pathname.includes("/project")
-      ) {
-        router?.push({
-          pathname: getGrowthProjectPath(project.protocolSlug, menu),
-          query: router?.location?.query,
-        });
+        setUserProject(projects);
+        if (
+          index === -1 && location.pathname.startsWith("/fga/") && location.pathname.includes("/project")
+        ) {
+          router?.push({
+            pathname: getGrowthProjectPath(project.projectName, menu),
+            query: router?.location?.query,
+          });
+        }
       }
     }
   }, [fgaProjectList]);
 
   useEffect(() => {
-    loadFgaProjectList({ from });
+    if (isProFga) {
+      if (user?.id) {
+        loadFgaProjectList({ from });
+      }
+    } else {
+      loadFgaProjectList({ from });
+    }
   }, [user?.id])
 
   useEffect(() => {
@@ -96,32 +133,36 @@ const GaProjectSearch = props => {
   const handleProjectChange = async (value, uiOption) => {
     const option = userProject.find(item => item.protocolSlug === value) ||
       {
-        protocolName: uiOption.label,
-        protocolSlug: uiOption.value,
+        projectName: uiOption.label,
+        projectId: uiOption.value,
       }
     // saveLatestGAProject(option.protocolSlug);
     // setCurrentProject(option.protocolSlug);
-    // saveLatestGAProjectId(option.value);
-    // loadProjectDetail(option.protocolSlug);
+    saveLatestGAProjectId(option.projectId);
+    // loadProjectDetail(option.projectId);
     const keys = fga_menu_data_v2(businessType, projectObject, null, user).keys
     const currentPath = props.menu
     const path = keys.includes(currentPath) ? currentPath : keys[0]
-    if (option.protocolSlug) {
-      router?.push({
-        pathname: getGrowthProjectPath(option.protocolSlug, path),
-      });
-    }
+    // if (option.projectName) {
+    //   router?.push({
+    //     pathname: getGrowthProjectPath(option.projectName, path),
+    //   });
+    // }
   };
 
-
+  const list = isProFga ? (
+    fgaProjectList
+      ?.filter(item => item.projectId !== 1)
+      ?.slice(-1)
+  ) : fgaProjectList;
   return (
-    <div className="flex flex-column items-center ga-project-search" ref={ref1} >
+    <div className="flex flex-column items-center ga-project-search" ref={ref1} style={style}>
         <>
           {/*{userProject?.length > 0 && (*/}
             <Select
+              style={{ width: width, "display": !isProFga || (isProFga && fgaProjectList?.length > 1) ? "" : "none"}}
               showSearch
               ref={selectRef}
-              style={{ width: 360 }}
               dropdownStyle={{
                 background: "#1C1C1E",
                 color: "white",
@@ -149,10 +190,11 @@ const GaProjectSearch = props => {
               }
               // options={selectOptions}
             >
-              {fgaProjectList?.map(item => {
+              {list
+                ?.map(item => {
                 const logo = item.logo;
                 return (
-                  <Select.Option key={item.protocolSlug} label={item.projectName} value={item.protocolSlug}>
+                  <Select.Option key={item.projectId} label={item.projectName} value={item.projectId}>
                     <div className="flex align-center">
                        {logo && logo !== 'N/A' ? (
                          <Avatar
@@ -211,6 +253,7 @@ const GaProjectSearch = props => {
 
 const mapDispatchToProps = {
   loadCurrentFgaProjectNew,
+  loadCurrentFgaProjectById,
   setGames: setGames,
   setHistoryGames: setHistoryGames,
   setLoginModalShowAction: loginModalShowAction,

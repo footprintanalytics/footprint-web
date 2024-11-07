@@ -10,7 +10,6 @@ const FgaProResult = ({
   icon,
   extra = [],
 }) => {
-  console.log("cardIdcardId", cardId, width)
 
   const imgData = [
     {
@@ -30,10 +29,10 @@ const FgaProResult = ({
       img: "https://static.footprint.network/fga/pro/img_monthly_user_wallet_link.png",
     },
   ]
-  const img = imgData?.find(item => item.cardId === cardId)?.img || ""
+  const img = imgData?.find(item => item.cardId === cardId)?.img || "https://static.footprint.network/fga/pro/img_number_of_users.png"
   return (
     <div className="flex w-full" >
-      <div style={{width: "50%", overflow: "hidden"}}>
+      <div className="flex justify-center align-center" style={{width: "50%", overflow: "hidden"}}>
         <img src={img} style={{maxWidth: "100%", maxHeight: "100%", objectFit: "cover"}} />
       </div>
       {/*<Result
@@ -44,9 +43,9 @@ const FgaProResult = ({
         {extra}
       </Result>*/}
       <div className="flex flex-col justify-center items-center" style={{ padding: 0, width: "50%", flex: 1, gap: 10}}>
+        {extra}
         <div>{icon}</div>
         <div>{subTitle}</div>
-        {extra}
       </div>
     </div>
   )

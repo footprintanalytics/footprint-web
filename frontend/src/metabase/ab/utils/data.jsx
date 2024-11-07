@@ -419,19 +419,57 @@ const GaIconLayout = ({children}) => {
 export const fga_menu_data_v2 = (businessType, project, chain, user) => {
   if (businessType === "pro") {
     const menuTabs = [
-      getItem("User", "user", ReactIcons.assetIcon, [
-        // project?.nftCollectionAddress?.length > 0 &&
+      getItem("Project Overview", "asset_overview_pro", null),
+      getItem("User Acquisition", "user_acquisition_parent", ReactIcons.trendingIcon14, [
         getItem("User Acquisition", "acquisition_users_pro", null),
-        getItem("User Engagement", "engagement_users_pro", null),
         getItem("User Retention", "Retention_users_pro", null),
+        // getItem("Wallet Retention", "wallet_retention", null),
+      ]),
+      getItem("User Engagement", "user_engagement_parent", ReactIcons.growthIcon, [
+        getItem("User Engagement", "engagement_users_pro", null),
+        // getItem("Wallet Engagement", "wallet_engagement", null),
+      ]),
+      getItem("Assets", "assets", ReactIcons.assetIcon, [
+        getItem("Token", "token", null, [
+          // getItem("Summary", "game_tokenomics", null),
+          getItem("Trading", "token_trading", null),
+          getItem("Holders", "token_holders", null),
+          getItem("Leaderboard", "token_leaderboard", null),
+          // getItem("Token City Map", "token_city_map", null),
+          // getItem("Token Snapshot Tool", "token_snapshot_tool", null),
+        ]),
+        getItem("NFT", "nft", null, [
+            // getItem("Summary", "nft_summary", null),
+            // getItem("NFT Mints", "nft_mints", null),
+            getItem("Sales", "nft_sales", null),
+            getItem("Holders", "nft_nft_holder", null),
+            getItem("Leaderboard", "nft_leaderboard", null),
+            getItem("Listing", "nft_listing", null),
+            // getItem("NFT Snapshot Tool", "nft_snapshot_tool", null),
+          ]
+        ),
+      ]),
+      getItem("Settings", "settings", <SettingOutlined />, [
+        getItem("Project Info", "general", null),
       ]),
     ]
     const keys = getKeys([...menuTabs]);
     return {
       dashboardMap: new Map([
+          ["asset_overview_pro", "72e6366d-1586-4c72-9c4b-d9a0c67a9bde"],
           ["acquisition_users_pro", "e7e9eaee-676a-4c4e-94a0-4828c7cc8f2a"],
-          ["engagement_users_pro", "7d97d9d7-d75e-44ea-b1c7-4cfcf68f6ce1"],
           ["Retention_users_pro", "31bae1fb-5eee-4f05-8c30-d049a68765dc"],
+          ["engagement_users_pro", "7d97d9d7-d75e-44ea-b1c7-4cfcf68f6ce1"],
+          ["token_trading", "87efcdde-b574-48b4-a7ea-ff62a6ff3d78"],
+          ["token_holders", "5a8acaed-c1b7-4995-9560-11b716ec6dff"],
+          ["token_leaderboard", "f36c338b-d213-4071-9d92-66c7d575f7cb"],
+          ["nft_sales", "f402d300-7a8b-46bd-8a39-5d0eb2066c3e"],
+          ["nft_listing", "c09a2a49-a90b-4bd2-94b7-fbe192ad0eb7"],
+          ["nft_nft_holder", "f4346e62-3191-4e08-b201-2abcc8d5956c"],
+          ["nft_leaderboard", "21a0555b-4e8b-45cc-858d-ae41861ba9ee"],
+          ["wallet_retention", "19eb5c44-8c3f-4172-b3e1-115268e116f3"],
+          ["wallet_engagement", "6116808a-ba87-482f-b47f-5e9b79a4b700"],
+          ["token_city_map", "9293ce58-0836-41ec-b6d5-9b017e00fca9"],
         ]
       ),
       menuTabs: menuTabs,

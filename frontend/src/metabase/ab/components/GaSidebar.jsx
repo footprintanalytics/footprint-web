@@ -17,8 +17,9 @@ import {
   saveLatestGAMenuTag,
 } from "../utils/utils";
 import { getFgaChain } from "../../selectors/control";
-import { resetFgaProtocolList, setFgaChain } from "../../redux/control";
+import { createFgaProjectModalShowAction, resetFgaProtocolList, setFgaChain } from "../../redux/control";
 import { getOssUrl } from "metabase/lib/image";
+import GaProjectSearch from "metabase/ab/components/GaProjectSearch";
 
 const { Sider } = Layout;
 
@@ -36,9 +37,10 @@ const GaSidebar = (props) => {
     resetFgaProtocolList,
     selectCallback,
     style,
+    setCreateFgaProjectModalShowAction,
   } = props;
   const [openKeys, setOpenKeys] = useState([currentMenu]);
-
+  const isProFga = window.location.pathname.startsWith("/fga/pro")
   const menuData = fga_menu_data_v2(businessType, projectObject, chain, user);
   const menuTitle = menuData?.menuTitle;
   const platformMenuTitle = menuData?.platformMenuTitle;
@@ -152,6 +154,15 @@ const GaSidebar = (props) => {
               <h3>{menuTitle}</h3>
             </div>
             }
+            {isProFga && (<div className="flex flex-column">
+              <GaProjectSearch
+                width={200}
+                location={location}
+                setCreateFgaProjectModalShowAction={setCreateFgaProjectModalShowAction}
+              />
+              <div className="pb2"/>
+            </div>
+              )}
             <Menu
               style={{
                 borderRight: "0px",
@@ -217,6 +228,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = {
   setFgaChain: setFgaChain,
   resetFgaProtocolList,
+  setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(GaSidebar));
