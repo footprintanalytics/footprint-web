@@ -1,21 +1,19 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
-import { Avatar, Button, Modal, Result, Radio, message, Timeline, Steps, theme, Table, Spin, Upload } from "antd";
-import { CheckCircleOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
+import { Button, message, Steps, Table, theme, Upload } from "antd";
 import FgaFlowDataProcess from "metabase/visualizations/components/FgaFlowDataProcess";
 import FgaFlowProduceData from "metabase/visualizations/components/FgaFlowProduceData";
 import { fgaEventConfirmCsv } from "metabase/new-service";
+import { QueryClient, QueryClientProvider } from "react-query";
 
-const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
-  const [timeItems, setTimeItems] = useState([{ label: 'Step 1: Test connection done', completed: true }, { label: 'Step 2: Sync sample data done', completed: true }, { label: 'Step 3: ETL sample data done', completed: true }]);
+const FgaFlowUploadLayout = ({onSuccess, projectObject, cardId}) => {
   const { token } = theme.useToken();
-  const [count, setCount] = useState(0);
   const [confirmCsvLoading, setConfirmCsvLoading] = useState();
   const [csvData, setCSVData] = useState([]);
   const [file, setFile] = useState()
   const [current, setCurrent] = useState(0);
   const projectId = projectObject?.id
-  const fileName = file?.name
+  const [pipelineId, setPipelineId] = useState()
   const columns = [
     {
       title: 'Project Id',
@@ -48,41 +46,8 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
       key: 'age23',
     },
   ];
+  const queryClient = new QueryClient();
 
-  const data = [
-    {
-      key: '1',
-      user_id: 1,
-      event_type: 'Account',
-      sub_event: 'Login',
-      event_id: 1,
-      timestamp: 1730113928,
-    },
-    {
-      key: '1',
-      user_id: 2,
-      event_type: 'Account',
-      sub_event: 'Login',
-      event_id: 2,
-      timestamp: 1730113929,
-    },
-    {
-      key: '1',
-      user_id: 3,
-      event_type: 'Account',
-      sub_event: 'Login',
-      event_id: 3,
-      timestamp: 1730113923,
-    },
-    {
-      key: '1',
-      user_id: 4,
-      event_type: 'Account',
-      sub_event: 'Login',
-      event_id: 4,
-      timestamp: 1730113928,
-    },
-  ];
   const propsUploadAvatarTcOss = {
     name: 'file',
     accept: '.csv',
@@ -90,7 +55,6 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
     maxCount: 1,
     method: 'post',
     // eslint-disable-next-line no-undef
-    action: `/api/v1/fga/event/upload/csv`,
     headers: {
       // token: getUserToken(),
     },
@@ -108,15 +72,17 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
       return false
     },
     onChange(info) {
-      const data = info?.file?.response?.data;
-      if (data) {
-        setCSVData(data)
-        message.success("Upload CSV successfully");
-        setTimeout(() => {
-          setCurrent(current + 1);
-        }, 1000);
-      }
-      console.log('upload onChange: ', info, data)
+      // const data = info?.file?.response?.data?.previewData;
+      // const pipelineId = info?.file?.response?.data?.pipelineId;
+      // if (data) {
+      //   setPipelineId(pipelineId)
+      //   setCSVData(data)
+      //   message.success("Upload CSV successfully");
+      //   setTimeout(() => {
+      //     setCurrent(current + 1);
+      //   }, 1000);
+      // }
+      // console.log('upload onChange: ', info, data)
     },
   }
 
@@ -124,7 +90,7 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
     setConfirmCsvLoading(true)
     await fgaEventConfirmCsv({
       "projectId": projectId + "",
-      "fileName": fileName,
+      "pipelineId": pipelineId,
     })
     setConfirmCsvLoading(false)
     setCurrent(current + 1)
@@ -143,18 +109,20 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
               </Upload>
             </Button>
 
-          <Button onClick={() => {
-            message.success("Config Mysql successfully")
-            setTimeout(() => {
-              setCurrent(current + 1);
-            }, 1000);
-          }}>Mysql</Button>
-          <Button onClick={() => {
-            message.success("Config Postgres successfully");
-            setTimeout(() => {
-              setCurrent(current + 1);
-            }, 1000);
-          }}>Postgres</Button>
+          <Button
+            onClick={() => {
+              message.success("Coming soon...")
+            }}
+          >
+            Mysql
+          </Button>
+          <Button
+            onClick={() => {
+              message.success("Coming soon...")
+            }}
+          >
+            Postgres
+          </Button>
         </div>
       ),
     },
@@ -163,10 +131,13 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
       content: (
         <FgaFlowDataProcess
           projectObject={projectObject}
-          previewData={(data) => {
+          cardId={cardId}
+          callbackData={(data, pipelineId) => {
+            setPipelineId(pipelineId)
             setCSVData(data)
             setCurrent(current + 1)
-          }} file={file}
+          }}
+          file={file}
         />
       ),
       onClick: () => setCurrent(1),
@@ -187,17 +158,21 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
     },
     {
       title: 'Produce Data',
-      content: (<FgaFlowProduceData onSuccess={() => {
-        onSuccess?.()
-      }}/>),
+      content: (
+        <QueryClientProvider client={queryClient}>
+          <FgaFlowProduceData
+            pipelineId={pipelineId}
+            onSuccess={() => {
+              onSuccess?.()
+            }}
+            onError={() => {
+              setCurrent(0)
+            }}
+          />
+        </QueryClientProvider>
+      ),
     },
   ];
-  const next = () => {
-    setCurrent(current + 1);
-  };
-  const prev = () => {
-    setCurrent(current - 1);
-  };
   const items = steps.map((item) => ({
     key: item.title,
     title: item.title,
@@ -212,26 +187,6 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject}) => {
     marginTop: 16,
     height: "100%",
   };
-  const getTimeItemsFromCount = (count) => {
-    if (count === 0) {
-      return [{ label: 'Step 1: Ready for connection done', completed: true }]
-    }
-    if (count === 1) {
-      return [{ label: 'Step 1: Test connection done', completed: true }, { label: 'Step 2: Sync sample data done', completed: true }]
-    }
-    if (count >= 2) {
-      return [{ label: 'Step 1: Test connection done', completed: true }, { label: 'Step 2: Sync sample data done', completed: true }, { label: 'Step 3: ETL sample data done', completed: true }]
-    }
-  }
-/*  useEffect(() => {
-    if (count >= 4) return;
-
-    const timer = setInterval(() => {
-      setCount((prevCount) => prevCount + 1);
-    }, 2000);
-
-    return () => clearInterval(timer);
-  }, [count]);*/
 
 
   return (

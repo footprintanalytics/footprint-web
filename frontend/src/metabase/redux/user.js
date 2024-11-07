@@ -1,19 +1,18 @@
-import {
-  createAction,
-  createThunkAction,
-  handleActions,
-} from "metabase/lib/redux";
+import { createAction, createThunkAction, handleActions } from "metabase/lib/redux";
 import { UserApi } from "metabase/services";
 // import { CLOSE_QB_NEWB_MODAL } from "metabase/query_builder/actions";
 import Users from "metabase/entities/users";
 import {
-  getUserVipInfo,
   getDataApiVipInfo,
-  GetFgaProjectDetail, getPublicChainProjectDetail, getProtocolDetail, getProtocolDetailById,
+  GetFgaProjectDetail,
+  getProjectChartTypeStatus,
+  getProtocolDetail,
+  getProtocolDetailById,
+  getUserVipInfo,
 } from "metabase/new-service";
 import arms from "metabase/lib/arms";
-import { clearGACache } from "metabase/growth/utils/utils";
-import { isABPath, isBusinessTypePath } from "metabase/ab/utils/utils";
+import { isABPath } from "metabase/ab/utils/utils";
+
 export const REFRESH_CURRENT_USER = "metabase/user/REFRESH_CURRENT_USER";
 /*export const refreshCurrentUser = createAction(REFRESH_CURRENT_USER, () => {
   try {
@@ -169,6 +168,8 @@ export const currentUser = handleActions(
 
 export const REFRESH_CURRENT_FGA_PROJECT =
   "metabase/user/REFRESH_CURRENT_FGA_PROJECT";
+export const REFRESH_CURRENT_FGA_PROJECT_CHART_TYPE =
+  "metabase/user/REFRESH_CURRENT_FGA_PROJECT_CHART_TYPE";
 export const refreshCurrentFgaProject = createThunkAction(
   REFRESH_CURRENT_FGA_PROJECT,
   async project_id => {
@@ -770,6 +771,18 @@ export const refreshCurrentFgaProjectById = createThunkAction(
     }
   },
 );
+export const refreshCurrentFgaProjectChartType = createThunkAction(
+  REFRESH_CURRENT_FGA_PROJECT_CHART_TYPE,
+  async (projectId, from) => {
+    try {
+      return await getProjectChartTypeStatus({ "projectId": 1 });
+      // return await getProjectChartTypeStatus({ "projectId": projectId });
+    } catch (e) {
+      console.log(e)
+      return null;
+    }
+  },
+);
 
 export const LOAD_CURRENT_FGA_PROJECT =
   "metabase/user/LOAD_CURRENT_FGA_PROJECT";
@@ -823,6 +836,7 @@ export const loadCurrentFgaProjectById = createThunkAction(
         }
         // await dispatch(refreshCurrentFgaProject(project_id));
         await dispatch(refreshCurrentFgaProjectById(projectId, from));
+        await dispatch(refreshCurrentFgaProjectChartType(projectId))
       }
     },
 );
@@ -840,6 +854,11 @@ export const currentFgaProject = handleActions(
           return payload;
         }
         return { ...state, ...payload };
+      },
+    },
+    [REFRESH_CURRENT_FGA_PROJECT_CHART_TYPE]: {
+      next: (state, { payload }) => {
+        return { ...state, chartTypeStatus: payload };
       },
     },
     [REFRESH_CURRENT_FGA_PROJECT_NEW]: {

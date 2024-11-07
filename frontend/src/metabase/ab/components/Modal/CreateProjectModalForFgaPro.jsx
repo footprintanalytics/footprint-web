@@ -188,7 +188,7 @@ const CreateProjectModalForFgaPro = props => {
     return array.every(address => regex.test(get(address.split(","),"[0]")));
   };
 
-  async function createProject(params) {
+  async function createProject() {
     const contractData = data.filter(item => item.checked);
     const emptyInputs = contractData
       .map((item, index) => ({ ...item, index: data.indexOf(item) + 1 }))

@@ -18,7 +18,6 @@ export function isWeb3Card(cardId) {
   return fgaChartObject?.category === "web3";
 }
 export function isWeb3DataCreated(cardId, projectObject) {
-  const fgaChartObject = getFgaChartTypeMappingById(cardId);
   const web3TypeText = getWeb3TypeText(cardId);
   if (!_.isEmpty(projectObject?.tokenAddress) && web3TypeText === "Token") {
     return true;

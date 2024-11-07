@@ -125,6 +125,7 @@ const mapStateToProps = state => {
     userExtend: getUserExtend(state),
     projectObject: getFgaProject(state),
     fgaProjectList: getFgaProjectList(state),
+    chartTypeStatus: state?.currentFgaProject?.chartTypeStatus
   };
 };
 
