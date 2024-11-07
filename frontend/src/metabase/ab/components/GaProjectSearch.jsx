@@ -53,10 +53,11 @@ const GaProjectSearch = props => {
       protocolName: "Gaming Demo Project 2",
     }
 
-  const loadProjectDetail = protocolSlug => {
+  const loadProjectDetail = projectId => {
     if (isProFga) {
-      loadCurrentFgaProjectById(protocolSlug, from);
+      loadCurrentFgaProjectById(projectId, from);
     } else {
+      const protocolSlug = fgaProjectList?.find(item => item.projectId === projectId)?.protocolSlug;
       loadCurrentFgaProjectNew(protocolSlug, from);
     }
   };
@@ -98,7 +99,6 @@ const GaProjectSearch = props => {
       if (project.projectId !== 1) {
         setCurrentProject(project.projectName);
         saveLatestGAProject(project.projectName);
-        console.log("project.projectIdproject.projectId", project.projectId, project)
         loadProjectDetail(project.projectId);
 
         setUserProject(projects);
@@ -150,13 +150,17 @@ const GaProjectSearch = props => {
     // }
   };
 
-
+  const list = isProFga ? (
+    fgaProjectList
+      ?.filter(item => item.projectId !== 1)
+      ?.slice(-1)
+  ) : fgaProjectList;
   return (
     <div className="flex flex-column items-center ga-project-search" ref={ref1} style={style}>
         <>
           {/*{userProject?.length > 0 && (*/}
             <Select
-              style={{ width: width, "display": fgaProjectList?.length > 1 ? "" : "none"}}
+              style={{ width: width, "display": !isProFga || (isProFga && fgaProjectList?.length > 1) ? "" : "none"}}
               showSearch
               ref={selectRef}
               dropdownStyle={{
@@ -186,10 +190,7 @@ const GaProjectSearch = props => {
               }
               // options={selectOptions}
             >
-              {fgaProjectList
-                ?.filter(item => item.projectId !== 1)
-                ?.filter(item => item.projectId !== 1)
-                ?.slice(-1)
+              {list
                 ?.map(item => {
                 const logo = item.logo;
                 return (

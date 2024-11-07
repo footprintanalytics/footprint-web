@@ -24,7 +24,7 @@ const tailLayout = {
 };
 
 const CreateProjectModalForDemo = props => {
-  const { open, onCancel, onSuccess, router, replace, loadFgaProjectList, force, setFgaDashboardKey, setUserExtend, userExtend, projectObject, loadCurrentFgaProjectById, isModal = true } = props;
+  const { open, onCancel, onSuccess, router, replace, loadFgaProjectList, force, setFgaDashboardKey, setUserExtend, userExtend, projectObject, loadCurrentFgaProjectById, isModal = true, submitButtonText } = props;
   const [form] = Form.useForm();
   const [loadingData, setLoadingData] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -90,13 +90,13 @@ const CreateProjectModalForDemo = props => {
     }
     onSuccess?.();
     if (!projectObject) {
-      setState(2)
+      await loadFgaProjectList({ from: "pro" });
+      await loadCurrentFgaProjectById(result?.projectId || projectObject?.id, "edit-project")
+      router.push(getGrowthProjectPath(result?.projectName || projectObject?.name, "asset_overview_pro"));
       // window.location.reload();
-      // router.push(getGrowthProjectPath(result?.projectName || projectObject?.name, "asset_overview_pro"));
     } else {
       await loadFgaProjectList({ from: "pro" });
-      await loadCurrentFgaProjectById(projectObject?.id, "edit-project")
-      // await loadCurrentFgaProjectById(result?.projectId || projectObject?.id, "edit-project")
+      await loadCurrentFgaProjectById(result?.projectId || projectObject?.id, "edit-project")
       setFgaDashboardKey({ key: "pro" });
     }
   }
@@ -114,6 +114,7 @@ const CreateProjectModalForDemo = props => {
             {!projectObject && (<span className="mb2">You can create a new project to explore by entering key information, such as NFT or TOKEN, and we will help you generate a series of reports.</span>)}
             <CreateProjectContractDetails
               projectObject={projectObject}
+              submitButtonText={submitButtonText}
               onClosed={(params) => {
                 createProject(params);
               }}
@@ -180,7 +181,7 @@ const CreateProjectModalForDemo = props => {
               status="success"
               title={`${projectResult?.projectName} is created successfully.`}
               extra={
-                <div className="flex justify-between" style={{ gap: 20 }}>
+                <div className="flex justify-center" style={{ gap: 20 }}>
                   <div
                     loading={loading}
                     className="mt3"

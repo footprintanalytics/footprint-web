@@ -667,7 +667,7 @@ class DashCard extends Component {
             subTitle={<div className={"text-white"}><LockFilled />Submit project web3 info</div>}
             extra={[
               <Button key='xxx' onClick={() => {
-                this.props.setCreateFgaProjectModalShowAction({ show: true, projectObject: this.props.projectObject });
+                this.props.setCreateFgaProjectModalShowAction({ show: true, projectObject: this.props.projectObject, submitButtonText: `Submit ${getWeb3TypeText(dashcard.card.id)}` });
                 // Modal.info({
                 //   icon: null,
                 //   width: 600,

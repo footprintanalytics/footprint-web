@@ -49,7 +49,7 @@ const CHAIN_LIST = [
   { value: "Ronin", label: "Ronin" },
 ];
 
-const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject }) => {
+const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject, submitButtonText }) => {
   const [refresh, setRefresh] = useState(0);
   const [contract, setContract] = useState([]);
   const [form] = Form.useForm();
@@ -362,7 +362,7 @@ const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject 
           <div className="w-full flex flex-row-reverse justify-between align-center">
             <div className="flex align-center gap-2 mt4">
               <Button type="primary" htmlType="submit">
-                {`${projectObject ? 'Edit': "Create"}`} Project
+                {submitButtonText || `${projectObject ? 'Edit Project': "Create Project"}`}
               </Button>
             </div>
           </div>

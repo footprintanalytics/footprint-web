@@ -40,7 +40,7 @@ const GaSidebar = (props) => {
     setCreateFgaProjectModalShowAction,
   } = props;
   const [openKeys, setOpenKeys] = useState([currentMenu]);
-
+  const isProFga = window.location.pathname.startsWith("/fga/pro")
   const menuData = fga_menu_data_v2(businessType, projectObject, chain, user);
   const menuTitle = menuData?.menuTitle;
   const platformMenuTitle = menuData?.platformMenuTitle;
@@ -154,7 +154,7 @@ const GaSidebar = (props) => {
               <h3>{menuTitle}</h3>
             </div>
             }
-            <div className="flex flex-column">
+            {isProFga && (<div className="flex flex-column">
               <GaProjectSearch
                 width={200}
                 location={location}
@@ -162,6 +162,7 @@ const GaSidebar = (props) => {
               />
               <div className="pb2"/>
             </div>
+              )}
             <Menu
               style={{
                 borderRight: "0px",

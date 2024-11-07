@@ -56,7 +56,7 @@ const LayoutView = props => {
   // }, [setLoginModalShow, user, projectObject]);
   //
 
-  useEffect(() => {
+/*  useEffect(() => {
     const showCreateProjectModal = async () => {
       if (!isFirst) {
         return
@@ -73,7 +73,7 @@ const LayoutView = props => {
       showCreateProjectModal()
 
     }
-  }, [fgaProjectList, user])
+  }, [fgaProjectList, user])*/
 
   if (isProFga && (!user || (fgaProjectList?.length <= 1))) {
     return (

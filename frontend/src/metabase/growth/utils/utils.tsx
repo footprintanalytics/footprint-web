@@ -5,6 +5,7 @@ import { notification, Button, Modal } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 import { dashboardIdInfo } from "metabase/new-service";
+import { loadFgaProjectList } from "metabase/redux/control";
 
 export function getFirstAddressByPriory(datas:{address: string, chain: string}[]) {
   if (datas.length === 0) return null;
@@ -364,7 +365,7 @@ export function getGaMenuTabs(
   return { menuTabs, dashboardMap };
 }
 
-export function clearGACache() {
+export function clearGACache(dispatch: any) {
   localStorage.removeItem("LatestGACampaigns");
   localStorage.removeItem("LatestGAMenuTag");
   localStorage.removeItem("GASearchHistory");
@@ -373,6 +374,7 @@ export function clearGACache() {
   localStorage.removeItem("LatestGAProject");
   localStorage.removeItem("GAUserId");
   localStorage.removeItem("IsFgaDemoProject");
+  dispatch(loadFgaProjectList({clear: true}));
 }
 
 export function saveLatestGAProject(LatestGAProject: string) {
