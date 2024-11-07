@@ -37,8 +37,8 @@ export const SET_PEA_TOKEN = "metabase/control/SET_PEA_TOKEN";
 
 export const createFgaProjectModalShowAction = createThunkAction(
   CREATE_FGA_PROJECT_MODAL_SHOW,
-  ({ show, projectObject, force = false }) => {
-    return { show: show, projectObject, force: force };
+  ({ show, projectObject, submitButtonText, force = false }) => {
+    return { show: show, projectObject, submitButtonText, force: force };
   },
 );
 
@@ -219,10 +219,12 @@ export const LOAD_FGA_PROJECT_LIST =
   "metabase/user/LOAD_FGA_PROJECT_LIST";
 export const loadFgaProjectList = createThunkAction(
   LOAD_FGA_PROJECT_LIST,
-  ({ from }) =>
+  ({ from, clear }) =>
     async (dispatch, getState) => {
-      let result = await getProjectList({ from: from || "" });
-      return result;
+      if (clear) {
+        return null
+      }
+      return await getProjectList({ from: from || "" });
     },
 );
 export const LOAD_FGA_DASHBOARD_KEY =

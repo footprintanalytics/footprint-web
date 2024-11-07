@@ -553,6 +553,7 @@ class ABNavbar extends Component {
           open={createFgaProjectModalShow?.show}
           force={createFgaProjectModalShow?.force}
           projectObject={createFgaProjectModalShow?.projectObject}
+          submitButtonText={createFgaProjectModalShow?.submitButtonText}
           location={location}
           onSuccess={() => {
             setCreateFgaProjectModalShowAction({ show: false });

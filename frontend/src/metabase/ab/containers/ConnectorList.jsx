@@ -231,7 +231,6 @@ const ConnectorList = props => {
 
   useEffect(() => {
     if ((projectId && !isLoading && data) || (!projectId && data)) {
-      console.log("getAvailableIntegrations", data);
       const availableConnectors = data?.availableConnectorConfig;
       const groupMap = new Map();
       availableConnectors.map((j, index) => {

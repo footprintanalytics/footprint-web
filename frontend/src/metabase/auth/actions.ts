@@ -235,7 +235,7 @@ export const logout = createThunkAction(LOGOUT, (redirectUrl: string) => {
     } else {
       dispatch(replace("/"));
     }
-    clearGACache();
+    clearGACache(dispatch);
     // window.location.reload(); // clears redux state and browser caches
   };
 });
