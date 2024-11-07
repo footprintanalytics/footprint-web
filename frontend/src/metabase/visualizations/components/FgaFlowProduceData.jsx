@@ -17,7 +17,7 @@ const FgaFlowProduceData = ({ onSuccess, pipelineId, onError }) => {
 
   return (
     <div className="flex flex-col justify-center line-height-2" style={{padding: 40, lineHeight: 1.5}}>
-      {!data?.status && (
+      {!["finished", "sync_failed"].includes(data?.status) && (
         <Result
           icon={<Spin/>}
           title={"Data Brewing!"}

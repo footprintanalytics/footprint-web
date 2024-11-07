@@ -29,10 +29,10 @@ const FgaFlowDataProcess = ({ projectObject, callbackData, file, cardId }) => {
         return;
       }
 
+      const chartType = getFgaChartTypeMappingById(cardId)?.type || "";
       const formData = new FormData();
       formData.append('file', file);
       formData.append('projectId', projectId + "");
-      const chartType = getFgaChartTypeMappingById(cardId)?.chartType || "";
       formData.append('chartType', chartType);
 
       try {

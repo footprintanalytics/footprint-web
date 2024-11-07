@@ -775,8 +775,7 @@ export const refreshCurrentFgaProjectChartType = createThunkAction(
   REFRESH_CURRENT_FGA_PROJECT_CHART_TYPE,
   async (projectId, from) => {
     try {
-      return await getProjectChartTypeStatus({ "projectId": 1 });
-      // return await getProjectChartTypeStatus({ "projectId": projectId });
+      return await getProjectChartTypeStatus({ "projectId": projectId });
     } catch (e) {
       console.log(e)
       return null;
