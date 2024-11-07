@@ -14,7 +14,6 @@ import {
 import arms from "metabase/lib/arms";
 import { clearGACache } from "metabase/growth/utils/utils";
 import { isABPath, isBusinessTypePath } from "metabase/ab/utils/utils";
-import { debounce } from 'lodash';
 export const REFRESH_CURRENT_USER = "metabase/user/REFRESH_CURRENT_USER";
 /*export const refreshCurrentUser = createAction(REFRESH_CURRENT_USER, () => {
   try {
