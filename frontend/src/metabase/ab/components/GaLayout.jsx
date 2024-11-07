@@ -77,7 +77,7 @@ const LayoutView = props => {
 
   if (isProFga && (!user || (fgaProjectList?.length <= 1))) {
     return (
-      <FgaCreateProjectGuide user={user} setLoginModalShow={setLoginModalShow} setCreateFgaProjectModalShowAction={setCreateFgaProjectModalShowAction}/>
+      <FgaCreateProjectGuide user={user} setLoginModalShow={setLoginModalShow} setCreateFgaProjectModalShowAction={setCreateFgaProjectModalShowAction} fgaProjectList={fgaProjectList}/>
     )
   }
 
@@ -125,6 +125,7 @@ const mapStateToProps = state => {
     userExtend: getUserExtend(state),
     projectObject: getFgaProject(state),
     fgaProjectList: getFgaProjectList(state),
+    chartTypeStatus: state?.currentFgaProject?.chartTypeStatus
   };
 };
 

@@ -466,6 +466,7 @@ class DashCard extends Component {
         width: 900,
         icon: null,
         content: (<FgaFlowUploadLayout
+          cardId={dashcard.card.id}
           projectObject={this.props.projectObject}
           onSuccess={() => {
           // changeFgaFlowType("loading")

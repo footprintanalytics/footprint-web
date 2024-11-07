@@ -774,7 +774,7 @@ export const submitFGAProtocols = params => {
 };
 
 export const submitFGAContractForPro = params => {
-  return POST(`/api/v1/project/contract/submit`, params);
+  return POST(`/api/v1/project/contract`, params);
 };
 
 // get audit list ,status = ['reviewing'] type = contract | protocol
@@ -877,6 +877,23 @@ export const getMediaTagTop = (params, config) => {
   return POST(`api/v1/media/tagTop`, params, { silentFp: true, silent: true });
 };
 
-export const fgaEventConfirmCsv = (params) => {
-  return POST(`api/v1/fga/event/confirm/csv`, params);
+export const getProjectChartTypeStatus = async params => {
+  return POST(`/api/v1/fga/event/data/integration/chart/status`, params);
+  // return GET(`/mock/api/v1/project/protocol/detail-by-id`, params);
 };
+
+export const fgaEventConfirmCsv = (params) => {
+  return POST(`/api/v1/fga/event/confirm/csv`, params);
+};
+
+export const fgaEventRecordDetail = (params) => {
+  return POST(`/api/v1/fga/event/data/integration/record/detail`, params);
+};
+
+//projectName
+export const findContractMatchByName = (params) => {
+  return GET(`api/v1/project/contract/match-by-name`, params);
+  // return GET(`api/v1/project/contract/match-by-name`, params);
+};
+
+export const fgaUploadCsvUrl = '/api/v1/fga/event/upload/csv'
