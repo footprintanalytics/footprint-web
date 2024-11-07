@@ -298,10 +298,10 @@ const ProjectInfo = props => {
               <Button
                 type="primary"
                 onClick={() => {
-                  setProjectModalShow({ show: true });
+                  setCreateFgaProjectModalShowAction({ show: true, projectObject: project });
                 }}
               >
-                Set up now
+                Submit Now
               </Button>
             </Empty>
           )}

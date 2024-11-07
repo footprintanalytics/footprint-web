@@ -880,3 +880,9 @@ export const getMediaTagTop = (params, config) => {
 export const fgaEventConfirmCsv = (params) => {
   return POST(`api/v1/fga/event/confirm/csv`, params);
 };
+
+//projectName
+export const findContractMatchByName = (params) => {
+  return GET(`api/v1/project/contract/match-by-name`, params);
+  // return GET(`api/v1/project/contract/match-by-name`, params);
+};
