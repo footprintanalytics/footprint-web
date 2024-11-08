@@ -119,7 +119,7 @@ const GaProjectSearch = props => {
 
   useEffect(() => {
     if (isProFga) {
-      if (user?.id) {
+      if (user?.id && !fromLeftMenu) {
         loadFgaProjectList({ from });
       }
     } else {
