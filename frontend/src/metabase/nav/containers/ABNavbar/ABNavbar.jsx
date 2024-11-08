@@ -320,7 +320,10 @@ class ABNavbar extends Component {
     const rootDisplay = window.location.pathname.startsWith("/defi360")
       ? "none"
       : "flex";
-
+    const showSearch = window.location.pathname.startsWith("/fga")
+    const isGrowthFga = window.location.pathname.startsWith("/growthly")
+    const isProFga = window.location.pathname.startsWith("/fga/pro")
+    const showAddProject = isProFga
     const MobileMenuIcon = () => {
       return (
         <div
@@ -449,6 +452,7 @@ class ABNavbar extends Component {
           ) : (
             <Button
               className="ml2"
+              style={{display: isProFga ? "none" : ""}}
               onClick={() => {
                 trackStructEvent(`click Sign in`);
                 // message.info("Coming soon...")
@@ -461,10 +465,6 @@ class ABNavbar extends Component {
         </div>
       );
     };
-    const showSearch = window.location.pathname.startsWith("/fga")
-    const isGrowthFga = window.location.pathname.startsWith("/growthly")
-    const isProFga = window.location.pathname.startsWith("/fga/pro")
-    const showAddProject = isProFga
     return (
       <div className="fga-Nav" style={{ display: rootDisplay,backgroundColor:'#1B1B1E' }}>
         <div className="Nav__left" style={{ borderRight: "1px solid #ffffff20" }}>
