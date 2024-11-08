@@ -126,7 +126,7 @@ const LoginModalInner = props => {
     if (location?.pathname === "/moon-men") {
       return { channel: "moon-men" };
     }
-    return channel.length > 0 ? { channel } : {};
+    return channel?.length > 0 ? { channel } : {};
   };
 
   const getRedirect = () => {

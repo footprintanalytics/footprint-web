@@ -93,11 +93,11 @@ const SignInPanel = ({
                 ) : (
                   <>
                     Email address{" "}
-                    {hideClose && (
+                    {/*{hideClose && (
                       <Typography.Text type="default">
                         (Demo: fga@footprint.network)
                       </Typography.Text>
-                    )}
+                    )}*/}
                   </>
                 )
               }
@@ -109,15 +109,15 @@ const SignInPanel = ({
             <FormField
               name="password"
               type="password"
-              initial={hideClose ? "FGAdemo@2023" : undefined}
+              // initial={hideClose ? "FGAdemo@2023" : undefined}
               title={
                 <>
                   Password{" "}
-                  {hideClose && (
+                  {/*{hideClose && (
                     <Typography.Text type="default">
                       (Demo: FGAdemo@2023)
                     </Typography.Text>
-                  )}
+                  )}*/}
                 </>
               }
               placeholder={t`password...`}

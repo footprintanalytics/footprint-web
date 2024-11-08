@@ -74,7 +74,13 @@ const LayoutView = props => {
 
   if (isProFga && (!user || (fgaProjectList?.length <= 1))) {
     return (
-      <FgaCreateProjectGuide user={user} setLoginModalShow={setLoginModalShow} setCreateFgaProjectModalShowAction={setCreateFgaProjectModalShowAction} fgaProjectList={fgaProjectList}/>
+      <FgaCreateProjectGuide
+        {...props}
+        user={user}
+        setLoginModalShow={setLoginModalShow}
+        setCreateFgaProjectModalShowAction={setCreateFgaProjectModalShowAction}
+        fgaProjectList={fgaProjectList}
+      />
     )
   }
 

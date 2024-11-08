@@ -158,6 +158,7 @@ const GaSidebar = (props) => {
               <GaProjectSearch
                 width={200}
                 location={location}
+                fromLeftMenu={true}
                 setCreateFgaProjectModalShowAction={setCreateFgaProjectModalShowAction}
               />
               <div className="pb2"/>
