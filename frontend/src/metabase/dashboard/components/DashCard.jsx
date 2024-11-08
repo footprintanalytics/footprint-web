@@ -497,12 +497,13 @@ class DashCard extends Component {
       if (type === "login") {
         return (
           <FgaProResult
+            card={dashcard.card}
             cardId={dashcard.card.id}
             height={this.props.height}
             width={this.props.gridItemWidth}
-            subTitle={<div className={"text-white"}><LockFilled /> Login to access this data.<br/>This data is Only available for Footprint user</div>}
+            subTitle={<div className={"text-white"}> <LockFilled className="mr1" /> Login to access this data.<br/>This data is Only available for Footprint user</div>}
             extra={[
-              <Button key='xxx' onClick={() => {
+              <Button className="text-white" key='xxx' onClick={() => {
                 this.props.setLoginModalShow({
                   show: true,
                   from: `FGA Pro`,
@@ -517,12 +518,13 @@ class DashCard extends Component {
       if (type === "pay") {
         return (
           <FgaProResult
+            card={dashcard.card}
             cardId={dashcard.card.id}
             height={this.props.height}
             width={this.props.gridItemWidth}
-            subTitle={<div className={"text-white"}><LockFilled />This data is Only available for standard plan</div>}
+            subTitle={<div className={"text-white"}> <LockFilled className="mr1" />This data is Only available for standard plan</div>}
             extra={[
-              <Button key='xxx' onClick={() => {
+              <Button className="text-white" key='xxx' onClick={() => {
                 Modal.info({
                   icon: null,
                   title: "Choose a plan",
@@ -562,12 +564,13 @@ class DashCard extends Component {
       if (type === "advancedPay") {
         return (
           <FgaProResult
+            card={dashcard.card}
             cardId={dashcard.card.id}
             height={this.props.height}
             width={this.props.gridItemWidth}
-            subTitle={<div className={"text-white"}><LockFilled />your plan to unlock more exclusive insights</div>}
+            subTitle={<div className={"text-white"}> <LockFilled className="mr1" />your plan to unlock more exclusive insights</div>}
             extra={[
-              <Button key='xxx' onClick={() => {
+              <Button className="text-white" key='xxx' onClick={() => {
                 Modal.info({
                   icon: null,
                   title: "Choose a plan",
@@ -600,12 +603,13 @@ class DashCard extends Component {
       if (type === "integration") {
         return (
           <FgaProResult
+            card={dashcard.card}
             cardId={dashcard.card.id}
             height={this.props.height}
             width={this.props.width}
-            subTitle={<div className={"text-white"}><LockFilled />your web2 data to view standard analysis </div>}
+            subTitle={<div className={"text-white"}> <LockFilled className="mr1" />your web2 data to view standard analysis </div>}
             extra={[
-              <Button key='xxx' onClick={() => {
+              <Button className="text-white" key='xxx' onClick={() => {
                 showIntegrationDialog()
               }}>Upload {getWeb2TypeText(dashcard.card.id)}</Button>
             ]}
@@ -616,6 +620,7 @@ class DashCard extends Component {
       if (type === "loading") {
         return (
           <FgaProResult
+            card={dashcard.card}
             icon={<Spin key="xxx"/>}
             cardId={dashcard.card.id}
             height={this.props.height}
@@ -628,12 +633,13 @@ class DashCard extends Component {
       if (type === "createProject") {
         return (
           <FgaProResult
+            card={dashcard.card}
             cardId={dashcard.card.id}
             height={this.props.height}
             width={this.props.gridItemWidth}
-            subTitle={<div className={"text-white"}><LockFilled />Create Project to access this data.</div>}
+            subTitle={<div className={"text-white"}> <LockFilled className="mr1" />Create Project to access this data.</div>}
             extra={[
-              <Button key='xxx' onClick={() => {
+              <Button className="text-white" key='xxx' onClick={() => {
                 Modal.info({
                   icon: null,
                   title: "Create Project",
@@ -664,12 +670,13 @@ class DashCard extends Component {
       if (type === "submitProjectInfo") {
         return (
           <FgaProResult
+            card={dashcard.card}
             cardId={dashcard.card.id}
             height={this.props.height}
             width={this.props.gridItemWidth}
-            subTitle={<div className={"text-white"}><LockFilled />Submit project web3 info</div>}
+            subTitle={<div className={"text-white"}> <LockFilled className="mr1" />Submit project web3 info</div>}
             extra={[
-              <Button key='xxx' onClick={() => {
+              <Button className="text-white" key='xxx' onClick={() => {
                 this.props.setCreateFgaProjectModalShowAction({ show: true, projectObject: this.props.projectObject, submitButtonText: `Submit ${getWeb3TypeText(dashcard.card.id)}` });
                 // Modal.info({
                 //   icon: null,
@@ -704,7 +711,7 @@ class DashCard extends Component {
       // const fgaFlowType = this.getFgaFlowType(this.props, card?.id)
       return (
         <div className="flex flex-col w-full h-full align-top text-white">
-          <div className="text-left mt1 ml1" style={{fontWeight: "bold"}}>{cardName}</div>
+          <div className="text-left my1 ml1" style={{fontWeight: "bold", zIndex: 1}}>{cardName}{dashcard.card.id}{display}</div>
           <div className="flex-1 flex justify-center items-center h-full overflow-hidden" >
             {renderFgaFlowTypeLayout(type)}
             {/*{renderFgaFlowTypeLayout(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935) ? "normal": type)}*/}
@@ -956,7 +963,7 @@ class DashCard extends Component {
           )} */}
         </div>)}
         {isCustom && (
-          <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered absolute w-full h-full" style={{background: "#282828", zIndex: 2}}>
+          <div className="flex-full text-centered text-brand flex flex-column layout-centered absolute w-full h-full" style={{background: "#282828", zIndex: 2}}>
             {renderCustomLayout()}
           </div>
         )}
