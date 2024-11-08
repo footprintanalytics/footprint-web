@@ -16,7 +16,7 @@ import { findContractMatchByName, postProject, submitFGAContractForPro } from "m
 import { saveLatestGAProject, saveLatestGAProjectId } from "metabase/ab/utils/utils";
 const { Option } = Select
 const CreateProjectModalForFgaPro = props => {
-  const { force, isModal, onCancel, onSuccess, loadFgaProjectList, loadCurrentFgaProjectById, setFgaDashboardKey } = props;
+  const { force, isModal = false, open, onCancel, onSuccess, loadFgaProjectList, loadCurrentFgaProjectById, setFgaDashboardKey, submitButtonText } = props;
   const [form] = Form.useForm();
   const steps = [
     {
@@ -30,7 +30,7 @@ const CreateProjectModalForFgaPro = props => {
   ];
   const [current, setCurrent] = useState(0);
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(isModal ? false: true);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [data, setData] = useState([]);
   const [projectName, setProjectName] = useState('');
@@ -86,7 +86,7 @@ const CreateProjectModalForFgaPro = props => {
   }
 
   const handleAdd = () => {
-    setData([{ key: uuidv4(), address: '', select: 'ERC1155', chain: 'Ethereum', checked: true }, ...data]);
+    setData([{ key: uuidv4(), address: '', standard: submitButtonText?.includes('Token') ? 'ERC20': 'ERC1155', chain: 'Ethereum', checked: true }, ...data]);
   };
 
   const handleDelete = (key) => {
@@ -139,12 +139,12 @@ const CreateProjectModalForFgaPro = props => {
     {
       title: 'Chain',
       dataIndex: 'chain',
-      width: 100,
+      width: 110,
       render: (_, record) => (
         <Select
           value={record.chain}
           onChange={(value) => handleSelectChange('chain', value, record.key)}
-          style={{ width: 100, fontSize: 12 }}
+          style={{ width: 110, fontSize: 12 }}
         >
           {CHAIN_LIST.map(chain => (
             <Option key={chain.value} value={chain.value}>
@@ -157,12 +157,12 @@ const CreateProjectModalForFgaPro = props => {
     {
       title: 'Standard',
       dataIndex: 'standard',
-      width: 100,
+      width: 110,
       render: (_, record) => (
         <Select
           value={record.standard}
           onChange={(value) => handleSelectChange('select', value, record.key)}
-          style={{ width: 100, fontSize: 12 }}
+          style={{ width: 110, fontSize: 12 }}
         >
           <Option value="ERC1155">ERC1155</Option>
           <Option value="ERC721">ERC721</Option>
@@ -170,7 +170,7 @@ const CreateProjectModalForFgaPro = props => {
         </Select>
       ),
     },
-    {
+    /*{
       title: '',
       dataIndex: 'action',
       width: 60,
@@ -179,7 +179,7 @@ const CreateProjectModalForFgaPro = props => {
           <DeleteOutlined />
         </Button>
       ),
-    },
+    },*/
   ];
 
   const isValidAddress = contractAddress => {
@@ -245,7 +245,7 @@ const CreateProjectModalForFgaPro = props => {
             title="Loading Project Info..."
           >
           </Result>
-        ) : data.length > 0 ? (
+        ) : data.length > 0 || isModal ? (
           <div>
             <h2>Project: {projectName}</h2>
             <div style={{ marginBottom: 16 }}>
@@ -272,11 +272,11 @@ const CreateProjectModalForFgaPro = props => {
           `}
             </style>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 32 }}>
-              <Button onClick={handleAdd} type="primary" style={{ marginRight: 8 }}>
+              <Button onClick={handleAdd} style={{ marginRight: 8 }}>
                 Add a Contract
               </Button>
-              <Button onClick={() => createProject(data)} loading={submitLoading} type="default">
-                Submit Project Info
+              <Button type="primary" onClick={() => createProject(data)} loading={submitLoading}>
+                {`${isModal ? "Submit" : "Submit Project Info"}`}
               </Button>
             </div>
           </div>
@@ -288,6 +288,9 @@ const CreateProjectModalForFgaPro = props => {
   }
 
   const renderContent = () => {
+    if (isModal) {
+      return renderProjectInfo()
+    }
     return (
       <div className="flex flex-column" style={{ width: "100%", gap: 20 }}>
         <h2>Create Project</h2>
@@ -306,11 +309,11 @@ const CreateProjectModalForFgaPro = props => {
 
   return (
     <Modal
-      title={"Create your project"}
+      title={`Submit More Contact`}
       open={open}
       destroyOnClose
       footer={null}
-      width={560}
+      width={960}
       closable={!force}
       maskClosable={!force}
       // onOk={handleOk}
