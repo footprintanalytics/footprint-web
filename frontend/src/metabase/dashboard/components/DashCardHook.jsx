@@ -10,13 +10,12 @@ const DashCardHook = props => {
     if (web2TypeText === null) {
       return null;
     }
-
     const latestUpdateTimeStr = chartTypeStatus?.find(i => i.chartType === web2TypeText)?.latestUpdateTime;
     if (!latestUpdateTimeStr) {
       return null;
     }
     const latestUpdateTime = new Date(latestUpdateTimeStr).getTime();
-    const chartUpdatedTime = chartUpdatedTime ? new Date(chartUpdatedAt).getTime() : null;
+    const chartUpdatedTime = chartUpdatedAt ? new Date(chartUpdatedAt).getTime() : null;
     if (chartUpdatedTime && latestUpdateTime > chartUpdatedTime) {
       refreshCardThrottle()
     }
