@@ -28,12 +28,19 @@ const CreateProjectModalForFgaPro = props => {
       content: 'Second-content',
     },
   ];
+
   const [current, setCurrent] = useState(0);
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
   const [loading, setLoading] = useState(!isModal);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [data, setData] = useState([]);
   const [projectName, setProjectName] = useState();
+
+  useEffect(() => {
+    if (!open) {
+      setData([])
+    }
+  }, [open]);
 
   const renderCreateProject = () => {
     return (
@@ -161,7 +168,7 @@ const CreateProjectModalForFgaPro = props => {
       render: (_, record) => (
         <Select
           value={record.standard}
-          onChange={(value) => handleSelectChange('select', value, record.key)}
+          onChange={(value) => handleSelectChange('standard', value, record.key)}
           style={{ width: 110, fontSize: 12 }}
         >
           <Option value="ERC1155">ERC1155</Option>
