@@ -93,10 +93,6 @@ const GaProjectSearch = props => {
     }
   }, [projectPath]);
   useEffect(() => {
-<<<<<<< HEAD
-=======
-    console.log("useEffectuseEffect", fgaProjectList)
->>>>>>> fdf47027fe9ef853b1e3610f8ecccd438631dfbf
     if (fgaProjectList?.length > 0 && !fromLeftMenu) {
       const projects = fgaProjectList;
       const index = projects.findIndex(i => i.projectName === currentProject);

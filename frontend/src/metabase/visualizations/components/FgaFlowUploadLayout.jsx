@@ -162,8 +162,8 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject, cardId}) => {
         <QueryClientProvider client={queryClient}>
           <FgaFlowProduceData
             pipelineId={pipelineId}
-            onSuccess={() => {
-              onSuccess?.()
+            onSuccess={(isRefresh) => {
+              onSuccess?.(isRefresh)
             }}
             onError={() => {
               setCurrent(0)

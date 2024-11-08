@@ -73,7 +73,7 @@ const FgaFlowProduceData = ({ onSuccess, pipelineId, onError }) => {
           subTitle={
             <div className={"flex flex-col items-center"}>
               <span>Check out your dashboard now</span>
-              <Button type="primary" style={{width: 200, marginTop: 20}} onClick={() => onSuccess?.()}>View Dashboard</Button>
+              <Button type="primary" style={{width: 200, marginTop: 20}} onClick={() => onSuccess?.(true)}>View Dashboard</Button>
             </div>
           }
         />
