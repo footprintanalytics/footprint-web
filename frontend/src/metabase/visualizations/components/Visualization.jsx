@@ -504,6 +504,7 @@ class Visualization extends React.PureComponent {
       isFga && location.pathname.includes("/User%20Funnel");
     const cardId = get(this.props.rawSeries, 0)?.card?.id;
     const isResearch = window.location.pathname.startsWith("/research");
+    const isGrowthly = document.referrer.includes('growthly')
 
     const isABWeb3Dashboard = getAbWeb3DashboardCase(location);
 
@@ -515,7 +516,7 @@ class Visualization extends React.PureComponent {
           </>
         );
       }
-      if (isFga) {
+      if (isFga || isGrowthly) {
         return (
           <div className="noResults">
             The data is not yet available, please.
@@ -592,7 +593,7 @@ class Visualization extends React.PureComponent {
       if (isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis) {
         return (<FgaErrorGuide />);
       }
-      if (isResearch) {
+      if (isResearch || isGrowthly) {
         return (
           <div style={{lineHeight: 1.1}}>
             <ResearchNoData />
@@ -668,7 +669,7 @@ class Visualization extends React.PureComponent {
     }
 
     const renderLoadingLayout = () => {
-      if (isResearch) {
+      if (isResearch || isGrowthly) {
         return (
           <>
             <LoadingSpinner className="text-slate" />
