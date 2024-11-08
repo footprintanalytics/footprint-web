@@ -59,7 +59,8 @@ export function getWeb3TypeText(cardId) {
 export function getWeb2TypeText(cardId) {
   const fgaChartObject = getFgaChartTypeMappingById(cardId);
   if (fgaChartObject?.category === "web2") {
-    return fgaChartObject?.type;
+    // return fgaChartObject?.type;
+    return "";
   }
   return null;
 }

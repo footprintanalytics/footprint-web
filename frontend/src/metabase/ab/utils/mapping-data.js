@@ -8,11 +8,31 @@ export const fgaChartTypeMapping = [
     subType: ["sign_up"],
   },
   {
+    cardId: 51099,
+    plan: "standard",
+    category: "web2",
+    type: "tracked_events",
+    subType: ["sign_up"],
+  },
+  {
+    cardId: 51098,
+    plan: "standard",
+    category: "web2",
+    type: "tracked_events",
+    subType: ["sign_up"],
+  },
+  {
     cardId: 50988,
     plan: "standard",
     category: "web2",
     type: "tracked_events",
     subType: ["sign_up", "login"],
+  },
+  {
+    cardId: 51103,
+    plan: "standard",
+    category: "web3",
+    type: "token_address",
   },
   {
     cardId: 51066,
@@ -25,6 +45,18 @@ export const fgaChartTypeMapping = [
     plan: "standard",
     category: "web3",
     type: "token_address",
+  },
+  {
+    cardId: 51101,
+    plan: "standard",
+    category: "web3",
+    type: "nft_address",
+  },
+  {
+    cardId: 51100,
+    plan: "standard",
+    category: "web3",
+    type: "nft_address",
   },
   {
     cardId: 51078,

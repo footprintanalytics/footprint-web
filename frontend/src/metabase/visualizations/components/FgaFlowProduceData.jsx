@@ -9,12 +9,17 @@ import { CheckCircleOutlined } from "@ant-design/icons";
 const FgaFlowProduceData = ({ onSuccess, pipelineId, onError }) => {
 
   const [current, setCurrent] = useState(0);
+  const [isAPIFinished, setIsAPIFinished] = useState(false);
   const { data } = useQuery(
     ["fgaEventRecordDetail"],
     async () => {
       return await fgaEventRecordDetail({ pipelineId: pipelineId });
     },
-    {...QUERY_OPTIONS_NORMAL, enabled: !!pipelineId, refetchInterval: 10000 },
+    {...QUERY_OPTIONS_NORMAL, enabled: !!pipelineId && !isAPIFinished, refetchInterval: 10000, onSuccess: (data) => {
+      if (["finished", "sync_failed"].includes(data?.status)) {
+        setIsAPIFinished(true);
+      }
+    }},
   );
 
   const timeItems =

@@ -190,7 +190,7 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject, cardId}) => {
 
 
   return (
-    <div className="flex flex-col" style={{width: 840, height: 560}}>
+    <div className="flex flex-col" style={{width: 840, height: 560, marginTop: 20}}>
       {/*<Button>Upload CSV</Button>*/}
      {/* <Timeline>
         {timeItems?.map((item, index) => (

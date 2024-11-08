@@ -86,7 +86,7 @@ const CreateProjectModalForFgaPro = props => {
   }
 
   const handleAdd = () => {
-    setData([...data, { key: uuidv4(), address: '', select: 'ERC1155', chain: 'Ethereum', checked: true }]);
+    setData([{ key: uuidv4(), address: '', select: 'ERC1155', chain: 'Ethereum', checked: true }, ...data]);
   };
 
   const handleDelete = (key) => {

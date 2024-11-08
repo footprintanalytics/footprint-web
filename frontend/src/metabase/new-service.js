@@ -878,7 +878,7 @@ export const getMediaTagTop = (params, config) => {
 };
 
 export const getProjectChartTypeStatus = async params => {
-  return POST(`/api/v1/fga/event/data/integration/chart/status`, params);
+  return POST(`/api/v1/fga/event/data/integration/chart/status`, params, { silentFp: true, silent: true });
   // return GET(`/mock/api/v1/project/protocol/detail-by-id`, params);
 };
 

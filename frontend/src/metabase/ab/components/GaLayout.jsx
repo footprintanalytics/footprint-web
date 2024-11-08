@@ -14,6 +14,7 @@ import { createFgaProjectModalShowAction, loadFgaProjectList, loginModalShowActi
 import { push } from "react-router-redux";
 import { getFgaProjectList, getUserExtend } from "metabase/selectors/control";
 import FgaCreateProjectGuide from "metabase/ab/components/FgaCreateProjectGuide";
+import { refreshCurrentFgaProjectChartType } from "metabase/redux/user";
 
 const ABLayout = props => {
   const pathname = location.pathname;
@@ -27,7 +28,7 @@ const ABLayout = props => {
 
 const LayoutView = props => {
   const { isOpenSubMenu } = useContext(StateContext);
-  const { user, projectObject, setLoginModalShow, setCreateFgaProjectModalShowAction, userExtend, fgaProjectList, loadFgaProjectList } = props;
+  const { user, projectObject, setLoginModalShow, setCreateFgaProjectModalShowAction, userExtend, fgaProjectList, loadFgaProjectList, refreshCurrentFgaProjectChartType } = props;
   const isGamesManage = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-manage")
   const isProjectList = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-list")
   const isBindGame = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("bind-game")
@@ -41,20 +42,16 @@ const LayoutView = props => {
     "Growth Analytics | Unlock your growth potential in a web3 world";
   const isProFga = window.location.pathname.startsWith("/fga/pro")
 
-  // useEffect(() => {
-  //   if (isProFga) {
-  //     if (!user) {
-  //       setLoginModalShow({ show: true, from: "" });
-  //       return
-  //     }
-  //
-  //     if (!projectObject?.id) {
-  //       setCreateFgaProjectModalShowAction({ show: true });
-  //       return
-  //     }
-  //   }
-  // }, [setLoginModalShow, user, projectObject]);
-  //
+  useEffect(() => {
+    const getFgaProjectChartTypeStatus = () => {
+      if (projectObject) {
+        refreshCurrentFgaProjectChartType(projectObject?.id)
+      }
+    }
+    const intervalId = setInterval(getFgaProjectChartTypeStatus, 10000);
+    return () => clearInterval(intervalId);
+  }, []);
+
 
 /*  useEffect(() => {
     const showCreateProjectModal = async () => {
@@ -125,7 +122,7 @@ const mapStateToProps = state => {
     userExtend: getUserExtend(state),
     projectObject: getFgaProject(state),
     fgaProjectList: getFgaProjectList(state),
-    chartTypeStatus: state?.currentFgaProject?.chartTypeStatus
+    chartTypeStatus: state?.currentFgaProject?.chartTypeStatus,
   };
 };
 
@@ -134,6 +131,7 @@ const mapDispatchToProps = {
   setLoginModalShow: loginModalShowAction,
   setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
   loadFgaProjectList: loadFgaProjectList,
+  refreshCurrentFgaProjectChartType,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ABLayout);
