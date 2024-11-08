@@ -756,6 +756,9 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
 export const refreshCurrentFgaProjectById = createThunkAction(
   REFRESH_CURRENT_FGA_PROJECT,
   async (projectId, from) => {
+    if (!projectId) {
+      return null
+    }
     try {
       const res = await getProtocolDetailById({ "projectId": projectId });
       if(!res?.protocolSlug || res?.protocolSlug === ''){
