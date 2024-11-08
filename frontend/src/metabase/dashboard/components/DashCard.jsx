@@ -445,7 +445,7 @@ class DashCard extends Component {
       if (web3Card && !web3DataCreated) {
         return 'submitProjectInfo'
       }
-      return 'integration'
+      return 'normal'
     }
 
     const isCustom = !['text', 'image', 'filter'].includes(series[0]?.card?.display) &&
