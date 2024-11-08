@@ -120,7 +120,6 @@ const LayoutView = props => {
 };
 
 const mapStateToProps = state => {
-  console.log("statestatestate", state)
   return {
     user: getUser(state),
     userExtend: getUserExtend(state),
