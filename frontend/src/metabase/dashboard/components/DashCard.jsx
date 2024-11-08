@@ -712,7 +712,7 @@ class DashCard extends Component {
       // const fgaFlowType = this.getFgaFlowType(this.props, card?.id)
       return (
         <div className="flex flex-col w-full h-full align-top text-white">
-          <div className="text-left my1 ml1" style={{fontWeight: "bold", zIndex: 1}}>{cardName}{dashcard.card.id}{display}</div>
+          <div className="text-left my1 ml1" style={{fontWeight: "bold", zIndex: 1}}>{cardName}</div>
           <div className="flex-1 flex justify-center items-center h-full overflow-hidden" >
             {renderFgaFlowTypeLayout(type)}
             {/*{renderFgaFlowTypeLayout(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935) ? "normal": type)}*/}
