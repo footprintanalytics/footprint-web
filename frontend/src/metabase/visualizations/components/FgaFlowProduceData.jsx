@@ -1,12 +1,14 @@
 /* eslint-disable react/prop-types */
-import React from "react";
-import { Button, Result, Spin } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Result, Spin, Timeline } from "antd";
 import { fgaEventRecordDetail } from "metabase/new-service";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/config";
+import { CheckCircleOutlined } from "@ant-design/icons";
 
 const FgaFlowProduceData = ({ onSuccess, pipelineId, onError }) => {
 
+  const [current, setCurrent] = useState(0);
   const { data } = useQuery(
     ["fgaEventRecordDetail"],
     async () => {
@@ -15,13 +17,43 @@ const FgaFlowProduceData = ({ onSuccess, pipelineId, onError }) => {
     {...QUERY_OPTIONS_NORMAL, enabled: !!pipelineId, refetchInterval: 10000 },
   );
 
+  const timeItems =
+    [
+      {
+        label: "Step 1: Synchronous Data Now ",
+      },
+      { label: "Step 2: ETL Data Now "},
+    ]
+
+  useEffect(() => {
+    if (data?.status === "etl") {
+      setCurrent(1);
+    }
+  }, [data]);
   return (
     <div className="flex flex-col justify-center line-height-2" style={{padding: 40, lineHeight: 1.5}}>
-      {!data?.status && (
+      {!["finished", "sync_failed"].includes(data?.status) && (
         <Result
-          icon={<Spin/>}
+          icon={<div />}
           title={"Data Brewing!"}
           subTitle={
+            <div style={{ paddingTop: 30, paddingLeft: 60 }}>
+              <Timeline>
+                {timeItems.map((item, index) => (
+                  <Timeline.Item
+                    style={{display: "flex", justifyContent: "left"}}
+                    key={index}
+                    dot={<div className="bg-transparent">{
+                      current > index ? <CheckCircleOutlined style={{ color: "green" }} /> : current === index ? <Spin /> : <div />
+                    }</div>}
+                  >
+                    {item.label}
+                  </Timeline.Item>
+                ))}
+              </Timeline>
+            </div>
+          }
+          extra={
             <div className={"flex flex-col items-center"}>
               <span>Hang tight for about 3 minutes, or explore other dashboards and refresh later</span>
               <Button type="primary" style={{width: 200, marginTop: 20}} onClick={() => onSuccess?.()}>View Dashboard</Button>
@@ -43,7 +75,7 @@ const FgaFlowProduceData = ({ onSuccess, pipelineId, onError }) => {
       )}
       {data?.status === "sync_failed" && (
         <Result
-          status="success"
+          status="error"
           title={"Data Brewing Error!"}
           subTitle={
             <div className={"flex flex-col items-center"}>

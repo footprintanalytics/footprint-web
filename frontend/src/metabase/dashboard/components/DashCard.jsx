@@ -61,14 +61,15 @@ import FgaFlowUploadLayout from "metabase/visualizations/components/FgaFlowUploa
 import { getFgaProject } from "metabase/selectors/user";
 import { createFgaProjectModalShowAction, loginModalShowAction, setUserExtend } from "metabase/redux/control";
 import {
-  getFgaChartTypeMappingById, getWeb3TypeText,
+  getFgaChartTypeMappingById, getWeb2TypeText, getWeb3TypeText,
   isAdvancedCard,
   isStandardCard,
-  isWeb2Card,
+  isWeb2Card, isWeb2DataCreated,
   isWeb3Card, isWeb3DataCreated,
 } from "metabase/ab/utils/mapping-utils";
 import { getPeaToken, getUserExtend } from "metabase/selectors/control";
 import FgaFlowCreateProject from "metabase/visualizations/components/FgaFlowCreateProject";
+import { refreshCurrentFgaProjectChartType } from "metabase/redux/user";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -430,9 +431,9 @@ class DashCard extends Component {
         return 'advancedPay'
       }
       const web2Card = isWeb2Card(cardId)
-      const isWeb2DataCreated = !!props.userExtend?.web2Data
+      const web2DataCreated = isWeb2DataCreated(cardId, this.props.chartTypeStatus)
       // 如果当前card是web2，web2 数据没有创建 {
-      if (web2Card && !isWeb2DataCreated) {
+      if (web2Card && !web2DataCreated) {
         return 'integration'
       }
       const web3Card = isWeb3Card(cardId)
@@ -441,13 +442,7 @@ class DashCard extends Component {
       if (web3Card && !web3DataCreated) {
         return 'submitProjectInfo'
       }
-      if (web2Card && isWeb2DataCreated) {
-        return 'normal'
-      }
-      return 'normal'
-    }
-    const changeFgaFlowType = (type) => {
-      this.setState({fgaFlowType: type})
+      return 'integration'
     }
 
     const isCustom = !['text', 'image', 'filter'].includes(series[0]?.card?.display) &&
@@ -468,16 +463,17 @@ class DashCard extends Component {
         content: (<FgaFlowUploadLayout
           cardId={dashcard.card.id}
           projectObject={this.props.projectObject}
-          onSuccess={() => {
-          // changeFgaFlowType("loading")
-          // changeFgaFlowType("normal")
-            this.props.setUserExtend({
-              ...(this.props.userExtend || {}),
-              web2Data: true
-            })
-          modalDestroy.destroy()
-          // this.props.fgaFlowInteractionSuccess?.()
-        }}/>),
+          onSuccess={async () => {
+            // changeFgaFlowType("loading")
+            // changeFgaFlowType("normal")
+            await this.props.refreshCurrentFgaProjectChartType(this.props.projectObject?.id)
+            // this.props.setUserExtend({
+            //   ...(this.props.userExtend || {}),
+            //   web2Data: true
+            // })
+            modalDestroy.destroy()
+            // this.props.fgaFlowInteractionSuccess?.()
+          }}/>),
         okText: "OK",
         footer: null,
         onOk: () => {
@@ -601,11 +597,11 @@ class DashCard extends Component {
             cardId={dashcard.card.id}
             height={this.props.height}
             width={this.props.width}
-            subTitle={<div className={"text-white"}><LockFilled />your web2 data to view standard analysis</div>}
+            subTitle={<div className={"text-white"}><LockFilled />your web2 data to view standard analysis </div>}
             extra={[
               <Button key='xxx' onClick={() => {
                 showIntegrationDialog()
-              }}>Upload</Button>
+              }}>Upload {getWeb2TypeText(dashcard.card.id)}</Button>
             ]}
           />
 
@@ -1313,7 +1309,8 @@ const ClickBehaviorSidebarOverlay = ({
 const mapStateToProps = state => ({
   projectObject: getFgaProject(state),
   realtimeList: getRealtimeList(state),
-  userExtend: getUserExtend(state)
+  userExtend: getUserExtend(state),
+  chartTypeStatus: state?.currentFgaProject?.chartTypeStatus
 });
 
 const mapDispatchToProps = {

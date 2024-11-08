@@ -29,10 +29,10 @@ const FgaFlowDataProcess = ({ projectObject, callbackData, file, cardId }) => {
         return;
       }
 
+      const chartType = getFgaChartTypeMappingById(cardId)?.type || "";
       const formData = new FormData();
       formData.append('file', file);
       formData.append('projectId', projectId + "");
-      const chartType = getFgaChartTypeMappingById(cardId)?.chartType || "";
       formData.append('chartType', chartType);
 
       try {
@@ -68,7 +68,7 @@ const FgaFlowDataProcess = ({ projectObject, callbackData, file, cardId }) => {
 
   return (
     <div className="flex flex-col items-center" style={{ padding: 40 }}>
-      <div className="flex p-20" >
+      <div className="flex p-20 mt4" >
         <Timeline>
           {timeItems.map((item, index) => (
             <Timeline.Item
