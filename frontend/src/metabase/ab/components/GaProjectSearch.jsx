@@ -55,7 +55,6 @@ const GaProjectSearch = props => {
     }
 
   const loadProjectDetail = projectId => {
-    console.log("loadProjectDetail9", projectId)
     if (isProFga) {
       loadCurrentFgaProjectById(projectId, from);
     } else {
@@ -93,7 +92,6 @@ const GaProjectSearch = props => {
     }
   }, [projectPath]);
   useEffect(() => {
-    console.log("useEffectuseEffect", fgaProjectList)
     if (fgaProjectList?.length > 0 && !fromLeftMenu) {
       const projects = fgaProjectList;
       const index = projects.findIndex(i => i.projectName === currentProject);
@@ -102,7 +100,6 @@ const GaProjectSearch = props => {
       if (project.projectId !== 1) {
         setCurrentProject(project.projectName);
         saveLatestGAProject(project.projectName);
-        console.log("useEffect,loadProjectDetail", project.projectId, fromLeftMenu)
         loadProjectDetail(project.projectId);
 
         setUserProject(projects);
