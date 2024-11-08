@@ -47,7 +47,7 @@ const FgaProResult = ({
     },
   ]
   const img = imgData?.find(item => item.type === card?.display)?.img || "https://static.footprint.network/fga/pro/img_number.png"
-  console.log("card", card?.display, img)
+
   return (
     <div className="flex w-full h-full" >
       <img src={img} style={{width: "100%", height: "100%", objectFit: "cover", filter: "blur(4px)",}} />

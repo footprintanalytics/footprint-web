@@ -22,6 +22,13 @@ export const fgaChartTypeMapping = [
     subType: ["sign_up"],
   },
   {
+    cardId: 51104,
+    plan: "standard",
+    category: "web2",
+    type: "tracked_events",
+    subType: ["sign_up"],
+  },
+  {
     cardId: 50988,
     plan: "standard",
     category: "web2",
