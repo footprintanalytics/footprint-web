@@ -8,11 +8,11 @@ import { getFgaProject, getUser } from "metabase/selectors/user";
 import { loadCurrentFgaProjectById, loadCurrentFgaProjectNew } from "metabase/redux/user";
 import "../css/index.css";
 import { head, throttle } from "lodash";
-import { getGrowthProjectPath, getLatestGAProject, saveLatestGAProject, saveLatestGAProjectId } from "../utils/utils";
 import _ from "underscore";
 import { getFgaChain, getFgaProjectList, getGamesByRedux, getHistoryGamesByRedux } from "metabase/selectors/control";
 import { loadFgaProjectList, loginModalShowAction, setGames, setHistoryGames } from "metabase/redux/control";
 import { fga_menu_data_v2 } from "metabase/ab/utils/data";
+import { getGrowthProjectPath, getLatestGAProject, saveLatestGAProject, saveLatestGAProjectId } from "../utils/utils";
 
 const GaProjectSearch = props => {
   const {
@@ -93,13 +93,11 @@ const GaProjectSearch = props => {
     }
   }, [projectPath]);
   useEffect(() => {
-    console.log("fgaProjectList", fgaProjectList, fromLeftMenu)
     if (fgaProjectList?.length > 0 && !fromLeftMenu) {
       const projects = fgaProjectList;
       const index = projects.findIndex(i => i.projectName === currentProject);
       const projectIndex = index === -1 ? projects.length - 1 : index;
-      let project = projects[projectIndex];
-      console.log("project", project)
+      const project = projects[projectIndex];
       if (project.projectId !== 1) {
         setCurrentProject(project.projectName);
         saveLatestGAProject(project.projectName);
