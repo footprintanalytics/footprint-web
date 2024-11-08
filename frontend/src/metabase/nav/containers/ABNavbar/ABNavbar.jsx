@@ -51,6 +51,7 @@ import CreateProjectModal2 from "metabase/ab/components/Modal/CreateProjectModal
 import ProjectSubmitContactModal from "metabase/ab/components/Modal/ProjectSubmitContactModal";
 import { getFgaProject } from "metabase/selectors/user";
 import CreateProjectModalForDemo from "metabase/ab/components/Modal/CreateProjectModalForDemo";
+import CreateProjectModalForFgaPro from "metabase/ab/components/Modal/CreateProjectModalForFgaPro";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -550,9 +551,9 @@ class ABNavbar extends Component {
         {this.renderModal()}
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}
-        <CreateProjectModalForDemo
+        <CreateProjectModalForFgaPro
+          isModal={true}
           open={createFgaProjectModalShow?.show}
-          force={createFgaProjectModalShow?.force}
           projectObject={createFgaProjectModalShow?.projectObject}
           submitButtonText={createFgaProjectModalShow?.submitButtonText}
           location={location}
