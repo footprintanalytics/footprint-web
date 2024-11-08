@@ -35,12 +35,12 @@ const mapStatusToProps = (state, props) => {
 const mapDispatchToProps = { login, regist, getRegistEmail, loginGoogle };
 
 const LoginModal = props => {
-  const { isOpen = false, fromNav = false, formModal = true, from = "", showLeftSlider = true } = props;
+  const { isOpen = false, fromNav = false, from = "", showLeftSlider = true } = props;
 
   const InnerPanel = () => {
     trackStructEvent("ShowLoginModal", from);
     return (
-      <ModalContent formModal={formModal}>
+      <ModalContent>
         <div className="flex loginModalContent rounded overflow-hidden">
           {showLeftSlider && (<LoginModalSlider {...props} />)}
           <LoginModalInner {...props} />
@@ -49,7 +49,7 @@ const LoginModal = props => {
     );
   };
 
-  return fromNav || !formModal ? (
+  return fromNav ? (
     isOpen ? (
       <Modal className={cx("loginModalRoot", { "dark": isDark() })} ModalClass="z-index-top">
         <InnerPanel {...props} />
@@ -73,7 +73,6 @@ LoginModal.propTypes = {
   fromNav: PropTypes.bool,
   defaultRegister: PropTypes.bool,
   showLeftSlider: PropTypes.bool,
-  formModal: PropTypes.bool,
 };
 
 export default withRouter(
