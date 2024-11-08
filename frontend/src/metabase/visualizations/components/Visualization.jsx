@@ -544,7 +544,7 @@ class Visualization extends React.PureComponent {
           </div>
         );
       }
-      if (isResearch || isGrowthly) {
+      if (isResearch) {
         return (
           <div style={{lineHeight: 1.1}}>
             <ResearchNoData />
