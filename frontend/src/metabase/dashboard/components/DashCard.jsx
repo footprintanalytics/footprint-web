@@ -571,7 +571,8 @@ class DashCard extends Component {
             subTitle={<div className={"text-white"}> <LockFilled className="mr1" />your plan to unlock more exclusive insights</div>}
             extra={[
               <Button className="text-white" key='xxx' onClick={() => {
-                Modal.info({
+                message.info("Please contact us to upgrade your plan")
+                /*Modal.info({
                   icon: null,
                   title: "Choose a plan",
                   content: (<div className="flex flex-col">
@@ -592,7 +593,7 @@ class DashCard extends Component {
                       plan: 'advanced'
                     })
                   },
-                });
+                });*/
               }}>
                 Upgrade
               </Button>
