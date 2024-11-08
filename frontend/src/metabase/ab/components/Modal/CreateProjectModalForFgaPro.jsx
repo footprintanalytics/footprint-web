@@ -4,7 +4,7 @@ import { Button, Checkbox, Form, Input, message, Modal, Result, Select, Steps, T
 import { withRouter } from "react-router";
 import { v4 as uuidv4 } from "uuid";
 import { connect } from "react-redux";
-import { getUser } from "metabase/selectors/user";
+import { getFgaProject, getUser } from "metabase/selectors/user";
 import { loadFgaProjectList, setFgaDashboardKey, setUserExtend } from "metabase/redux/control";
 import { getUserExtend } from "metabase/selectors/control";
 import { loadCurrentFgaProjectById } from "metabase/redux/user";
@@ -16,7 +16,7 @@ import { findContractMatchByName, postProject, submitFGAContractForPro } from "m
 import { saveLatestGAProject, saveLatestGAProjectId } from "metabase/ab/utils/utils";
 const { Option } = Select
 const CreateProjectModalForFgaPro = props => {
-  const { force, isModal = false, open, onCancel, onSuccess, loadFgaProjectList, loadCurrentFgaProjectById, setFgaDashboardKey, submitButtonText } = props;
+  const { force, isModal = false, open, onCancel, onSuccess, loadFgaProjectList, loadCurrentFgaProjectById, setFgaDashboardKey, projectObject, submitButtonText } = props;
   const [form] = Form.useForm();
   const steps = [
     {
@@ -28,12 +28,19 @@ const CreateProjectModalForFgaPro = props => {
       content: 'Second-content',
     },
   ];
+
   const [current, setCurrent] = useState(0);
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
-  const [loading, setLoading] = useState(isModal ? false: true);
+  const [loading, setLoading] = useState(!isModal);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [projectName, setProjectName] = useState('');
+  const [projectName, setProjectName] = useState();
+
+  useEffect(() => {
+    if (!open) {
+      setData([])
+    }
+  }, [open]);
 
   const renderCreateProject = () => {
     return (
@@ -161,7 +168,7 @@ const CreateProjectModalForFgaPro = props => {
       render: (_, record) => (
         <Select
           value={record.standard}
-          onChange={(value) => handleSelectChange('select', value, record.key)}
+          onChange={(value) => handleSelectChange('standard', value, record.key)}
           style={{ width: 110, fontSize: 12 }}
         >
           <Option value="ERC1155">ERC1155</Option>
@@ -219,7 +226,7 @@ const CreateProjectModalForFgaPro = props => {
 
     if (!_.isEmpty(contractData)) {
       await submitFGAContractForPro({
-        projectId: result?.projectId,
+        projectId: result?.projectId || projectObject?.id,
         contractList: contractData,
       })
     }
@@ -245,9 +252,9 @@ const CreateProjectModalForFgaPro = props => {
             title="Loading Project Info..."
           >
           </Result>
-        ) : data.length > 0 || isModal ? (
+        ) : (
           <div>
-            <h2>Project: {projectName}</h2>
+            <h2>Project: {projectName || projectObject?.name}</h2>
             <div style={{ marginBottom: 16 }}>
               <h4>The system has matched the following contracts through AI. Please select your contract for submission.</h4>
             </div>
@@ -280,8 +287,6 @@ const CreateProjectModalForFgaPro = props => {
               </Button>
             </div>
           </div>
-        ) : (
-          <div>No project info found. Please add your contact.</div>
         )}
       </div>
     );
@@ -328,6 +333,7 @@ const mapStateToProps = state => {
   return {
     user: getUser(state),
     userExtend: getUserExtend(state),
+    projectObject: getFgaProject(state),
   };
 };
 

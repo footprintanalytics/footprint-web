@@ -191,36 +191,9 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject, cardId}) => {
 
   return (
     <div className="flex flex-col" style={{width: 840, height: 560, marginTop: 20}}>
-      {/*<Button>Upload CSV</Button>*/}
-     {/* <Timeline>
-        {timeItems?.map((item, index) => (
-          <Timeline.Item
-            key={index}
-            dot={item.completed ? <CheckCircleOutlined style={{ color: 'green' }} /> : <div />}
-          >
-            {item.label}
-          </Timeline.Item>
-        ))}
-      </Timeline>*/}
-
       <Steps current={current} items={items} onChange={(index) => setCurrent(index)}/>
       <div style={contentStyle}>{steps[current].content}</div>
       <div className="flex justify-end" style={{ marginTop: 24 }}>
-        {/*{current > 0 && (
-          <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-            Previous
-          </Button>
-        )}*/}
-        {/*{current < steps.length - 1 && (
-          <Button type="primary" onClick={() => next()}>
-            Next
-          </Butwton>
-        )}*/}
-        {/*{current === steps.length - 1 && (
-          <Button type="primary" onClick={() => onSuccess?.()}>
-            View Dashboard
-          </Button>
-        )}*/}
       </div>
     </div>
   );
