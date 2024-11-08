@@ -3,6 +3,7 @@ import React from "react";
 import { Avatar, Result } from "antd";
 
 const FgaProResult = ({
+  card,
   cardId,
   subTitle,
   height,
@@ -13,28 +14,43 @@ const FgaProResult = ({
 
   const imgData = [
     {
-      cardId: 50934,
-      img: "https://static.footprint.network/fga/pro/img_number_of_users.png",
+      type: "scalar",
+      img: "https://static.footprint.network/fga/pro/img_number.png",
     },
     {
-      cardId: 50944,
-      img: "https://static.footprint.network/fga/pro/img_total_users_wallet_link.png",
+      type: "smartscalar",
+      img: "https://static.footprint.network/fga/pro/img_number.png",
     },
     {
-      cardId: 50935,
-      img: "https://static.footprint.network/fga/pro/img_user_monthly_net.png",
+      type: "bar",
+      img: "https://static.footprint.network/fga/pro/img_bar.png",
     },
     {
-      cardId: 50945,
-      img: "https://static.footprint.network/fga/pro/img_monthly_user_wallet_link.png",
+      type: "line",
+      img: "https://static.footprint.network/fga/pro/img_line.png",
+    },
+    {
+      type: "combo",
+      img: "https://static.footprint.network/fga/pro/img_bar_line.png",
+    },
+    {
+      type: "pie",
+      img: "https://static.footprint.network/fga/pro/img_pie.png",
+    },
+    {
+      type: "table",
+      img: "https://static.footprint.network/fga/pro/img_table.png",
+    },
+    {
+      type: "row",
+      img: "https://static.footprint.network/fga/pro/img_row.png",
     },
   ]
-  const img = imgData?.find(item => item.cardId === cardId)?.img || "https://static.footprint.network/fga/pro/img_number_of_users.png"
+  const img = imgData?.find(item => item.type === card?.display)?.img || "https://static.footprint.network/fga/pro/img_number.png"
+  console.log("card", card?.display, img)
   return (
-    <div className="flex w-full" >
-      <div className="flex justify-center align-center" style={{width: "50%", overflow: "hidden"}}>
-        <img src={img} style={{maxWidth: "100%", maxHeight: "100%", objectFit: "cover"}} />
-      </div>
+    <div className="flex w-full h-full" >
+      <img src={img} style={{width: "100%", height: "100%", objectFit: "cover", filter: "blur(4px)",}} />
       {/*<Result
         style={{ padding: 0, width: "50%", flex: 1}}
         icon={null}
@@ -42,10 +58,10 @@ const FgaProResult = ({
       >
         {extra}
       </Result>*/}
-      <div className="flex flex-col justify-center items-center" style={{ padding: 0, width: "50%", flex: 1, gap: 10}}>
-        {extra}
+      <div className="flex flex-col justify-center items-center absolute bottom" style={{ width: "100%", height: "100%", gap: 10, backgroundColor: "#22222299"}}>
+        <div style={{fontSize: 14, fontWeight: "bold"}}>{extra}</div>
         <div>{icon}</div>
-        <div>{subTitle}</div>
+        <div style={{fontSize: 16}}>{subTitle}</div>
       </div>
     </div>
   )
