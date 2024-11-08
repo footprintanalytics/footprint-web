@@ -105,7 +105,7 @@ const leftMenuData = [
       {
         title: "Growthly",
         desc: "White-label Telegram quest tool.",
-        link: "https://t.me/GrowthlyBot/App",
+        link: "https://growthly.footprint.network/admin",
         externalLink: true,
       },
     ],
