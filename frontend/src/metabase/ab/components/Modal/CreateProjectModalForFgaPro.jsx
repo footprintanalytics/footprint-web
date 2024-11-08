@@ -34,6 +34,7 @@ const CreateProjectModalForFgaPro = props => {
   const [loading, setLoading] = useState(!isModal);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [contractResult, setContractResult] = useState([]);
   const [projectName, setProjectName] = useState();
 
   useEffect(() => {
@@ -82,6 +83,7 @@ const CreateProjectModalForFgaPro = props => {
   const getProjectInfo = async (values) => {
     setLoading(true);
     const contractResult = await findContractMatchByName(values)
+    setContractResult(contractResult)
     setData(contractResult.map((item, inx) => {
       return {
         ...item,
@@ -256,7 +258,7 @@ const CreateProjectModalForFgaPro = props => {
           <div>
             <h2>Project: {projectName || projectObject?.name}</h2>
             <div style={{ marginBottom: 16 }}>
-              <h4>The system has matched the following contracts through AI. Please select your contract for submission.</h4>
+              <h4>{contractResult?.length > 0 ? "The system has matched the following contracts through AI. Please select your contract for submission." : "No project info found. Please add your contact."}</h4>
             </div>
             <Table
               columns={columns}
@@ -299,7 +301,11 @@ const CreateProjectModalForFgaPro = props => {
     return (
       <div className="flex flex-column" style={{ width: "100%", gap: 20 }}>
         <h2>Create Project</h2>
-        <Steps current={current} items={items} />
+        <Steps current={current} items={items} onChange={(index) => {
+          if (index === 0) {
+            setCurrent(index)
+          }
+        }}/>
         <div className="flex flex-column pt2">
           {current === 0 && (renderCreateProject())}
           {current === 1 && (renderProjectInfo())}
