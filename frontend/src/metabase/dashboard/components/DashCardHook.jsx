@@ -14,8 +14,9 @@ const DashCardHook = props => {
     if (!latestUpdateTimeStr) {
       return null;
     }
-    const latestUpdateTime = new Date(latestUpdateTimeStr).getTime();
+    const latestUpdateTime = new Date(latestUpdateTimeStr).getTime() - 8*3600*1000;
     const chartUpdatedTime = chartUpdatedAt ? new Date(chartUpdatedAt).getTime() : null;
+    console.log("DashCardHook", latestUpdateTime, chartUpdatedTime)
     if (chartUpdatedTime && latestUpdateTime > chartUpdatedTime) {
       refreshCardThrottle()
     }

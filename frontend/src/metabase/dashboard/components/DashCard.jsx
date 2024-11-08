@@ -466,10 +466,12 @@ class DashCard extends Component {
         content: (<FgaFlowUploadLayout
           cardId={dashcard.card.id}
           projectObject={this.props.projectObject}
-          onSuccess={async () => {
+          onSuccess={async (isRefresh) => {
             // changeFgaFlowType("loading")
             // changeFgaFlowType("normal")
-            this.props.refreshCurrentFgaProjectChartType(this.props.projectObject?.id)
+            if (isRefresh) {
+              this.props.refreshCurrentFgaProjectChartType(this.props.projectObject?.id)
+            }
             // this.props.setUserExtend({
             //   ...(this.props.userExtend || {}),
             //   web2Data: true

@@ -50,7 +50,7 @@ const LayoutView = props => {
     }
     const intervalId = setInterval(getFgaProjectChartTypeStatus, 10000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [projectObject]);
 
 
 /*  useEffect(() => {
