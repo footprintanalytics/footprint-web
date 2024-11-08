@@ -15,7 +15,9 @@ const FgaCreateProjectGuide = (props) => {
           {/*显示登录页面*/}
           {state === 1 && (
             <div className="flex flex-column" >
-              <h1 style={{marginLeft: 80}}>Welcome to <br/>Footprint Growth Analytics (FGA)</h1>
+              <div className="flex flex-column items-center">
+                <h1>Welcome to</h1><h1>Footprint Growth Analytics (FGA)</h1>
+              </div>
               {/*<span>Unlock your growth potential in a web3 world. Dive into data insights and get an edge in your marketing strategy with Footprint GA by bringing all of your Web2 and Wed3 data sources together.</span>*/}
               <LoginModal
                 fromNav={false}
