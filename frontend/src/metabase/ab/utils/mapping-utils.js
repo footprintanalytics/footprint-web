@@ -23,7 +23,7 @@ export function isWeb3Card(cardId) {
 
 export function isWeb2DataCreated(cardId, chartTypeStatus) {
   const web2TypeText = getWeb2TypeText(cardId);
-  return !!chartTypeStatus.find((project) => project.chartType === web2TypeText);
+  return !!chartTypeStatus?.find((project) => project.chartType === web2TypeText);
 }
 
 export function isWeb3DataCreated(cardId, projectObject) {
