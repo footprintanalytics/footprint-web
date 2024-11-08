@@ -48,29 +48,9 @@ const LayoutView = props => {
         refreshCurrentFgaProjectChartType(projectObject?.id)
       }
     }
-    const intervalId = setInterval(getFgaProjectChartTypeStatus, 10000);
+    const intervalId = setInterval(getFgaProjectChartTypeStatus, 20000);
     return () => clearInterval(intervalId);
   }, [projectObject]);
-
-
-/*  useEffect(() => {
-    const showCreateProjectModal = async () => {
-      if (!isFirst) {
-        return
-      }
-      const result = await loadFgaProjectList({ from: "pro" });
-      setFirst(false)
-      const projectList = result?.payload
-      if (projectList?.length === 1) {
-        setCreateFgaProjectModalShowAction({ show: true });
-      }
-    }
-    if (isProFga && user && fgaProjectList?.length === 1) {
-      console.log("auto create project", fgaProjectList)
-      showCreateProjectModal()
-
-    }
-  }, [fgaProjectList, user])*/
 
   if (isProFga && (!user || (fgaProjectList?.length <= 1))) {
     return (
