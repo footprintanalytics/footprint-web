@@ -93,11 +93,13 @@ const GaProjectSearch = props => {
     }
   }, [projectPath]);
   useEffect(() => {
+    console.log("fgaProjectList", fgaProjectList, fromLeftMenu)
     if (fgaProjectList?.length > 0 && !fromLeftMenu) {
       const projects = fgaProjectList;
       const index = projects.findIndex(i => i.projectName === currentProject);
       const projectIndex = index === -1 ? projects.length - 1 : index;
       let project = projects[projectIndex];
+      console.log("project", project)
       if (project.projectId !== 1) {
         setCurrentProject(project.projectName);
         saveLatestGAProject(project.projectName);
