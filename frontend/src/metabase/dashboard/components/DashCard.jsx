@@ -70,6 +70,7 @@ import {
 import { getPeaToken, getUserExtend } from "metabase/selectors/control";
 import FgaFlowCreateProject from "metabase/visualizations/components/FgaFlowCreateProject";
 import { refreshCurrentFgaProjectChartType } from "metabase/redux/user";
+import DashCardHook from "metabase/dashboard/components/DashCardHook";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -350,6 +351,7 @@ class DashCard extends Component {
       || window.location.pathname.startsWith("/data-api/statistics")
       || window.location.pathname.startsWith("/studio")
     ;
+    const isProFga = window.location.pathname.startsWith("/fga/pro")
 
     const getOuterPathname = () => {
       let outerPathname = "";
@@ -379,7 +381,8 @@ class DashCard extends Component {
     const showChartRefresh = !isPublic && !singleDisplay;
     const showStatusButton = showChartRefresh;
     // const showProduceFullData = this.props.showNormalChartData;
-    const showProduceFullData = this.props.userExtend?.web2Data;
+    const web2DataCreated = isWeb2DataCreated(dashcard.card.id, this.props.chartTypeStatus)
+    const showProduceFullData = web2DataCreated
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -442,7 +445,7 @@ class DashCard extends Component {
       if (web3Card && !web3DataCreated) {
         return 'submitProjectInfo'
       }
-      return 'integration'
+      return 'normal'
     }
 
     const isCustom = !['text', 'image', 'filter'].includes(series[0]?.card?.display) &&
@@ -466,7 +469,7 @@ class DashCard extends Component {
           onSuccess={async () => {
             // changeFgaFlowType("loading")
             // changeFgaFlowType("normal")
-            await this.props.refreshCurrentFgaProjectChartType(this.props.projectObject?.id)
+            this.props.refreshCurrentFgaProjectChartType(this.props.projectObject?.id)
             // this.props.setUserExtend({
             //   ...(this.props.userExtend || {}),
             //   web2Data: true
@@ -475,6 +478,7 @@ class DashCard extends Component {
             // this.props.fgaFlowInteractionSuccess?.()
           }}/>),
         okText: "OK",
+        closable: true,
         footer: null,
         onOk: () => {
           // changeFgaFlowType("loading")
@@ -740,6 +744,16 @@ class DashCard extends Component {
         isNightMode={isNightMode}
         isUsuallySlow={isSlow === "usually-slow"}
       >
+        {isProFga && (<DashCardHook
+          card={dashcard.card}
+          chartUpdatedAt={chartUpdatedAt}
+          chartTypeStatus={this.props.chartTypeStatus}
+          refreshCard={async () => {
+            console.log("refreshCard !!!!!", dashcard.card.id)
+            await this.props.refreshCardData({ dashcard, card: dashcard.card, clear: true })
+          }}
+        />)
+        }
         {showButtons && (<div
           className="html2canvas-filter"
           style={{
@@ -884,10 +898,12 @@ class DashCard extends Component {
               </Tooltip>
             )}
           {showProduceFullData && (
-            <Tooltip key="produceFullData" tooltip={t`Produce Full Data`}>
-              <DatabaseOutlined
+            <Tooltip key="upload_data" tooltip={t`Upload Data`}>
+              <a
+                className="html2canvas-filter dash-card__button"
                 onClick={() => {
-                  Modal.confirm(
+                  showIntegrationDialog()
+                  /*Modal.confirm(
                     {
                       width: 500,
                       title: "Is the data correct?",
@@ -908,9 +924,11 @@ class DashCard extends Component {
                         message.success("Data is being generated. If it finish an email will be sent to your account")
                       }
                     }
-                  )
+                  )*/
                 }}
-              />
+              >
+                <Icon name="upload" size={14} color={"#9AA0AF"} />
+              </a>
             </Tooltip>
           )}
           {/* {!hideDownload && (
@@ -1319,6 +1337,7 @@ const mapDispatchToProps = {
   setLoginModalShow: loginModalShowAction,
   setUserExtend: setUserExtend,
   setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
+  refreshCurrentFgaProjectChartType,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashCard);

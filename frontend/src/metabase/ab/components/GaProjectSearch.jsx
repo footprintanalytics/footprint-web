@@ -7,7 +7,7 @@ import { withRouter } from "react-router";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { loadCurrentFgaProjectById, loadCurrentFgaProjectNew } from "metabase/redux/user";
 import "../css/index.css";
-import { head } from "lodash";
+import { head, throttle } from "lodash";
 import { getGrowthProjectPath, getLatestGAProject, saveLatestGAProject, saveLatestGAProjectId } from "../utils/utils";
 import _ from "underscore";
 import { getFgaChain, getFgaProjectList, getGamesByRedux, getHistoryGamesByRedux } from "metabase/selectors/control";
@@ -30,6 +30,7 @@ const GaProjectSearch = props => {
     projectObject,
     width = 360,
     style,
+    fromLeftMenu = false,
   } = props;
   const selectRef = useRef();
   const [userProject, setUserProject] = useState([]);
@@ -54,6 +55,7 @@ const GaProjectSearch = props => {
     }
 
   const loadProjectDetail = projectId => {
+    console.log("loadProjectDetail9", projectId)
     if (isProFga) {
       loadCurrentFgaProjectById(projectId, from);
     } else {
@@ -91,7 +93,8 @@ const GaProjectSearch = props => {
     }
   }, [projectPath]);
   useEffect(() => {
-    if (fgaProjectList?.length > 0) {
+    console.log("useEffectuseEffect", fgaProjectList)
+    if (fgaProjectList?.length > 0 && !fromLeftMenu) {
       const projects = fgaProjectList;
       const index = projects.findIndex(i => i.projectName === currentProject);
       const projectIndex = index === -1 ? projects.length - 1 : index;
@@ -99,6 +102,7 @@ const GaProjectSearch = props => {
       if (project.projectId !== 1) {
         setCurrentProject(project.projectName);
         saveLatestGAProject(project.projectName);
+        console.log("useEffect,loadProjectDetail", project.projectId, fromLeftMenu)
         loadProjectDetail(project.projectId);
 
         setUserProject(projects);

@@ -494,6 +494,7 @@ class ABNavbar extends Component {
                 style={{ display: isProFga ? "none": "" }}
                 location={location}
                 logout={this.props.logout}
+                fromLeftMenu={true}
                 setCreateFgaProjectModalShowAction={setCreateFgaProjectModalShowAction}
               />
             )}

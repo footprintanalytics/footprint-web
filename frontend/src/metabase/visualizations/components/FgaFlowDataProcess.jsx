@@ -4,7 +4,7 @@ import { Timeline, message, Spin, Button } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { fgaUploadCsvUrl } from "metabase/new-service";
-import { getFgaChartTypeMappingById } from "metabase/ab/utils/mapping-utils";
+import { getFgaChartTypeMappingById, getWeb2TypeText } from "metabase/ab/utils/mapping-utils";
 const FgaFlowDataProcess = ({ projectObject, callbackData, file, cardId }) => {
   const timeItems =
     [
@@ -29,7 +29,7 @@ const FgaFlowDataProcess = ({ projectObject, callbackData, file, cardId }) => {
         return;
       }
 
-      const chartType = getFgaChartTypeMappingById(cardId)?.type || "";
+      const chartType = getWeb2TypeText(cardId);
       const formData = new FormData();
       formData.append('file', file);
       formData.append('projectId', projectId + "");
