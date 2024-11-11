@@ -59,7 +59,12 @@ import { fgaPlanMapping } from "metabase/visualizations/util/data";
 import FgaProResult from "metabase/visualizations/components/FgaProResult";
 import FgaFlowUploadModal from "metabase/visualizations/components/FgaFlowUploadModal";
 import { getFgaProject } from "metabase/selectors/user";
-import { createFgaProjectModalShowAction, loginModalShowAction, setUserExtend } from "metabase/redux/control";
+import {
+  createFgaProjectModalShowAction,
+  loginModalShowAction,
+  setFgaDashboardKey,
+  setUserExtend,
+} from "metabase/redux/control";
 import {
   getFgaChartTypeMappingById, getWeb2TypeText, getWeb3TypeText,
   isAdvancedCard,
@@ -69,8 +74,12 @@ import {
 } from "metabase/ab/utils/mapping-utils";
 import { getPeaToken, getUserExtend } from "metabase/selectors/control";
 import FgaFlowCreateProject from "metabase/visualizations/components/FgaFlowCreateProject";
-import { refreshCurrentFgaProjectChartType } from "metabase/redux/user";
+import { loadCurrentUserVipFGA, refreshCurrentFgaProjectChartType } from "metabase/redux/user";
 import DashCardHook from "metabase/dashboard/components/DashCardHook";
+import FgaPricingLayout from "metabase/ab/components/FgaPricingLayout";
+import { FgaProductMock } from "metabase/ab/utils/data";
+import PricingModal from "metabase/pricing_v2/components/PricingModal";
+import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -353,6 +362,7 @@ class DashCard extends Component {
       || window.location.pathname.startsWith("/studio")
     ;
     const isProFga = window.location.pathname.startsWith("/fga/pro")
+    const isProFgaBeta = window.location.pathname.startsWith("/fga/pro_beta")
 
     const getOuterPathname = () => {
       let outerPathname = "";
@@ -428,7 +438,20 @@ class DashCard extends Component {
       if (isNotStandardUser && standardCard) {
         return 'pay'
       }
-      const isNotAdvancedUser = props.userExtend?.plan !== 'advanced'
+      let isExpired = false
+      if (props.user?.vipInfoFga) {
+        const vipDate = new Date(props.user?.vipInfoFga?.validEndDate).getTime()
+        const nowDate = new Date().getTime()
+        console.log("vipDatevipDate", vipDate, nowDate)
+        if (vipDate < nowDate) {
+          isExpired = true
+        }
+      }
+      if (isExpired) {
+        return 'expiredPay'
+      }
+      const isNotAdvancedUser = user?.vipInfoFga?.type !== "advanced"
+      //props.userExtend?.plan !== 'advanced'
       const advancedCard = isAdvancedCard(cardId)
       // 如果当前用户是standard付费用户 并且当前卡片是advanced卡片
       if (isNotAdvancedUser && advancedCard) {
@@ -565,7 +588,8 @@ class DashCard extends Component {
             subTitle={<div className={"text-white"}> <LockFilled className="mr1" />your plan to unlock more exclusive insights</div>}
             extra={[
               <Button className="text-white" key='xxx' onClick={() => {
-                message.info("Please contact us to upgrade your plan")
+                // message.info("Please contact us to upgrade your plan")
+                this.setState({fgaFlowPricingOpen: true})
                 /*Modal.info({
                   icon: null,
                   title: "Choose a plan",
@@ -588,6 +612,25 @@ class DashCard extends Component {
                     })
                   },
                 });*/
+              }}>
+                Upgrade
+              </Button>
+            ]}
+          />
+        )
+      }
+      if (type === "expiredPay") {
+        return (
+          <FgaProResult
+            card={dashcard.card}
+            cardId={dashcard.card.id}
+            height={this.props.height}
+            width={this.props.gridItemWidth}
+            subTitle={<div className={"text-white"}> <LockFilled className="mr1" />your plan is expired, pay to unlock more exclusive insights</div>}
+            extra={[
+              <Button className="text-white" key='xxx' onClick={() => {
+                // message.info("Please contact us to upgrade your plan")
+                this.setState({fgaFlowPricingOpen: true})
               }}>
                 Upgrade
               </Button>
@@ -733,6 +776,63 @@ class DashCard extends Component {
             this.setState({fgaFlowOpen: false})
           }}
         />
+      )
+    }
+
+    const renderPaymentCallbackModal = () => {
+      return (
+        <PaymentCallbackModal
+          open={this.state.fgaFlowPricingCallBackOpen}
+          isModal={true}
+          onCompletedClick={() => {
+            // here mock the result
+            window.localStorage.setItem("FGAVipInfo", JSON.stringify({
+              "level": 2,
+              "type": "advanced",
+              "validEndDate": "2024-11-22T07:46:40.901Z"
+            }))
+
+            this.props.loadCurrentUserVipFGA()
+            this.props.setFgaDashboardKey({ key: "pro2112" });
+          }}
+        />
+      )
+    }
+
+    const renderFgaPriceModal = () => {
+      return (
+        <PricingModal
+          isModal={true}
+          visible={this.state.fgaFlowPricingOpen}
+          showTitle={true}
+          user={user}
+          subscribeOptions={FgaProductMock.filter((item) => item.type === "advanced")}
+          onClose={() => {
+            this.setState({fgaFlowPricingOpen: false})
+          }}
+          setCallback={(result) => {
+            this.setState({fgaFlowPricingOpen: false, fgaFlowPricingCallBackOpen: true})
+          }}
+        />
+        // <FgaPricingLayout
+        //   open={this.state.fgaFlowPricingOpen}
+        //   isModal={true}
+        //   user={user}
+        //   type={"advanced"}
+        //   onCancel={() => {
+        //     this.setState({fgaFlowPricingOpen: false})
+        //   }}
+        //   onSuccess={() => {
+        //     window.localStorage.setItem("FGAVipInfo", JSON.stringify({
+        //       "level": 2,
+        //       "type": "advanced",
+        //       "validEndDate": "2024-11-22T07:46:40.901Z"
+        //     }))
+        //     message.success("Payment success")
+        //     this.setState({fgaFlowPricingOpen: false})
+        //     this.props.setFgaDashboardKey()
+        //   }}
+        // />
       )
     }
 
@@ -1107,6 +1207,8 @@ class DashCard extends Component {
           hideWatermark={hideWatermark}
         />
         {renderFlowModal()}
+        {renderFgaPriceModal()}
+        {renderPaymentCallbackModal()}
       </DashCardRoot>
     );
   }
@@ -1364,6 +1466,8 @@ const mapDispatchToProps = {
   setUserExtend: setUserExtend,
   setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
   refreshCurrentFgaProjectChartType,
+  setFgaDashboardKey,
+  loadCurrentUserVipFGA,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashCard);

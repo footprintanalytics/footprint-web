@@ -4,7 +4,7 @@ import { UserApi } from "metabase/services";
 import Users from "metabase/entities/users";
 import {
   getDataApiVipInfo,
-  GetFgaProjectDetail,
+  GetFgaProjectDetail, getFgaVipInfo,
   getProjectChartTypeStatus,
   getProtocolDetail,
   getProtocolDetailById,
@@ -101,6 +101,23 @@ export const loadCurrentUserVipDataApi = createThunkAction(
   },
 );
 
+export const LOAD_CURRENT_USER_VIP_FGA =
+  "metabase/user/LOAD_CURRENT_USER_VIP_FGA";
+export const loadCurrentUserVipFGA = createThunkAction(
+  LOAD_CURRENT_USER_VIP_FGA,
+  () => (dispatch, getState) => {
+    if (getState().currentUser) {
+      const fgaVipInfoStr = window.localStorage.getItem("FGAVipInfo");
+      if (fgaVipInfoStr) {
+        return JSON.parse(fgaVipInfoStr);
+      } else {
+        return {}
+      }
+      // return getFgaVipInfo();
+    }
+  },
+);
+
 export const UPDATE_SUBSCRIBE_INFO = "metabase/user/UPDATE_SUBSCRIBE_INFO";
 export const updateSubscribeInfo = createThunkAction(
   UPDATE_SUBSCRIBE_INFO,
@@ -150,6 +167,14 @@ export const currentUser = handleActions(
       next: (state, { payload }) => {
         if (payload) {
           return { ...state, vipInfoDataApi: { ...payload } };
+        }
+        return state;
+      },
+    },
+    [LOAD_CURRENT_USER_VIP_FGA]: {
+      next: (state, { payload }) => {
+        if (payload) {
+          return { ...state, vipInfoFga: { ...payload } };
         }
         return state;
       },

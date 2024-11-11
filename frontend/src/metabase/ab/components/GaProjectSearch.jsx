@@ -38,8 +38,8 @@ const GaProjectSearch = props => {
   const [currentProject, setCurrentProject] = useState(projectPath);
   const ref1 = useRef(null);
   const [tourOpen, setTourOpen] = useState(false);
-  const from = location?.pathname?.startsWith("/fga/pro") ? "pro" : "";
-  const isProFga = location?.pathname?.startsWith("/fga/pro");
+  const from = location?.pathname?.startsWith("/fga/pro") || location?.pathname?.startsWith("/fga/pro_beta") ? "pro" : "";
+  const isProFga = location?.pathname?.startsWith("/fga/pro") || location?.pathname?.startsWith("/fga/pro_beta");
   const steps = [
     {
       title: 'Switch Project',
@@ -197,7 +197,7 @@ const GaProjectSearch = props => {
                 return (
                   <Select.Option key={item.projectId} label={item.projectName} value={item.projectId}>
                     <div className="flex align-center">
-                       {logo && logo !== 'N/A' ? (
+                       {/*{logo && logo !== 'N/A' ? (
                          <Avatar
                            src={logo}
                            style={{height: 16, width: 16, borderRadius: "50%", background: "#ffffff"}}
@@ -208,7 +208,7 @@ const GaProjectSearch = props => {
                          >
                            <div style={{fontSize: 12, lineHeight: "16px"}}>{head(item.projectName)}</div>
                          </Avatar>
-                       )}
+                       )}*/}
                        <span className="ml1" style={
                          {
                           whiteSpace: "nowrap",

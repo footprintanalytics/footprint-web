@@ -261,7 +261,7 @@ export const getProtocolList = async params => {
   return GET(`/api/v1/project/protocol/list`, params, {'Cache-Control': 'max-age=1800'});
 };
 export const getProjectList = async params => {
-  if (window.location.pathname.startsWith('/fga/pro')) {
+  if (window.location.pathname.startsWith('/fga/pro') || window.location.pathname.startsWith('/fga/pro_beta')) {
     return GET(`/api/v1/project/list`, params);
   }
   return [
@@ -364,6 +364,10 @@ export const getUserVipInfo = async () => {
 
 export const getDataApiVipInfo = async () => {
   return GET(`/api/v1/user/vip/dataApi`, { project: getProject() });
+};
+
+export const getFgaVipInfo = async () => {
+  return GET(`mock/api/v1/user/vip/fga`, { project: getProject() });
 };
 
 export const getUserInterests = async () => {

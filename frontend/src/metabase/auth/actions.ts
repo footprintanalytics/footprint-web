@@ -11,7 +11,7 @@ import {
   clearCurrentUser,
   refreshCurrentUser,
   loadCurrentUserVip,
-  loadCurrentUserVipDataApi,
+  loadCurrentUserVipDataApi, loadCurrentUserVipFGA,
 } from "metabase/redux/user";
 import { refreshSiteSettings } from "metabase/redux/settings";
 import { getUser } from "metabase/selectors/user";
@@ -62,6 +62,7 @@ const handleLogin = async (dispatch: any, redirectUrl: string) => {
   ]);
   dispatch(loadCurrentUserVip());
   dispatch(loadCurrentUserVipDataApi());
+  dispatch(loadCurrentUserVipFGA());
 
   if (redirectUrl) {
     setTimeout(() => {

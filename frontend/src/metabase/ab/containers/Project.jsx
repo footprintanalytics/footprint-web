@@ -48,6 +48,7 @@ import KeysIds from "metabase/ab/components/KeysIds";
 import MySubmitProject from "metabase/ab/containers/MySubmitProject";
 import ChartCreate from "metabase/containers/myStudio/Component/ChartCreate";
 import ContactUs from "metabase/ab/containers/ContactUs";
+import AccountInfo from "metabase/ab/components/AccountInfo";
 
 const Project = props => {
   const {
@@ -247,6 +248,7 @@ const Project = props => {
     // if (!projectObject || !currentMenu || !gaMenuTabs) {
     //   return <LoadingSpinner message="Loading..." />;
     // }
+    console.log("fgaDashboardKeyfgaDashboardKey", fgaDashboardKey)
     const WrapPublicDashboard = current_tab =>
       getProjectObject()?.protocolSlug ? (
         <>
@@ -516,6 +518,15 @@ const Project = props => {
           router={router}
           businessType={businessType}
           // project={getProjectObject()}
+        />
+      );
+    }
+    if (["account"].includes(current_tab)) {
+      return (
+        <AccountInfo
+          location={location}
+          router={router}
+          businessType={businessType}
         />
       );
     }

@@ -6,14 +6,10 @@ import ModalContent from "metabase/components/ModalContent";
 import "./PaymentModal.css";
 import { Typography, Button } from "antd";
 
-const PaymentCallbackModal = ({ onClose }) => {
-  return (
-    <Modal ModalClass="payment-model payment-callback-model">
-      <ModalContent
-        onClose={onClose}
-        className="payment-model__root"
-        formModal={false}
-      >
+const PaymentCallbackModal = ({ onClose, isModal, onCompletedClick, open }) => {
+  const renderContent = () => {
+    return (
+      <div className="flex flex-column">
         <div className="payment-model__title">
           Your transaction has started
           <br />
@@ -39,11 +35,37 @@ const PaymentCallbackModal = ({ onClose }) => {
           <Button
             type="primary"
             size="large"
-            onClick={() => window.location.reload()}
+            onClick={() => {
+              if (onCompletedClick) {
+                onCompletedClick();
+              } else {
+                window.location.reload()
+              }
+            }}
           >
             I have completed the payment
           </Button>
         </div>
+      </div>
+    )
+  }
+
+  if (!isModal) {
+    return renderContent();
+  }
+
+  if (!open) {
+    return null
+  }
+
+  return (
+    <Modal ModalClass="payment-model payment-callback-model" >
+      <ModalContent
+        onClose={onClose}
+        className="payment-model__root"
+        formModal={false}
+      >
+        {renderContent()}
       </ModalContent>
     </Modal>
   );

@@ -8,7 +8,7 @@ import { Route } from "metabase/hoc/Title";
 import {
   loadCurrentUser,
   loadCurrentUserVip,
-  loadCurrentUserVipDataApi,
+  loadCurrentUserVipDataApi, loadCurrentUserVipFGA,
 } from "metabase/redux/user";
 import MetabaseSettings from "metabase/lib/settings";
 import { Unauthorized } from "metabase/containers/ErrorPages";
@@ -125,6 +125,7 @@ export const getRoutes = store => (
         if (store.getState().currentUser) {
           store.dispatch(loadCurrentUserVip());
           store.dispatch(loadCurrentUserVipDataApi());
+          store.dispatch(loadCurrentUserVipFGA());
         }
         done();
       }}

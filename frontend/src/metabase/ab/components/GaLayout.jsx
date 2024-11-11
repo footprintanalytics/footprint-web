@@ -12,7 +12,7 @@ import "../css/index.css";
 import GaSidebar from "./GaSidebar";
 import { createFgaProjectModalShowAction, loadFgaProjectList, loginModalShowAction } from "metabase/redux/control";
 import { push } from "react-router-redux";
-import { getFgaProjectList, getUserExtend } from "metabase/selectors/control";
+import { getFgaDashboardKey, getFgaProjectList, getUserExtend } from "metabase/selectors/control";
 import FgaCreateProjectGuide from "metabase/ab/components/FgaCreateProjectGuide";
 import { refreshCurrentFgaProjectChartType } from "metabase/redux/user";
 
@@ -21,14 +21,14 @@ const ABLayout = props => {
   const isHideSidebar = pathname.includes("/fga/chart");
   return (
     <StateProvider>
-      <LayoutView {...props} isChart={isHideSidebar} />
+      <LayoutView {...props} isChart={isHideSidebar}/>
     </StateProvider>
   );
 };
 
 const LayoutView = props => {
   const { isOpenSubMenu } = useContext(StateContext);
-  const { user, projectObject, setLoginModalShow, setCreateFgaProjectModalShowAction, userExtend, fgaProjectList, loadFgaProjectList, refreshCurrentFgaProjectChartType } = props;
+  const { fgaDashboardKey, user, projectObject, setLoginModalShow, setCreateFgaProjectModalShowAction, userExtend, fgaProjectList, loadFgaProjectList, refreshCurrentFgaProjectChartType } = props;
   const isGamesManage = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-manage")
   const isProjectList = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-list")
   const isBindGame = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("bind-game")
@@ -41,6 +41,8 @@ const LayoutView = props => {
   const title =
     "Growth Analytics | Unlock your growth potential in a web3 world";
   const isProFga = window.location.pathname.startsWith("/fga/pro")
+  const isProFgaBeta = window.location.pathname.startsWith("/fga/pro_beta")
+  const isPay = user?.vipInfoFga?.type === "standard" || user?.vipInfoFga?.type === "advanced"
 
   useEffect(() => {
     const getFgaProjectChartTypeStatus = () => {
@@ -52,7 +54,7 @@ const LayoutView = props => {
     return () => clearInterval(intervalId);
   }, [projectObject]);
 
-  if (isProFga && (!user || (fgaProjectList?.length <= 1))) {
+  if (isProFga && !fgaDashboardKey && (!user || (fgaProjectList?.length <= 1) || (!isPay && isProFgaBeta))) {
     return (
       <FgaCreateProjectGuide
         {...props}
@@ -109,6 +111,7 @@ const mapStateToProps = state => {
     projectObject: getFgaProject(state),
     fgaProjectList: getFgaProjectList(state),
     chartTypeStatus: state?.currentFgaProject?.chartTypeStatus,
+    fgaDashboardKey: getFgaDashboardKey(state),
   };
 };
 
