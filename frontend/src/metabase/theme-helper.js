@@ -24,13 +24,21 @@ const getThemeConfig = () => {
           colorBgContainer: selectBackground,
         },
         Modal: {
-          colorBgElevated: "#1B1B1E",
+          colorBgElevated: selectBackground,
         },
         Tooltip: {
           colorBgSpotlight: "#2B2B2E",
         },
         Popover: {
           colorBgElevated: "#2B2B2E",
+        },
+        Button: {
+          colorBgContainer: selectBackground,
+        },
+        Table: {
+          colorBgContainer: selectBackground,
+          colorFillAlter: "#2B3346",
+          colorBgHeader: cardBg,
         },
       }
     }

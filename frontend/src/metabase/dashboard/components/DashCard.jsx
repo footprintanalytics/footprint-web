@@ -57,7 +57,7 @@ import { IFRAMED_IN_SELF } from "metabase/lib/dom";
 import { Button, Form, Input, message, Modal, Radio, Spin } from "antd";
 import { fgaPlanMapping } from "metabase/visualizations/util/data";
 import FgaProResult from "metabase/visualizations/components/FgaProResult";
-import FgaFlowUploadLayout from "metabase/visualizations/components/FgaFlowUploadLayout";
+import FgaFlowUploadModal from "metabase/visualizations/components/FgaFlowUploadModal";
 import { getFgaProject } from "metabase/selectors/user";
 import { createFgaProjectModalShowAction, loginModalShowAction, setUserExtend } from "metabase/redux/control";
 import {
@@ -110,6 +110,7 @@ class DashCard extends Component {
       isPreviewingCard: false,
       isLoading: false,
       fgaFlowType: '',
+      fgaFlowOpen: false,
     };
   }
 
@@ -458,12 +459,13 @@ class DashCard extends Component {
         // window.location.pathname.includes("acquisition_users_pro") &&
         // (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'login' || getFgaFlowType() === 'loading')
       )
-
     const showIntegrationDialog = () => {
-      const modalDestroy = Modal.info({
+      this.setState({fgaFlowOpen: true})
+      /*const modalDestroy = Modal.info({
         width: 900,
         icon: null,
         content: (<FgaFlowUploadLayout
+          open={this.state.fgaFlowOpen}
           cardId={dashcard.card.id}
           projectObject={this.props.projectObject}
           onSuccess={async (isRefresh) => {
@@ -482,15 +484,7 @@ class DashCard extends Component {
         okText: "OK",
         closable: true,
         footer: null,
-        onOk: () => {
-          // changeFgaFlowType("loading")
-          this.props.setUserExtend({
-            ...(this.props.userExtend || {}),
-            web2Data: true
-          })
-          // changeFgaFlowType("normal")
-        },
-      });
+      });*/
     }
 
     const renderFgaFlowTypeLayout = (type) => {
@@ -718,6 +712,27 @@ class DashCard extends Component {
             {/*{renderFgaFlowTypeLayout(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935) ? "normal": type)}*/}
           </div>
         </div>
+      )
+    }
+
+    const renderFlowModal = () => {
+
+      return (
+        <FgaFlowUploadModal
+          open={this.state.fgaFlowOpen}
+          isModal={true}
+          cardId={dashcard.card.id}
+          projectObject={this.props.projectObject}
+          onCancel={() => {
+            this.setState({fgaFlowOpen: false})
+          }}
+          onSuccess={async (isRefresh) => {
+            if (isRefresh) {
+              this.props.refreshCurrentFgaProjectChartType(this.props.projectObject?.id)
+            }
+            this.setState({fgaFlowOpen: false})
+          }}
+        />
       )
     }
 
@@ -1091,6 +1106,7 @@ class DashCard extends Component {
           chartStyle={chartStyle}
           hideWatermark={hideWatermark}
         />
+        {renderFlowModal()}
       </DashCardRoot>
     );
   }

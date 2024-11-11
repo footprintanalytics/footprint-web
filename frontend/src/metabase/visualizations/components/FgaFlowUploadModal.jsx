@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
-import { Button, message, Steps, Table, theme, Upload } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, message, Modal, Steps, Table, theme, Upload } from "antd";
 import FgaFlowDataProcess from "metabase/visualizations/components/FgaFlowDataProcess";
 import FgaFlowProduceData from "metabase/visualizations/components/FgaFlowProduceData";
 import { fgaEventConfirmCsv } from "metabase/new-service";
 import { QueryClient, QueryClientProvider } from "react-query";
+import "./FgaFlowUploadModal.css";
 
-const FgaFlowUploadLayout = ({onSuccess, projectObject, cardId}) => {
+const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, open, onCancel}) => {
   const { token } = theme.useToken();
   const [confirmCsvLoading, setConfirmCsvLoading] = useState();
   const [csvData, setCSVData] = useState([]);
@@ -14,6 +15,7 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject, cardId}) => {
   const [current, setCurrent] = useState(0);
   const projectId = projectObject?.id
   const [pipelineId, setPipelineId] = useState()
+  const isEditMode = !!projectObject
   const columns = [
     {
       title: 'Project Id',
@@ -46,6 +48,16 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject, cardId}) => {
       key: 'age23',
     },
   ];
+
+  useEffect(() => {
+    if (!open) {
+      setCurrent(0)
+      setCSVData([])
+      setFile(null)
+      setPipelineId(null)
+    }
+  }, [open]);
+
   const queryClient = new QueryClient();
 
   const propsUploadAvatarTcOss = {
@@ -62,27 +74,11 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject, cardId}) => {
       "projectId": projectId + "",
     },
     beforeUpload: async (file) => {
-      // const isLt2M = file.size / 1024 / 1024 < 10
-      // if (!isLt2M) {
-      //   message.error(t('File must smaller than 10MB!'))
-      //   return false
-      // }
       setFile(file);
       setCurrent(current + 1)
       return false
     },
     onChange(info) {
-      // const data = info?.file?.response?.data?.previewData;
-      // const pipelineId = info?.file?.response?.data?.pipelineId;
-      // if (data) {
-      //   setPipelineId(pipelineId)
-      //   setCSVData(data)
-      //   message.success("Upload CSV successfully");
-      //   setTimeout(() => {
-      //     setCurrent(current + 1);
-      //   }, 1000);
-      // }
-      // console.log('upload onChange: ', info, data)
     },
   }
 
@@ -145,7 +141,7 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject, cardId}) => {
     {
       title: 'Preview Data',
       content: (<div className="flex flex-col" style={{lineHeight: 1.5, padding: 20}}>
-        <div>Here is what has been generated based on your data. Please confirm it is correct.</div>
+        <div className="mb1">Generated based on your data. Please confirm. Preview shows up to 10 lines.</div>
         <Table columns={columns} dataSource={csvData} pagination={false} scroll={{ y: 300 }}/>
         <div className={"flex justify-center "} style={{gap: 10, padding: 20}}>
           <Button onClick={() => setCurrent(0)}>Not quite right? Upload Again</Button>
@@ -189,14 +185,37 @@ const FgaFlowUploadLayout = ({onSuccess, projectObject, cardId}) => {
   };
 
 
-  return (
-    <div className="flex flex-col" style={{width: 840, height: 560, marginTop: 20}}>
-      <Steps current={current} items={items} onChange={(index) => setCurrent(index)}/>
-      <div style={contentStyle}>{steps[current].content}</div>
-      <div className="flex justify-end" style={{ marginTop: 24 }}>
+  const renderContent = () => {
+    return (
+      <div className="FgaFlowUploadContent" style={{ width: 840, height: 560, marginTop: 20 }}>
+        <Steps current={current} items={items} />
+        <div style={contentStyle}>{steps[current].content}</div>
+        <div className="flex justify-end" style={{ marginTop: 24 }}>
+        </div>
       </div>
-    </div>
+    );
+  }
+
+  if (!isModal) {
+    return renderContent();
+  }
+
+  return (
+    <Modal
+      title={isEditMode ? "Edit your project": "Create your project"}
+      open={open}
+      destroyOnClose
+      footer={null}
+      width={900}
+      height={560}
+      closable={!force}
+      maskClosable={!force}
+      // onOk={handleOk}
+      onCancel={onCancel}
+    >
+      {renderContent()}
+    </Modal>
   );
 };
 
-export default FgaFlowUploadLayout;
+export default FgaFlowUploadModal;
