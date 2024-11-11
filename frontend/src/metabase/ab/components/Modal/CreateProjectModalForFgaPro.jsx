@@ -257,9 +257,9 @@ const CreateProjectModalForFgaPro = props => {
         ) : (
           <div>
             <h2>Project: {projectName || projectObject?.name}</h2>
-            <div style={{ marginBottom: 16 }}>
+            {!projectObject && (<div style={{ marginBottom: 16 }}>
               <h4>{contractResult?.length > 0 ? "The system has matched the following contracts through AI. Please select your contract for submission." : "No project info found. Please add your contact."}</h4>
-            </div>
+            </div>)}
             <Table
               columns={columns}
               dataSource={data}
