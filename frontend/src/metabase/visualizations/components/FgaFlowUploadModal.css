@@ -1,0 +1,8 @@
+.FgaFlowUploadContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.FgaFlowUploadContent .ant-timeline .ant-timeline-item-head-custom {
+  background-color: #242427;
+}
