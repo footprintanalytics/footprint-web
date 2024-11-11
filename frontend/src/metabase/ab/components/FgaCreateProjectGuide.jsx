@@ -29,7 +29,7 @@ const FgaCreateProjectGuide = (props) => {
           {/*显示 create project 页面*/}
           {state === 2 && (
             <div className="flex flex-column" style={{gap: 30, width: "100%"}}>
-              <CreateProjectModalForFgaPro isModal={false} />
+              <CreateProjectModalForFgaPro isModal={false} isOnboard={true}/>
             </div>
           )}
         </div>

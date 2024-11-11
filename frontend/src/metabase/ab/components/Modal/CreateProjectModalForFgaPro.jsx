@@ -7,17 +7,22 @@ import { connect } from "react-redux";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { loadFgaProjectList, setFgaDashboardKey, setUserExtend } from "metabase/redux/control";
 import { getUserExtend } from "metabase/selectors/control";
-import { loadCurrentFgaProjectById } from "metabase/redux/user";
+import { loadCurrentFgaProjectById, loadCurrentUserVipFGA } from "metabase/redux/user";
 import { push, replace } from "react-router-redux";
 import { CHAIN_LIST } from "metabase/submit/contract/components/ContractDetailsV4";
-import { DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined } from "@ant-design/icons";
 import _, { get } from "lodash";
 import { findContractMatchByName, postProject, submitFGAContractForPro } from "metabase/new-service";
 import { saveLatestGAProject, saveLatestGAProjectId } from "metabase/ab/utils/utils";
+import "metabase/pricing_v2/index.css";
+import FgaPricingLayout from "metabase/ab/components/FgaPricingLayout";
+
+
 const { Option } = Select
 const CreateProjectModalForFgaPro = props => {
-  const { force, isModal = false, open, onCancel, onSuccess, loadFgaProjectList, loadCurrentFgaProjectById, setFgaDashboardKey, projectObject, submitButtonText } = props;
+  const { force, isModal = false, open, onCancel, onSuccess, loadCurrentUserVipFGA, loadFgaProjectList, loadCurrentFgaProjectById, setFgaDashboardKey, projectObject, submitButtonText, user, isOnboard, replace } = props;
   const [form] = Form.useForm();
+  const isProFgaBeta = window.location.pathname.startsWith("/fga/pro_beta")
   const steps = [
     {
       title: 'Input your Project Name',
@@ -27,15 +32,26 @@ const CreateProjectModalForFgaPro = props => {
       title: 'Confirm Project Info',
       content: 'Second-content',
     },
-  ];
-
+    !isModal && isProFgaBeta && {
+      title: 'Plans & Pricing',
+      content: 'third-content',
+    },
+  ].filter(Boolean);
   const [current, setCurrent] = useState(0);
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
   const [loading, setLoading] = useState(!isModal);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [projectId, setProjectId] = useState();
   const [contractResult, setContractResult] = useState([]);
   const [projectName, setProjectName] = useState();
+
+  useEffect(() => {
+    console.log("projectObject", projectObject)
+    if (isOnboard && (projectObject && projectObject?.id !== 1) && isProFgaBeta) {
+      setCurrent(2)
+    }
+  }, [projectObject])
 
   useEffect(() => {
     if (!open) {
@@ -56,7 +72,7 @@ const CreateProjectModalForFgaPro = props => {
         }}
       >
         <Form.Item
-          label="Project Name. E.g. Mocaverse"
+          label="Project Name (e.g., Mocaverse)"
           name="projectName"
           required={true}
           rules={[{ required: true, message: 'Please input your project name!' }]}
@@ -240,9 +256,16 @@ const CreateProjectModalForFgaPro = props => {
       saveLatestGAProjectId(result.projectId);
     }
     onSuccess?.();
+    setProjectId(result?.projectId);
+    setCurrent(current + 1)
+  }
+
+  const handleSuccessSkip = async () => {
     await loadFgaProjectList({ from: "pro" });
-    await loadCurrentFgaProjectById(result?.projectId, "edit-project")
+    await loadCurrentFgaProjectById(projectId, "edit-project")
     setFgaDashboardKey({ key: "pro" });
+    await loadCurrentUserVipFGA()
+    // window.location.reload();
   }
 
   const renderProjectInfo = () => {
@@ -294,6 +317,29 @@ const CreateProjectModalForFgaPro = props => {
     );
   }
 
+  const renderPricing = () => {
+    // FgaProductMock
+    return (
+      <div className="flex flex-column" style={{gap: 10}}>
+        <h3>{"After purchasing the Standard package, you'll gain access to the standard dashboard analysis feature"}</h3>
+        <FgaPricingLayout
+          user={user}
+          onSuccess={() => {
+            window.localStorage.setItem("FGAVipInfo", JSON.stringify({
+              "level": 1,
+              "type": "standard",
+              "validEndDate": "2024-11-21T07:46:40.901Z"
+            }))
+            message.success("Payment success")
+            setTimeout(() => {
+              handleSuccessSkip()
+            }, 1000)
+          }}
+        />
+      </div>
+    )
+  }
+
   const renderContent = () => {
     if (isModal) {
       return renderProjectInfo()
@@ -302,13 +348,14 @@ const CreateProjectModalForFgaPro = props => {
       <div className="flex flex-column" style={{ width: "100%", gap: 20 }}>
         <h2>Create Project</h2>
         <Steps current={current} items={items} onChange={(index) => {
-          if (index === 0) {
+          if (index === 0 && current === 1) {
             setCurrent(index)
           }
         }}/>
         <div className="flex flex-column pt2">
           {current === 0 && (renderCreateProject())}
           {current === 1 && (renderProjectInfo())}
+          {current === 2 && (renderPricing())}
         </div>
       </div>
     );
@@ -350,6 +397,7 @@ const mapDispatchToProps = {
   loadCurrentFgaProjectById,
   onChangeLocation: push,
   replace,
+  loadCurrentUserVipFGA,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateProjectModalForFgaPro));

@@ -12,6 +12,7 @@ import UpdateProjectModal from "./Modal/UpdateProjectModal";
 import ProjectSubmitContactModal from "metabase/ab/components/Modal/ProjectSubmitContactModal";
 import { createFgaProjectModalShowAction, projectSubmitModalShowAction } from "metabase/redux/control";
 import InfoGenerate from "metabase/ab/components/InfoGenerate";
+import FgaVipInfoLayout from "metabase/ab/components/FgaVipInfoLayout";
 
 const ProjectInfo = props => {
   const { router, project, location, user, businessType, setProjectSubmitModalShowAction, setCreateFgaProjectModalShowAction } = props;
