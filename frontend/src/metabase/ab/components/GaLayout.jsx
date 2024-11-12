@@ -42,7 +42,8 @@ const LayoutView = props => {
     "Growth Analytics | Unlock your growth potential in a web3 world";
   const isProFga = window.location.pathname.startsWith("/fga/pro")
   const isProFgaBeta = window.location.pathname.startsWith("/fga/pro_beta")
-  const isPay = user?.vipInfoFga?.type === "standard" || user?.vipInfoFga?.type === "advanced"
+
+  const isPayStandard = !!user?.vipInfoFga?.find(vipInfo => vipInfo.type === "fga_standard")
 
   useEffect(() => {
     const getFgaProjectChartTypeStatus = () => {
@@ -54,7 +55,7 @@ const LayoutView = props => {
     return () => clearInterval(intervalId);
   }, [projectObject]);
 
-  if (isProFga && !fgaDashboardKey && (!user || (fgaProjectList?.length <= 1) || (!isPay && isProFgaBeta))) {
+  if (isProFga && !fgaDashboardKey && (!user || (fgaProjectList?.length <= 1) || (!isPayStandard))) {
     return (
       <FgaCreateProjectGuide
         {...props}

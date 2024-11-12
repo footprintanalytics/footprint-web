@@ -18,6 +18,7 @@ import SubscriptionDetailModal from "metabase/containers/creator/components/pers
 import { isFgaPath } from "metabase/growth/utils/utils";
 import { isABPath } from "metabase/ab/utils/utils";
 import Meta from "metabase/components/Meta";
+import { cancelAutoRenewal, showCancelAutoRenewal } from "metabase/utils/Utils";
 
 const Index = ({ router, user, data }) => {
   const [loading, setLoading] = useState(false);
@@ -62,18 +63,12 @@ const Index = ({ router, user, data }) => {
   // const email = get(data, "userInfo.email");
 
   const onCancelSubscription = async productId => {
-    Modal.confirm({
+    showCancelAutoRenewal({
+      productId,
       title: "Do you want to cancel automatic renewal?",
-      icon: <ExclamationCircleOutlined />,
-      confirmLoading: loading,
-      onOk: async () => {
-        setLoading(true);
-        await cancelSubscription({ productId });
-        setLoading(false);
-        // slack([{ label: "Cancel Subscription", value: user?.email }]);
+      onSuccess: () => {
         location.reload();
-      },
-      onCancel: () => {},
+      }
     });
   };
 

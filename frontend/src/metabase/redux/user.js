@@ -4,7 +4,8 @@ import { UserApi } from "metabase/services";
 import Users from "metabase/entities/users";
 import {
   getDataApiVipInfo,
-  GetFgaProjectDetail, getFgaVipInfo,
+  GetFgaProjectDetail,
+  getVipInfoV2,
   getProjectChartTypeStatus,
   getProtocolDetail,
   getProtocolDetailById,
@@ -107,13 +108,7 @@ export const loadCurrentUserVipFGA = createThunkAction(
   LOAD_CURRENT_USER_VIP_FGA,
   () => (dispatch, getState) => {
     if (getState().currentUser) {
-      const fgaVipInfoStr = window.localStorage.getItem("FGAVipInfo");
-      if (fgaVipInfoStr) {
-        return JSON.parse(fgaVipInfoStr);
-      } else {
-        return {}
-      }
-      // return getFgaVipInfo();
+      return getVipInfoV2("fga");
     }
   },
 );
@@ -174,7 +169,7 @@ export const currentUser = handleActions(
     [LOAD_CURRENT_USER_VIP_FGA]: {
       next: (state, { payload }) => {
         if (payload) {
-          return { ...state, vipInfoFga: { ...payload } };
+          return { ...state, vipInfoFga: payload };
         }
         return state;
       },
@@ -861,6 +856,7 @@ export const loadCurrentFgaProjectById = createThunkAction(
         if (clearCurrent) {
           dispatch(clearCurrentFgaProject());
         }
+        console.log("loadCurrentFgaProjectByIdloadCurrentFgaProjectById")
         // await dispatch(refreshCurrentFgaProject(project_id));
         await dispatch(refreshCurrentFgaProjectById(projectId, from));
         await dispatch(refreshCurrentFgaProjectChartType(projectId))

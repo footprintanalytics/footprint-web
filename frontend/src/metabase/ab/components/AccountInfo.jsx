@@ -11,23 +11,19 @@ import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModa
 import PricingModal from "metabase/pricing_v2/components/PricingModal";
 import { FgaProductMock } from "metabase/ab/utils/data";
 import { loadCurrentUserVipFGA } from "metabase/redux/user";
+import { useGetProductInfo } from "metabase/pricing_v2/use";
 
 const AccountInfo = props => {
   const { user, loadCurrentUserVipFGA } = props;
   const [fgaFlowPricingCallBackOpen, setFgaFlowPricingCallBackOpen] = useState(false);
   const [fgaFlowPricingOpen, setFgaFlowPricingOpen] = useState(false);
+  console.log("fgaFlowPricingOpen", fgaFlowPricingOpen)
   const renderPaymentCallbackModal = () => {
     return (
       <PaymentCallbackModal
         open={fgaFlowPricingCallBackOpen}
         isModal={true}
         onCompletedClick={async () => {
-          // here mock the result
-          window.localStorage.setItem("FGAVipInfo", JSON.stringify({
-            "level": 2,
-            "type": "advanced",
-            "validEndDate": "2024-11-22T07:46:40.901Z"
-          }))
           setFgaFlowPricingCallBackOpen(false)
           message.success("Payment success")
           loadCurrentUserVipFGA()
@@ -37,13 +33,17 @@ const AccountInfo = props => {
   }
 
   const renderFgaPriceModal = () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { isLoading, data } = useGetProductInfo("fga");
+    const type = fgaFlowPricingOpen
+    const fgaPaymentProducts = data?.filter((item) => item.productType === type) || []
     return (
       <PricingModal
         isModal={true}
         visible={fgaFlowPricingOpen}
         showTitle={true}
         user={user}
-        subscribeOptions={FgaProductMock.filter((item) => item.type === "advanced")}
+        subscribeOptions={fgaPaymentProducts}
         onClose={() => {setFgaFlowPricingOpen(false)}}
         setCallback={(result) => {
           setFgaFlowPricingCallBackOpen(true)
@@ -79,9 +79,9 @@ const AccountInfo = props => {
           }}
         >
           <div className={""}>
-            <h2>Name: {user.name}</h2>
+            <h2>Email: {user.email}</h2>
           </div>
-          <FgaVipInfoLayout upgradeOnclick={() => setFgaFlowPricingOpen(true)}/>
+          <FgaVipInfoLayout upgradeOnclick={(type) => setFgaFlowPricingOpen(type)}/>
         </Card>
       </div>
       {renderFgaPriceModal()}

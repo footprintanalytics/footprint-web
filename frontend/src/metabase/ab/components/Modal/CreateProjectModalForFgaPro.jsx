@@ -32,7 +32,7 @@ const CreateProjectModalForFgaPro = props => {
       title: 'Confirm Project Info',
       content: 'Second-content',
     },
-    !isModal && isProFgaBeta && {
+    !isModal && {
       title: 'Plans & Pricing',
       content: 'third-content',
     },
@@ -255,7 +255,7 @@ const CreateProjectModalForFgaPro = props => {
       saveLatestGAProject(result.projectName);
       saveLatestGAProjectId(result.projectId);
     }
-    onSuccess?.();
+    onSuccess?.(result?.projectId || projectObject?.id);
     setProjectId(result?.projectId);
     setCurrent(current + 1)
   }
@@ -325,11 +325,6 @@ const CreateProjectModalForFgaPro = props => {
         <FgaPricingLayout
           user={user}
           onSuccess={() => {
-            window.localStorage.setItem("FGAVipInfo", JSON.stringify({
-              "level": 1,
-              "type": "standard",
-              "validEndDate": "2024-11-21T07:46:40.901Z"
-            }))
             message.success("Payment success")
             setTimeout(() => {
               handleSuccessSkip()

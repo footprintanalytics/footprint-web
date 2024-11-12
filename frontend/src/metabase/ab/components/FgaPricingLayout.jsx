@@ -1,18 +1,35 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import PricingModal from "metabase/pricing_v2/components/PricingModal";
-import { FgaProductMock } from "metabase/ab/utils/data";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
-import { Collapse, Modal } from "antd";
+import { Collapse, message, Modal } from "antd";
+import { useGetProductInfo } from "metabase/pricing_v2/use";
+import { getVipInfoV2 } from "metabase/new-service";
+import { debounce } from "lodash";
 
 const FgaPricingLayout = (props) => {
-  const { user, onSuccess, isModal = false, open, onClose, type = "standard" } = props
-  const [current, setCurrent] = useState(0);
+  const { user, onSuccess, isModal = false, open, onClose, type = "fga_standard" } = props
   const [activeKey, setActiveKey] = useState("payment");
-
+  const { isLoading, data } = useGetProductInfo("fga");
+  const [isCompleteLoading, setCompleteLoading] = useState(false);
   const onChange = (value) => {
     setActiveKey(value);
   };
+  const fgaPaymentProducts = data?.filter((item) => item.productType === type) || []
+
+  const checkPaymentStatus = async () => {
+    setCompleteLoading(true)
+    const fgaVipInfoResult = await getVipInfoV2("fga")
+    setCompleteLoading(false)
+    const hasStandardPay = fgaVipInfoResult?.find(vipInfo => vipInfo.type === "fga_standard")
+    if (hasStandardPay) {
+      onSuccess?.()
+    }
+  }
+
+  const checkPaymentStatusDebounce = debounce(data => {
+    checkPaymentStatus()
+  }, 1000)
 
   const items = [
     {
@@ -20,18 +37,18 @@ const FgaPricingLayout = (props) => {
       label: 'Select a Plan',
       children: (
         <div className="flex flex-column">
-          <PricingModal
+          {fgaPaymentProducts && (<PricingModal
             isModal={false}
             showTitle={false}
             user={user}
-            subscribeOptions={FgaProductMock.filter((item) => item.type === type)}
+            subscribeOptions={fgaPaymentProducts}
             onClose={() => {}}
             setCallback={(result) => {
               if (result) {
                 setActiveKey("confirm");
               }
             }}
-          />
+          />)}
         </div>
       ),
     },
@@ -42,21 +59,15 @@ const FgaPricingLayout = (props) => {
         <div className="flex flex-column">
           <PaymentCallbackModal
             isModal={false}
+            isCompletedLoading={isCompleteLoading}
             onCompletedClick={() => {
-              // here mock the result
-              onSuccess?.()
+              checkPaymentStatusDebounce()
             }}
           />
         </div>
       ),
     },
   ];
-
-  // <div className="flex flex-column">
-  //               <Button onClick={() => {
-  //                 onSuccess?.()
-  //               }}>View Your Project</Button>
-  //             </div>
 
   const renderContent = () => {
     return (

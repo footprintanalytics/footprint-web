@@ -6,7 +6,7 @@ import ModalContent from "metabase/components/ModalContent";
 import "./PaymentModal.css";
 import { Typography, Button } from "antd";
 
-const PaymentCallbackModal = ({ onClose, isModal, onCompletedClick, open }) => {
+const PaymentCallbackModal = ({ onClose, isModal, onCompletedClick, open, isCompletedLoading }) => {
   const renderContent = () => {
     return (
       <div className="flex flex-column">
@@ -35,6 +35,7 @@ const PaymentCallbackModal = ({ onClose, isModal, onCompletedClick, open }) => {
           <Button
             type="primary"
             size="large"
+            loading={isCompletedLoading}
             onClick={() => {
               if (onCompletedClick) {
                 onCompletedClick();
@@ -59,14 +60,14 @@ const PaymentCallbackModal = ({ onClose, isModal, onCompletedClick, open }) => {
   }
 
   return (
-    <Modal ModalClass="payment-model payment-callback-model" >
-      <ModalContent
-        onClose={onClose}
-        className="payment-model__root"
-        formModal={false}
-      >
-        {renderContent()}
-      </ModalContent>
+    <Modal
+      className="payment-model payment-callback-model"
+      open={open}
+      closable={true}
+      footer={null}
+      onCancel={onClose}
+    >
+      {renderContent()}
     </Modal>
   );
 };

@@ -24,7 +24,7 @@ import {
   loginModalShowAction,
   createFgaProjectModalShowAction,
   setIsCancelFeedbackBlockAction,
-  setSubmitAddrZkspaceModal, projectSubmitModalShowAction,
+  setSubmitAddrZkspaceModal, projectSubmitModalShowAction, setFgaDashboardKey,
 } from "metabase/redux/control";
 import GaProjectSearch from "metabase/ab/components/GaProjectSearch";
 import ProfileLink from "metabase/nav/components/ProfileLink";
@@ -52,6 +52,7 @@ import ProjectSubmitContactModal from "metabase/ab/components/Modal/ProjectSubmi
 import { getFgaProject } from "metabase/selectors/user";
 import CreateProjectModalForDemo from "metabase/ab/components/Modal/CreateProjectModalForDemo";
 import CreateProjectModalForFgaPro from "metabase/ab/components/Modal/CreateProjectModalForFgaPro";
+import { loadCurrentFgaProjectById } from "metabase/redux/user";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -83,6 +84,8 @@ const mapDispatchToProps = {
   setSubmitAddrZkspaceModal,
   logout,
   replace,
+  setFgaDashboardKey,
+  loadCurrentFgaProjectById,
 };
 
 // @Database.loadList({
@@ -557,7 +560,9 @@ class ABNavbar extends Component {
           projectObject={createFgaProjectModalShow?.projectObject}
           submitButtonText={createFgaProjectModalShow?.submitButtonText}
           location={location}
-          onSuccess={() => {
+          onSuccess={async (projectId) => {
+            await this.props.loadCurrentFgaProjectById(projectId, "submit-project-info", true, false)
+            this.props.setFgaDashboardKey({ key: "pro-submit-project-info" });
             setCreateFgaProjectModalShowAction({ show: false });
           }}
           onCancel={() => {

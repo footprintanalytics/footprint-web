@@ -12,6 +12,7 @@ import {
   saveLatestGAProject,
   saveLatestGAProjectId,
 } from "../../utils/utils";
+import { loadCurrentFgaProjectById } from "metabase/redux/user";
 
 const layout = {
   labelCol: { span: 6 },
@@ -22,7 +23,7 @@ const tailLayout = {
 };
 
 const CreateProjectModal = props => {
-  const { open, onCancel, onSuccess, router, location, user,force } = props;
+  const { open, onCancel, onSuccess, router, location, user,force, loadCurrentFgaProjectById } = props;
   const [form] = Form.useForm();
   const [options, setOptions] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
@@ -52,6 +53,11 @@ const CreateProjectModal = props => {
     }
   }, [open]);
 
+    const handleAfterCreateFGAProject = async (projectId) => {
+      await loadCurrentFgaProjectById(projectId, "submit-project-info", true, false)
+      onSuccess?.();
+    }
+
    function createProject(projectName, protocol) {
      const hide = message.loading("Loading...", 10);
      setLoading(true);
@@ -65,8 +71,8 @@ const CreateProjectModal = props => {
          console.log(result);
          saveLatestGAProject(result.protocolSlug);
          saveLatestGAProjectId(result.id);
-         onSuccess?.();
-         window.location.href = getGrowthProjectPath(result.protocolSlug);
+         handleAfterCreateFGAProject(result.id)
+         // window.location.href = getGrowthProjectPath(result.protocolSlug);
          //  router?.push({
          //    pathname: getGrowthProjectPath(result.protocolSlug),
          //  });
@@ -187,4 +193,8 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(CreateProjectModal));
+const mapDispatchToProps = {
+  loadCurrentFgaProjectById
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateProjectModal));

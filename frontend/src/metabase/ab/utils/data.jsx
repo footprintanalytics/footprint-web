@@ -452,7 +452,7 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
       ]),
       getItem("Settings", "settings", <SettingOutlined />, [
         getItem("Project Info", "general", null),
-        isProFgaBeta && (getItem("Account Info", "account", null)),
+        getItem("Account Info", "account", null),
       ]),
     ]
     const keys = getKeys([...menuTabs]);
@@ -747,23 +747,3 @@ export const cohortTips = new Map([
   ],
 ]);
 
-
-export const FgaProductMock = [{
-  "title": "$1,500 for Monthly Standard Subscription",
-  "category": "monthly",
-  "type": "standard",
-  "productId": "6100d2153ad9a2001e40b607",
-  "subscription": true,
-  "project": "FGA",
-  "selected": true
-},
-  {
-  "title": "$2,000 for Advanced Subscription",
-  "category": "monthly",
-    "type": "advanced",
-  "productId": "6100d209444d4f0017c1008e",
-  "subscription": true,
-  "project": "FGA",
-}
-
-];
