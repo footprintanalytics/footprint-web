@@ -698,6 +698,11 @@ const chainData = [
         "value": "solana-overview",
         "publicUuid": "f45e8d8d-8b51-42d8-9d6c-4dd8396f7987",
       },
+      {
+        "label": "Tron Overview",
+        "value": "tron-overview",
+        "publicUuid": "8b795c6b-9034-45eb-87d1-1c3b59dce2fc",
+      },
     ],
   },
   /*{

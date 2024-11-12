@@ -197,6 +197,11 @@ const AboutDataCoverage = () => {
       img: getOssUrl("home-v2/chain/img-chain-solana.png"),
       link: "/research/chain/non-evm-stats/solana-overview",
     },
+    {
+      title: "Tron",
+      img: getOssUrl("home-v2/chain/img-chain-tron.png"),
+      link: "/research/chain/non-evm-stats/tron-overview",
+    },
   ]
 
   const renderChainImg = (chain) => {
