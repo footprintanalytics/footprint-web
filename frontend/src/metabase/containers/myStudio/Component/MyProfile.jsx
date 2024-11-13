@@ -17,14 +17,17 @@ import { logout } from "metabase/auth/actions";
 import * as Urls from "metabase/lib/urls";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
 import dayjs from "dayjs";
+import { useGetPaymentSubscriptionDetail } from "metabase/pricing_v2/use";
 
 const MyProfile = props => {
-  const { user, name, onLogout } = props;
+  const { user, name, onLogout, showMenu = true } = props;
 
   const personalInfoParams = {
     name: name,
     project: getProject(),
   };
+  const isProFga = window.location.pathname.startsWith("/fga/pro")
+  const { subscriptionDetailData, refetch } = useGetPaymentSubscriptionDetail(user, "fga", () => !!user && isProFga);
 
   const { isLoading, data, error } = useQuery(
     ["personalInfo", personalInfoParams],
@@ -126,10 +129,23 @@ const MyProfile = props => {
   }
   const vipInfo = user?.vipInfo;
   const dataApiVipInfo = user?.vipInfoDataApi;
+  const vipInfoFgaWithRenewals = user?.vipInfoFga?.map(vipInfo => {
+    return {
+      showCancelAutoRenewal: !!subscriptionDetailData?.list?.find(s => s.groupType === vipInfo.type),
+      productId: subscriptionDetailData?.list?.find(s => s.groupType === vipInfo.type)?.productId,
+      type: vipInfo.type,
+      validEndDate: vipInfo.validEndDate,
+      isExpire: vipInfo.isExpire,
+    }
+  })
+  const standardFgaVip = vipInfoFgaWithRenewals?.find(vipInfo => vipInfo.type === "fga_standard" && !vipInfo.isExpire)
+  const advancedFgaVip = vipInfoFgaWithRenewals?.find(vipInfo => vipInfo.type === "fga_advanced" && !vipInfo.isExpire);
+
   const showFpVip = vipInfo && vipInfo?.type !== "free";
   const showApiVip = dataApiVipInfo && dataApiVipInfo?.type !== "free";
   const getVipToolTip = (info, title) => {
-    return `${title}: ${formatTableTitle(info?.type)} plan to ${dayjs(info.validEndDate).format("YYYY-MM-DD")}`;
+    const titleStr = title ? `${title} :` : "";
+    return `${titleStr} ${formatTableTitle(info?.type)} plan to ${dayjs(info.validEndDate).format("YYYY-MM-DD")}`;
   }
 
   return (
@@ -170,6 +186,20 @@ const MyProfile = props => {
                   </div>
                 </Tooltip>
               )}
+              {standardFgaVip && (
+                <Tooltip title={getVipToolTip(standardFgaVip, "")}>
+                  <div className="flex justify-center p1">
+                    <AboutImage src={getOssUrl("/studio/img-fp-vip.png?x-oss-process=image/resize,m_fill,h_20,w_20")} style={{filter: standardFgaVip?.isExpire ? "grayscale(100%)" : ""}}/>
+                  </div>
+                </Tooltip>
+              )}
+              {advancedFgaVip && (
+                <Tooltip title={getVipToolTip(advancedFgaVip, "")}>
+                  <div className="flex justify-center p1">
+                    <AboutImage src={getOssUrl("/studio/img-api-vip.png?x-oss-process=image/resize,m_fill,h_20,w_20")} style={{filter: standardFgaVip?.isExpire ? "grayscale(100%)" : ""}}/>
+                  </div>
+                </Tooltip>
+              )}
             </div>
           )}
           {/*<SocialList
@@ -181,30 +211,34 @@ const MyProfile = props => {
             ]}
           />*/}
         </div>
-        <div className="my-profile__vertical-line"/>
-        <Dropdown
-          menu={{ items: getContent() }}
-          overlayStyle={{ borderRadius: 10, border: "1px solid #ffffff20", background: "#121728" }}
-          dropdownRender={(menu) => {
-            return (
-              <div className="my-profile__menu">
-                {menu.props.items.filter(Boolean).map(item => {
-                  return (
-                    <li key={item.key}>
-                      {item.label}
-                    </li>
-                  )
-                })}
+        {showMenu && (
+          <>
+            <div className="my-profile__vertical-line"/>
+            <Dropdown
+              menu={{ items: getContent() }}
+              overlayStyle={{ borderRadius: 10, border: "1px solid #ffffff20", background: "#121728" }}
+              dropdownRender={(menu) => {
+                return (
+                  <div className="my-profile__menu">
+                    {menu.props.items.filter(Boolean).map(item => {
+                      return (
+                        <li key={item.key}>
+                          {item.label}
+                        </li>
+                      )
+                    })}
 
+                  </div>
+                )
+              }}
+              placement="rightBottom"
+            >
+              <div className="px3 cursor-pointer">
+                <Icon name="arrow_right_simple" size={14} color="#ffffff90"/>
               </div>
-            )
-          }}
-          placement="rightBottom"
-        >
-          <div className="px3 cursor-pointer">
-            <Icon name="arrow_right_simple" size={14} color="#ffffff90"/>
-          </div>
-        </Dropdown>
+            </Dropdown>
+          </>
+        )}
       </div>
     </>
   );

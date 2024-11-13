@@ -363,7 +363,6 @@ class DashCard extends Component {
       || window.location.pathname.startsWith("/studio")
     ;
     const isProFga = window.location.pathname.startsWith("/fga/pro")
-    const isProFgaBeta = window.location.pathname.startsWith("/fga/pro_beta")
 
     const getOuterPathname = () => {
       let outerPathname = "";

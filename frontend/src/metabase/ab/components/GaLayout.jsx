@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { connect } from "react-redux";
-import _ from "lodash";
-import { Button, Card, Layout, message, Skeleton } from "antd";
+import { Layout, Skeleton } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
 import Meta from "metabase/components/Meta";
-import { StateProvider, StateContext } from "./StateProvider";
+import { StateContext, StateProvider } from "./StateProvider";
 import "../css/index.css";
 import GaSidebar from "./GaSidebar";
 import { createFgaProjectModalShowAction, loadFgaProjectList, loginModalShowAction } from "metabase/redux/control";
@@ -32,7 +31,6 @@ const LayoutView = props => {
   const isGamesManage = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-manage")
   const isProjectList = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-list")
   const isBindGame = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("bind-game")
-  const [isFirst, setFirst] = useState(true);
   const showSidebar = !props.isChart || isGamesManage || isBindGame || isProjectList;
   const defaultDesc =
     "Unlock your growth potential in a web3 world. Dive into data insights and get an edge in your marketing strategy with Footprint GA by bringing all of your Web2 and Wed3 data sources together.";
@@ -41,9 +39,8 @@ const LayoutView = props => {
   const title =
     "Growth Analytics | Unlock your growth potential in a web3 world";
   const isProFga = window.location.pathname.startsWith("/fga/pro")
-  const isProFgaBeta = window.location.pathname.startsWith("/fga/pro_beta")
 
-  const isPayStandard = !!user?.vipInfoFga?.find(vipInfo => vipInfo.type === "fga_standard")
+  const isPayStandard = !!user?.vipInfoFga?.find(vipInfo => vipInfo.type === "fga_standard" && !vipInfo.isExpire);
 
   useEffect(() => {
     const getFgaProjectChartTypeStatus = () => {
@@ -55,7 +52,19 @@ const LayoutView = props => {
     return () => clearInterval(intervalId);
   }, [projectObject]);
 
-  if (isProFga && !fgaDashboardKey && (!user || (fgaProjectList?.length <= 1) || (!isPayStandard))) {
+  if (isProFga && !fgaProjectList) {
+    return (
+      <div className="flex flex-col h-full " style={{background: '#101014', padding: 20}}>
+        <Skeleton active />
+      </div>
+    )
+  }
+  if (isProFga //限制 pro 版本fga，区分于 demo
+    && !fgaDashboardKey //主要用于刷新
+    && (!user  // 未登录
+      || fgaProjectList?.length <= 1 // 未创建项目
+      || !isPayStandard // 未购买标准版
+    )) {
     return (
       <FgaCreateProjectGuide
         {...props}
@@ -64,14 +73,6 @@ const LayoutView = props => {
         setCreateFgaProjectModalShowAction={setCreateFgaProjectModalShowAction}
         fgaProjectList={fgaProjectList}
       />
-    )
-  }
-
-  if (isProFga && !fgaProjectList) {
-    return (
-      <div className="flex flex-col h-full " style={{background: '#101014', padding: 20}}>
-        <Skeleton active />
-      </div>
     )
   }
 

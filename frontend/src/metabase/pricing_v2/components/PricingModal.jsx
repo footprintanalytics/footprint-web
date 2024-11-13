@@ -44,11 +44,12 @@ const PricingModal = ({ user, sign, subscribeOptions, visible, onClose, setCallb
         { label: "Mode", value: mode },
         { label: "Title", value: title },
       ]);*/
+      setCallback(true);
     } catch (e) {
+      setCallback(false);
     } finally {
       setLoading(false);
       onClose();
-      setCallback(true);
     }
   };
 

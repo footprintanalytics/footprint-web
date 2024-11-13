@@ -15,16 +15,19 @@ import Modal from "metabase/components/Modal";
 import LogoIcon from "metabase/components/LogoIcon";
 import EntityMenu from "metabase/components/EntityMenu";
 import { getAdminPaths } from "metabase/admin/app/selectors";
+import { getGrowthProjectPath } from "metabase/ab/utils/utils";
+import { getFgaProject } from "metabase/selectors/user";
 
 // generate the proper set of list items for the current user
 // based on whether they're an admin or not
 const mapStateToProps = state => ({
   adminItems: getAdminPaths(state),
+  projectObject: getFgaProject(state),
 });
 
 export default connect(mapStateToProps)(ProfileLink);
 
-function ProfileLink({ user, adminItems, onLogout, trigger }) {
+function ProfileLink({ user, adminItems, onLogout, trigger, projectObject }) {
   const [modalOpen, setModalOpen] = useState(null);
   // const [bugReportDetails, setBugReportDetails] = useState(null);
   const isFga = location.pathname.includes("/growth/");
@@ -48,7 +51,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
     /*const compactBugReportDetailsForUrl = encodeURIComponent(
       JSON.stringify(bugReportDetails),
     );*/
-
+    const isProFga = window.location.pathname.startsWith("/fga/pro")
     return [
       !isAB && ({
         title: t`My Studio`,
@@ -120,6 +123,11 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
         icon: null,
         link: "/market/upgrade",
         event: `Navbar;Profile Dropdown;upgrade`,
+      },
+      isProFga && {
+        title: "Account Info",
+        icon: null,
+        link: getGrowthProjectPath(projectObject?.name, "account")
       },
       {
         title: t`Sign out`,
@@ -206,4 +214,5 @@ ProfileLink.propTypes = {
   adminItems: PropTypes.array,
   onLogout: PropTypes.func.isRequired,
   trigger: PropTypes.object,
+  projectObject: PropTypes.object,
 };

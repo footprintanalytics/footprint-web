@@ -12,6 +12,7 @@ import PricingModal from "metabase/pricing_v2/components/PricingModal";
 import { FgaProductMock } from "metabase/ab/utils/data";
 import { loadCurrentUserVipFGA } from "metabase/redux/user";
 import { useGetProductInfo } from "metabase/pricing_v2/use";
+import MyProfile from "metabase/containers/myStudio/Component/MyProfile";
 
 const AccountInfo = props => {
   const { user, loadCurrentUserVipFGA } = props;
@@ -62,7 +63,6 @@ const AccountInfo = props => {
           borderRadius: 10,
           padding: 20,
           marginTop: 20,
-          minHeight: 800,
         }}
       >
         <div className=" flex flex-row justify-between w-full mb2" >
@@ -73,15 +73,12 @@ const AccountInfo = props => {
         <Card
           style={{
             width: "100%",
-            minHeight: 600,
             margin: 20,
             borderRadius: 10,
           }}
         >
-          <div className={""}>
-            <h2>Email: {user.email}</h2>
-          </div>
-          <FgaVipInfoLayout upgradeOnclick={(type) => setFgaFlowPricingOpen(type)}/>
+          <MyProfile user={user} name={user.name} showMenu={false}/>
+          {/*<FgaVipInfoLayout upgradeOnclick={(type) => setFgaFlowPricingOpen(type)}/>*/}
         </Card>
       </div>
       {renderFgaPriceModal()}

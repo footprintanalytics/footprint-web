@@ -417,7 +417,6 @@ const GaIconLayout = ({children}) => {
 }
 
 export const fga_menu_data_v2 = (businessType, project, chain, user) => {
-  const isProFgaBeta = businessType === "pro_beta"
   if (businessType === "pro" || businessType === "pro_beta") {
     const menuTabs = [
       getItem("Project Overview", "asset_overview_pro", null),
@@ -452,7 +451,6 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
       ]),
       getItem("Settings", "settings", <SettingOutlined />, [
         getItem("Project Info", "general", null),
-        getItem("Account Info", "account", null),
       ]),
     ]
     const keys = getKeys([...menuTabs]);

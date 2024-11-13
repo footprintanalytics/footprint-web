@@ -650,6 +650,8 @@ class PublicDashboard extends Component {
       header = this.handleFgaMultiAddressUiSelectHeader("project", keyProject);
       hideParametersForCustom = `${hideParametersForCustom},${keyProject.slug}`;
     }
+    // fga pro 路径下，如果 advanced plan 过期，就显示一个popup todo
+
     // const keyObjectAsset = this.getFgaMultiKeyObjectAsset();
     // if (keyObjectAsset) {
     //   header = this.handleFgaMultiAddressUiSelectHeader("asset", keyObjectAsset);

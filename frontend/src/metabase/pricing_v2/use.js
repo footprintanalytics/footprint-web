@@ -25,7 +25,7 @@ export const useGetProductInfo = (service) => {
   };
 };
 
-export const useGetPaymentSubscriptionDetail = (user, service) => {
+export const useGetPaymentSubscriptionDetail = (user, service, enabledFunction) => {
   const params = {
     "service": service || "footprint",
   }
@@ -38,7 +38,7 @@ export const useGetPaymentSubscriptionDetail = (user, service) => {
     {
       refetchOnWindowFocus: false,
       retry: 0,
-      enabled: !!user,
+      enabled: enabledFunction ? enabledFunction() : !!user,
     },
   );
   return {

@@ -73,7 +73,7 @@ const FgaVipInfoLayout = props => {
       ))}
 
       <div className="flex items-center" style={{gap: 10}}>
-        {showUpgrade && <Button onClick={() => upgradeOnclick("advanced")}>Upgrade Advanced</Button>}
+        {showUpgrade && <Button onClick={() => upgradeOnclick("fga_advanced")}>Upgrade Advanced Plan</Button>}
       </div>
     </div>
   );

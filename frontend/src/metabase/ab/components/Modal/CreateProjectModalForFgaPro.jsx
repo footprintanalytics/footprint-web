@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { connect } from "react-redux";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { loadFgaProjectList, setFgaDashboardKey, setUserExtend } from "metabase/redux/control";
-import { getUserExtend } from "metabase/selectors/control";
+import { getFgaProjectList, getUserExtend } from "metabase/selectors/control";
 import { loadCurrentFgaProjectById, loadCurrentUserVipFGA } from "metabase/redux/user";
 import { push, replace } from "react-router-redux";
 import { CHAIN_LIST } from "metabase/submit/contract/components/ContractDetailsV4";
@@ -20,9 +20,9 @@ import FgaPricingLayout from "metabase/ab/components/FgaPricingLayout";
 
 const { Option } = Select
 const CreateProjectModalForFgaPro = props => {
-  const { force, isModal = false, open, onCancel, onSuccess, loadCurrentUserVipFGA, loadFgaProjectList, loadCurrentFgaProjectById, setFgaDashboardKey, projectObject, submitButtonText, user, isOnboard, replace } = props;
+  const { force, isModal = false, open, onCancel, onSuccess, loadCurrentUserVipFGA, loadFgaProjectList, loadCurrentFgaProjectById, setFgaDashboardKey, projectObject, submitButtonText, user, isOnboard, fgaProjectList } = props;
   const [form] = Form.useForm();
-  const isProFgaBeta = window.location.pathname.startsWith("/fga/pro_beta")
+  const isPayStandard = !!user?.vipInfoFga?.find(vipInfo => vipInfo.type === "fga_standard" && !vipInfo.isExpire);
   const steps = [
     {
       title: 'Input your Project Name',
@@ -37,7 +37,7 @@ const CreateProjectModalForFgaPro = props => {
       content: 'third-content',
     },
   ].filter(Boolean);
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(!isPayStandard && fgaProjectList?.length > 1 ? 2 : 0); // 0: create project, 1: confirm project info, 2: pricing 如果用户已经创建 project，则在2，否则在0
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
   const [loading, setLoading] = useState(!isModal);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -45,13 +45,6 @@ const CreateProjectModalForFgaPro = props => {
   const [projectId, setProjectId] = useState();
   const [contractResult, setContractResult] = useState([]);
   const [projectName, setProjectName] = useState();
-
-  useEffect(() => {
-    console.log("projectObject", projectObject)
-    if (isOnboard && (projectObject && projectObject?.id !== 1) && isProFgaBeta) {
-      setCurrent(2)
-    }
-  }, [projectObject])
 
   useEffect(() => {
     if (!open) {
@@ -382,6 +375,7 @@ const mapStateToProps = state => {
     user: getUser(state),
     userExtend: getUserExtend(state),
     projectObject: getFgaProject(state),
+    fgaProjectList: getFgaProjectList(state),
   };
 };
 
