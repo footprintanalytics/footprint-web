@@ -5,6 +5,13 @@ import { getOssUrl } from "metabase/lib/image";
 const AboutDataTrusted = () => {
   let data = [
     {
+      name: "Gabriela Castillo Areco",
+      desc: "RootstockLabs",
+      post: "Data Lead",
+      img: "home-v2/img_trusted_rootstock.png?1=1",
+      detail: "Footprint Analytics’ SQL service is incredibly intuitive, with well-crafted documentation and a top-notch tool for contract submission and decoding, excelling in both speed and completeness. The team is highly professional and technical, consistently providing thorough and effective answers to any questions."
+    },
+    {
       name: "Heetae Lyu",
       desc: "NHN Corporation",
       post: "CTO",
@@ -49,15 +56,7 @@ const AboutDataTrusted = () => {
       detail: "Thanks to Footprint's SQL API, we have been able to efficiently access vast amounts of well-structured blockchain and market data across multiple chains. This has enabled us to power our analysis of Web3 gaming data and discover valuable insights.\n" +
         "Above is API focused, but I've really appreciated the Footprint teams' support. The team is always quick to help and resolve any issues we have. This is a great part of using Footprint services."
     },
-    {
-      name: "Gabriela Castillo Areco",
-      desc: "RootstockLabs",
-      post: "Data Lead",
-      img: "home-v2/img_trusted_rootstock.png?1=1",
-      detail: "Footprint Analytics’ SQL service is incredibly intuitive, with well-crafted documentation and a top-notch tool for contract submission and decoding, excelling in both speed and completeness. The team is highly professional and technical, consistently providing thorough and effective answers to any questions."
-    }
   ]
-  data = [data[data.length - 1], ...data]
   const newData = Array(30).fill().map(() => JSON.parse(JSON.stringify(data))).flat()
 
   const [hasVisited, setHasVisited] = useState(false);

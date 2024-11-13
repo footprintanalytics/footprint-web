@@ -306,6 +306,10 @@ export function getGrowthProjectPath(project: string, menu?: string) {
   return `/fga/${location.pathname.split("/")[2]}/project/${project}/${menu ?? ""}`;
 }
 
+export function getGrowthRoot() {
+  return `/fga/${location.pathname.split("/")[2]}/`;
+}
+
 export const getAbWeb3DashboardCase = (location: any) => {
   const pathArray = location?.pathname?.split("/")?.filter(i => i);
   const pathLength = pathArray?.length;
