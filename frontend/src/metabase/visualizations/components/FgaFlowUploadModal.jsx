@@ -134,6 +134,9 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
             setCurrent(current + 1)
           }}
           file={file}
+          onUploadAgainClick={() => {
+            setCurrent(0)
+          }}
         />
       ),
       onClick: () => setCurrent(1),
