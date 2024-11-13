@@ -78,7 +78,7 @@ const AccountInfo = props => {
           }}
         >
           <MyProfile user={user} name={user.name} showMenu={false}/>
-          <FgaVipInfoLayout upgradeOnclick={(type) => setFgaFlowPricingOpen(type)}/>
+          {/*<FgaVipInfoLayout upgradeOnclick={(type) => setFgaFlowPricingOpen(type)}/>*/}
         </Card>
       </div>
       {renderFgaPriceModal()}
