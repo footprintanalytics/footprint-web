@@ -5,7 +5,7 @@ import { saveAs } from "file-saver";
 import api from "metabase/lib/api";
 import { reportAPI } from "metabase/lib/arms";
 import { refreshCardData } from "metabase/dashboard/actions/cards";
-import { getLatestGAProjectId } from "metabase/lib/project_info";
+import { getLatestGAProjectId, getServiceObject, getServiceText } from "metabase/lib/project_info";
 
 axios.defaults.baseURL = api.basename;
 axios.defaults.headers.put["Content-Type"] = "application/json; charset=utf-8";
@@ -38,6 +38,8 @@ axios.interceptors.request.use(config => {
   const projectIdObject = latestGAProjectId
     ? { fgaProjectId: latestGAProjectId }
     : {};
+  const serviceText = getServiceText()
+  const serviceObject = serviceText ? { service: serviceText } : {};
   return {
     ...config,
     ...{ requestime: requestime },
@@ -47,6 +49,7 @@ axios.interceptors.request.use(config => {
         ...headers?.common,
         client_request_time: requestime,
         ...projectIdObject,
+        ...serviceObject,
       },
     },
   };

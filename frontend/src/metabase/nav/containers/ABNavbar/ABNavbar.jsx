@@ -42,7 +42,7 @@ import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/ab/components/Modal/CreateProjectModal";
-import { checkIsNeedContactUs, getGrowthProjectPath, isABPath } from "metabase/ab/utils/utils";
+import { checkIsNeedContactUs, getGrowthProjectPath, getGrowthRoot, isABPath } from "metabase/ab/utils/utils";
 import { getContext, getPath, getUser } from "../selectors";
 
 import { isDark } from "../../../dashboard/components/utils/dark";
@@ -167,12 +167,12 @@ class ABNavbar extends Component {
         <ul className="wrapper flex align-center">
           <li>
             <Link
-              to="/fga"
+              to={getGrowthRoot()}
               data-metabase-event={"Navbar;Logo"}
               className="NavItem cursor-pointer flex align-center"
               onClick={e => {
                 e.preventDefault();
-                this.goLink(e, "/fga");
+                this.goLink(e, getGrowthRoot());
               }}
             >
               <LogoIcon className="text-brand my2" />

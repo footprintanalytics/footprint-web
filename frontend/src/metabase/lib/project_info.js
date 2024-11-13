@@ -9,6 +9,7 @@ export const isDefi360 = project => {
   // return (project ? project : getProject()) === "defi360";
 };
 
+//为了动态替换 sql 的 table 参数，for web2
 export const getLatestGAProjectId = () => {
   // return null;
   const userId = window.localStorage.getItem("GAUserId");
@@ -29,3 +30,12 @@ export const getLatestGAProjectId = () => {
   } catch (e) {}
   return projectId;
 };
+
+// 为了区分哪个 service 来的
+export const getServiceText = () => {
+  let serviceText = ""
+  if (window.location.pathname.startsWith("/fga/pro")) {
+    serviceText = "fga";
+  }
+  return serviceText;
+}
