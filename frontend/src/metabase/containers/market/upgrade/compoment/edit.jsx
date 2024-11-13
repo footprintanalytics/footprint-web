@@ -33,6 +33,14 @@ const EditUserUpgradeModal = props => {
         value: "scale_trial",
         label: "Scale Trial",
       },
+      {
+        value: "fga_standard",
+        label: "FGA Standard",
+      },
+      {
+        value: "fga_advanced",
+        label: "FGA Advanced",
+      },
     ]
     return (
       <React.Fragment>
