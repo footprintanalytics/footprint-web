@@ -334,7 +334,7 @@ const CreateProjectModalForFgaPro = props => {
     }
     return (
       <div className="flex flex-column" style={{ width: "100%", gap: 20 }}>
-        <h2>Create Project</h2>
+        <h2>Get Started</h2>
         <Steps current={current} items={items} onChange={(index) => {
           if (index === 0 && current === 1) {
             setCurrent(index)

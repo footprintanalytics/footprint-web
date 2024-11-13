@@ -312,11 +312,10 @@ const Pricing = props => {
         )}
       </div>
       {showPaymentModal && renderPaymentModel()}
-      {showPaymentCallbackModal && (
-        <PaymentCallbackModal
-          onClose={() => setShowPaymentCallbackModal(false)}
-        />
-      )}
+      <PaymentCallbackModal
+        open={showPaymentCallbackModal}
+        onClose={() => setShowPaymentCallbackModal(false)}
+      />
     </div>
   );
 };

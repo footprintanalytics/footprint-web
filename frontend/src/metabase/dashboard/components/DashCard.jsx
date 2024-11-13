@@ -800,6 +800,7 @@ class DashCard extends Component {
       return (
         <PaymentCallbackModal
           open={this.state.fgaFlowPricingCallBackOpen}
+          onClose={() => this.setState({ fgaFlowPricingCallBackOpen: false })}
           isModal={true}
           onCompletedClick={() => {
             message.success("Payment success")
@@ -822,7 +823,9 @@ class DashCard extends Component {
             this.setState({fgaFlowPricingOpen: false})
           }}
           setCallback={(result) => {
-            this.setState({fgaFlowPricingOpen: false, fgaFlowPricingCallBackOpen: true})
+            if (result) {
+              this.setState({ fgaFlowPricingOpen: false, fgaFlowPricingCallBackOpen: true })
+            }
           }}
         />
       )

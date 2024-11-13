@@ -739,7 +739,7 @@ const Index = ({
           onClose={() => setVisible(null)}
         />
       )}
-      {callback && <PaymentCallbackModal onClose={() => setCallback(false)} />}
+      <PaymentCallbackModal open={callback} onClose={() => setCallback(false)} />
     </>
   );
 };

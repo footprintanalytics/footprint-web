@@ -10,7 +10,7 @@ import { debounce } from "lodash";
 const FgaPricingLayout = (props) => {
   const { user, onSuccess, isModal = false, open, onClose, type = "fga_standard" } = props
   const [activeKey, setActiveKey] = useState("payment");
-  const { isLoading, data } = useGetProductInfo("fga");
+  const { data } = useGetProductInfo("fga");
   const [isCompleteLoading, setCompleteLoading] = useState(false);
   const onChange = (value) => {
     setActiveKey(value);
@@ -21,9 +21,11 @@ const FgaPricingLayout = (props) => {
     setCompleteLoading(true)
     const fgaVipInfoResult = await getVipInfoV2("fga")
     setCompleteLoading(false)
-    const hasStandardPay = fgaVipInfoResult?.find(vipInfo => vipInfo.type === "fga_standard")
+    const hasStandardPay = fgaVipInfoResult?.find(vipInfo => vipInfo.type === "fga_standard" && !vipInfo.isExpire)
     if (hasStandardPay) {
       onSuccess?.()
+    } else {
+      message.info("Payment is not completed yet, please try again later.")
     }
   }
 
