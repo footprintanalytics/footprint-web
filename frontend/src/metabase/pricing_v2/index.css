@@ -278,8 +278,11 @@
 .Pricing_modal li {
   display: flex;
   padding: 24px 0;
-  border-bottom: 1px solid #dcdee4;
   cursor: pointer;
+}
+
+.Pricing_modal li:not(:last-child) {
+  border-bottom: 1px solid #dcdee4;
 }
 
 .Pricing_modal-option {

@@ -107,7 +107,7 @@ function errorHandle(err) {
           err.response.status || 601,
           err.message,
         );
-        if (!config?.params?.silentFp) {
+        if (!config?.silentFp && !config?.params?.silentFp) {
           message.error("Service exception, please contact the administrator");
         }
     }

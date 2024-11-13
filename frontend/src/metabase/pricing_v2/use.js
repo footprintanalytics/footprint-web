@@ -1,15 +1,17 @@
-import { getProductInfo, paymentSubscriptionDetail } from "metabase/new-service";
+import { getProductInfo, getProductInfoV2, paymentSubscriptionDetail } from "metabase/new-service";
 import { useQuery } from "react-query";
 
 export const useGetProductInfo = (service) => {
-  const params = {
+  const params = service === "fga" ? {
+    "project": service,
+  } : {
     "service": service || "footprint",
   }
 
   const { isLoading, data } = useQuery(
     ["getProductInfo", params],
     async () => {
-      return getProductInfo(params);
+      return service === "fga" ? getProductInfoV2(params) : getProductInfo(params);
     },
     {
       refetchOnWindowFocus: false,
@@ -23,12 +25,12 @@ export const useGetProductInfo = (service) => {
   };
 };
 
-export const useGetPaymentSubscriptionDetail = (user, service) => {
+export const useGetPaymentSubscriptionDetail = (user, service, enabledFunction) => {
   const params = {
     "service": service || "footprint",
   }
 
-  const { isLoading, data } = useQuery(
+  const { isLoading, data, refetch } = useQuery(
     ["paymentSubscriptionDetail", params],
     async () => {
       return paymentSubscriptionDetail(params);
@@ -36,11 +38,12 @@ export const useGetPaymentSubscriptionDetail = (user, service) => {
     {
       refetchOnWindowFocus: false,
       retry: 0,
-      enabled: !!user,
+      enabled: enabledFunction ? enabledFunction() : !!user,
     },
   );
   return {
     isSubscriptionDetailLoading: isLoading,
     subscriptionDetailData: data,
+    refetch,
   };
 };

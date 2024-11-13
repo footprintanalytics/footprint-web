@@ -36,11 +36,11 @@
 
 .payment-model__desc {
   font-size: 16px;
-  width: 480px;
+  width: 380px;
+  margin: 0 auto;
   padding: 20px 50px 0 50px;
   text-align: center;
   line-height: 1.4;
-  margin-bottom: 0;
 }
 
 .payment-model__category {

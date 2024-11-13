@@ -80,6 +80,7 @@ import FgaPricingLayout from "metabase/ab/components/FgaPricingLayout";
 import { FgaProductMock } from "metabase/ab/utils/data";
 import PricingModal from "metabase/pricing_v2/components/PricingModal";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
+import DashCardPricingModal from "metabase/dashboard/components/DashCardPricingModal";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -362,7 +363,6 @@ class DashCard extends Component {
       || window.location.pathname.startsWith("/studio")
     ;
     const isProFga = window.location.pathname.startsWith("/fga/pro")
-    const isProFgaBeta = window.location.pathname.startsWith("/fga/pro_beta")
 
     const getOuterPathname = () => {
       let outerPathname = "";
@@ -432,29 +432,25 @@ class DashCard extends Component {
         return "createProject"
       }
       // const isNotStandardUser = props.userExtend?.plan !== 'standard' && props.userExtend?.plan !== 'advanced'
-      const isNotStandardUser = false
+      /*const isNotStandardUser = false
       const standardCard = isStandardCard(cardId)
       // 如果当前用户不是付费用户
       if (isNotStandardUser && standardCard) {
         return 'pay'
-      }
-      let isExpired = false
-      if (props.user?.vipInfoFga) {
-        const vipDate = new Date(props.user?.vipInfoFga?.validEndDate).getTime()
-        const nowDate = new Date().getTime()
-        console.log("vipDatevipDate", vipDate, nowDate)
-        if (vipDate < nowDate) {
-          isExpired = true
-        }
-      }
-      if (isExpired) {
+      }*/
+      const payStandardPlan = user?.vipInfoFga?.find(vipInfo => vipInfo.type === "fga_standard")
+      // 判断 standard 是否过期
+      if (payStandardPlan?.isExpire) {
         return 'expiredPay'
       }
-      const isNotAdvancedUser = user?.vipInfoFga?.type !== "advanced"
-      //props.userExtend?.plan !== 'advanced'
+      const payAdvancedPlan = user?.vipInfoFga?.find(vipInfo => vipInfo.type === "fga_advanced")
       const advancedCard = isAdvancedCard(cardId)
-      // 如果当前用户是standard付费用户 并且当前卡片是advanced卡片
-      if (isNotAdvancedUser && advancedCard) {
+      // 判断 advanced 是否过期
+      if (payAdvancedPlan?.isExpire && advancedCard) {
+        return 'expiredAdvancedPay'
+      }
+      // 如果当前用户不是standard付费用户 并且当前卡片是advanced卡片
+      if (!payAdvancedPlan && advancedCard) {
         return 'advancedPay'
       }
       const web2Card = isWeb2Card(cardId)
@@ -589,7 +585,7 @@ class DashCard extends Component {
             extra={[
               <Button className="text-white" key='xxx' onClick={() => {
                 // message.info("Please contact us to upgrade your plan")
-                this.setState({fgaFlowPricingOpen: true})
+                this.setState({fgaFlowPricingOpen: "fga_advanced"})
                 /*Modal.info({
                   icon: null,
                   title: "Choose a plan",
@@ -626,11 +622,30 @@ class DashCard extends Component {
             cardId={dashcard.card.id}
             height={this.props.height}
             width={this.props.gridItemWidth}
-            subTitle={<div className={"text-white"}> <LockFilled className="mr1" />your plan is expired, pay to unlock more exclusive insights</div>}
+            subTitle={<div className={"text-white"}> <LockFilled className="mr1" />Your standard plan is expired, pay to unlock more exclusive insights</div>}
             extra={[
               <Button className="text-white" key='xxx' onClick={() => {
                 // message.info("Please contact us to upgrade your plan")
-                this.setState({fgaFlowPricingOpen: true})
+                this.setState({fgaFlowPricingOpen: "fga_standard"})
+              }}>
+                Upgrade
+              </Button>
+            ]}
+          />
+        )
+      }
+      if (type === "expiredAdvancedPay") {
+        return (
+          <FgaProResult
+            card={dashcard.card}
+            cardId={dashcard.card.id}
+            height={this.props.height}
+            width={this.props.gridItemWidth}
+            subTitle={<div className={"text-white"}> <LockFilled className="mr1" />Your advanced plan is expired, pay to unlock more exclusive insights</div>}
+            extra={[
+              <Button className="text-white" key='xxx' onClick={() => {
+                // message.info("Please contact us to upgrade your plan")
+                this.setState({fgaFlowPricingOpen: "fga_advanced"})
               }}>
                 Upgrade
               </Button>
@@ -715,7 +730,9 @@ class DashCard extends Component {
             subTitle={<div className={"text-white"}> <LockFilled className="mr1" />Submit project web3 info</div>}
             extra={[
               <Button className="text-white" key='xxx' onClick={() => {
-                this.props.setCreateFgaProjectModalShowAction({ show: true, projectObject: this.props.projectObject, submitButtonText: `Submit ${getWeb3TypeText(dashcard.card.id)}` });
+                this.props.setCreateFgaProjectModalShowAction(
+                  { show: true, projectObject: this.props.projectObject, submitButtonText: `Submit ${getWeb3TypeText(dashcard.card.id)}` }
+                );
                 // Modal.info({
                 //   icon: null,
                 //   width: 600,
@@ -783,56 +800,34 @@ class DashCard extends Component {
       return (
         <PaymentCallbackModal
           open={this.state.fgaFlowPricingCallBackOpen}
+          onClose={() => this.setState({ fgaFlowPricingCallBackOpen: false })}
           isModal={true}
           onCompletedClick={() => {
-            // here mock the result
-            window.localStorage.setItem("FGAVipInfo", JSON.stringify({
-              "level": 2,
-              "type": "advanced",
-              "validEndDate": "2024-11-22T07:46:40.901Z"
-            }))
-
+            message.success("Payment success")
             this.props.loadCurrentUserVipFGA()
-            this.props.setFgaDashboardKey({ key: "pro2112" });
+            this.props.setFgaDashboardKey({ key: "pro-pay-success" });
+            this.setState({ fgaFlowPricingCallBackOpen: false})
           }}
         />
       )
     }
 
     const renderFgaPriceModal = () => {
+      const type = this.state.fgaFlowPricingOpen
       return (
-        <PricingModal
-          isModal={true}
-          visible={this.state.fgaFlowPricingOpen}
-          showTitle={true}
-          user={user}
-          subscribeOptions={FgaProductMock.filter((item) => item.type === "advanced")}
+        <DashCardPricingModal
+          user={this.props.user}
+          open={this.state.fgaFlowPricingOpen}
+          type={type}
           onClose={() => {
             this.setState({fgaFlowPricingOpen: false})
           }}
           setCallback={(result) => {
-            this.setState({fgaFlowPricingOpen: false, fgaFlowPricingCallBackOpen: true})
+            if (result) {
+              this.setState({ fgaFlowPricingOpen: false, fgaFlowPricingCallBackOpen: true })
+            }
           }}
         />
-        // <FgaPricingLayout
-        //   open={this.state.fgaFlowPricingOpen}
-        //   isModal={true}
-        //   user={user}
-        //   type={"advanced"}
-        //   onCancel={() => {
-        //     this.setState({fgaFlowPricingOpen: false})
-        //   }}
-        //   onSuccess={() => {
-        //     window.localStorage.setItem("FGAVipInfo", JSON.stringify({
-        //       "level": 2,
-        //       "type": "advanced",
-        //       "validEndDate": "2024-11-22T07:46:40.901Z"
-        //     }))
-        //     message.success("Payment success")
-        //     this.setState({fgaFlowPricingOpen: false})
-        //     this.props.setFgaDashboardKey()
-        //   }}
-        // />
       )
     }
 

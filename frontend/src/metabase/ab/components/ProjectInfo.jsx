@@ -33,7 +33,7 @@ const ProjectInfo = props => {
   const onTabChange = key => {
     // console.log(key);
   };
-  const enableTour = true;
+  const enableTour = false;
   const steps = [
     {
       title: 'Submit Contract',

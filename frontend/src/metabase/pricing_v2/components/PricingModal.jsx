@@ -1,22 +1,31 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button, Checkbox, Modal, Tooltip } from "antd";
 import { payProduct } from "metabase/new-service";
 import { getOssUrl } from "metabase/lib/image";
 import Icon from "metabase/components/Icon";
 import Link from "metabase/core/components/Link";
+import { get, some } from "lodash";
 const PricingModal = ({ user, sign, subscribeOptions, visible, onClose, setCallback, isModal = true, showTitle = true }) => {
   const termsRef = useRef();
   const [termsCheck, setTermsCheck] = useState(false);
   const [options, setOptions] = useState(subscribeOptions);
   const [loading, setLoading] = useState(false);
   const [auto, setAuto] = useState(true);
-  const { subscription } = options?.find(item => item.selected) || {};
+  const { subscription } = options?.find(item => item.selected) || get(options, 0) || {};
+
+  useEffect(() => {
+    if (some(subscribeOptions, "selected")) {
+      setOptions(subscribeOptions);
+    } else {
+      setOptions(subscribeOptions.map((item, index) => ({ ...item, selected: !index})))
+    }
+  }, [subscribeOptions]);
 
   const onPay = async () => {
     if (!user?.id) {
       onClose();
-      sign();
+      sign?.();
       return;
     }
     setLoading(true);
@@ -35,11 +44,12 @@ const PricingModal = ({ user, sign, subscribeOptions, visible, onClose, setCallb
         { label: "Mode", value: mode },
         { label: "Title", value: title },
       ]);*/
+      setCallback(true);
     } catch (e) {
+      setCallback(false);
     } finally {
       setLoading(false);
       onClose();
-      setCallback(true);
     }
   };
 

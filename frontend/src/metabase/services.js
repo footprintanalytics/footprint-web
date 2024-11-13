@@ -4,6 +4,7 @@ import { IS_EMBED_PREVIEW } from "metabase/lib/embed";
 import Question from "metabase-lib/Question";
 import { getPivotColumnSplit } from "metabase-lib/queries/utils/pivot";
 import { injectTableMetadata } from "metabase-lib/metadata/utils/tables";
+import { isProduction } from "metabase/env";
 
 // use different endpoints for embed previews
 const embedBase = IS_EMBED_PREVIEW ? "/api/preview_embed" : "/api/embed";
@@ -187,7 +188,7 @@ export const PublicApi = {
   cardQueryPivot: GET(PIVOT_PUBLIC_PREFIX + "card/:uuid/query"),
   // dashboard: GET("/api/public/dashboard/:uuid"),
   dashboardCardQuery: GET(
-    "/api/v1/public/dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
+    isProduction ? "/api/v1/public/dashboard/:uuid/dashcard/:dashcardId/card/:cardId": "https://vip.footprint.network/api/v1/public/dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
   ),
   dashboardCardQueryDataApiStat: GET(
     "/api/v1/public/dashboard/:uuid/dashcard/:dashcardId/card/:cardId/queryWithId",
@@ -196,7 +197,7 @@ export const PublicApi = {
     PIVOT_PUBLIC_PREFIX + "dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
   ),
   card: GET("/api/v1/public/card/:uuid"),
-  dashboard: GET("/api/v1/public/dashboard/:uuid"),
+  dashboard: GET(isProduction ? "/api/v1/public/dashboard/:uuid" : "https://vip.footprint.network/api/v1/public/dashboard/:uuid"),
   dashboardCardSecret: GET(
     "/api/v1/public/dashboard/:uuid/card/:cardUuid/secret",
   ),

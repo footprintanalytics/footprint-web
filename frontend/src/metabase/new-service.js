@@ -366,8 +366,8 @@ export const getDataApiVipInfo = async () => {
   return GET(`/api/v1/user/vip/dataApi`, { project: getProject() });
 };
 
-export const getFgaVipInfo = async () => {
-  return GET(`mock/api/v1/user/vip/fga`, { project: getProject() });
+export const getVipInfoV2 = async (project) => {
+  return GET(`/api/v1/user/vip/v2`, { project: project });
 };
 
 export const getUserInterests = async () => {
@@ -380,6 +380,10 @@ export const postUserInterests = async params => {
 
 export const getProductInfo = async params => {
   return POST(`/api/v1/payment/product/list`, params);
+};
+
+export const getProductInfoV2 = async params => {
+  return GET(`/api/v1/product/list`, params);
 };
 
 export const payProduct = async params => {
@@ -882,7 +886,7 @@ export const getMediaTagTop = (params, config) => {
 };
 
 export const getProjectChartTypeStatus = async params => {
-  return POST(`/api/v1/fga/event/data/integration/chart/status`, params, { silentFp: true, silent: true });
+  return POST(`/api/v1/fga/event/data/integration/chart/status`, params, { silentFp: true, silent: true } );
   // return GET(`/mock/api/v1/project/protocol/detail-by-id`, params);
 };
 
