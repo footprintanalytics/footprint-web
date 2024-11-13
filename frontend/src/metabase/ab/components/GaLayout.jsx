@@ -52,6 +52,20 @@ const LayoutView = props => {
     return () => clearInterval(intervalId);
   }, [projectObject]);
 
+  if (isProFga //限制 pro 版本fga，区分于 demo
+    && !fgaDashboardKey //主要用于刷新
+    && !user) {
+    return(
+      <FgaCreateProjectGuide
+        {...props}
+        user={user}
+        setLoginModalShow={setLoginModalShow}
+        setCreateFgaProjectModalShowAction={setCreateFgaProjectModalShowAction}
+        fgaProjectList={fgaProjectList}
+      />
+    )
+  }
+
   if (isProFga && !fgaProjectList) {
     return (
       <div className="flex flex-col h-full " style={{background: '#101014', padding: 20}}>
@@ -61,8 +75,8 @@ const LayoutView = props => {
   }
   if (isProFga //限制 pro 版本fga，区分于 demo
     && !fgaDashboardKey //主要用于刷新
-    && (!user  // 未登录
-      || fgaProjectList?.length <= 1 // 未创建项目
+      && (
+        fgaProjectList?.length <= 1 // 未创建项目
       || !isPayStandard // 未购买标准版
     )) {
     return (
