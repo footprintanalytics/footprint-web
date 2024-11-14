@@ -58,7 +58,7 @@ import { Button, Form, Input, message, Modal, Radio, Spin } from "antd";
 import { fgaPlanMapping } from "metabase/visualizations/util/data";
 import FgaProResult from "metabase/visualizations/components/FgaProResult";
 import FgaFlowUploadModal from "metabase/visualizations/components/FgaFlowUploadModal";
-import { getFgaProject } from "metabase/selectors/user";
+import { getFgaProject, getFgaChartTypeStatus } from "metabase/selectors/user";
 import {
   createFgaProjectModalShowAction,
   loginModalShowAction,
@@ -81,6 +81,7 @@ import { FgaProductMock } from "metabase/ab/utils/data";
 import PricingModal from "metabase/pricing_v2/components/PricingModal";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
 import DashCardPricingModal from "metabase/dashboard/components/DashCardPricingModal";
+import { getFgaFlowType } from "metabase/ab/utils/mapping-utils";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -418,62 +419,14 @@ class DashCard extends Component {
       return this.state.fgaFlowType
 
     }*/
-    const getFgaFlowType = (props, cardId) => {
-      if (!cardId) {
-        return null
-      }
-      const userId = props.user?.id
-      if (!userId) {
-        return "login"
-      }
-      // 如果 projectid 为空 创建一个 project
-      if (!props.projectObject?.id) {
-      // if (!props.userExtend?.project) {
-        return "createProject"
-      }
-      // const isNotStandardUser = props.userExtend?.plan !== 'standard' && props.userExtend?.plan !== 'advanced'
-      /*const isNotStandardUser = false
-      const standardCard = isStandardCard(cardId)
-      // 如果当前用户不是付费用户
-      if (isNotStandardUser && standardCard) {
-        return 'pay'
-      }*/
-      const payStandardPlan = user?.vipInfoFga?.find(vipInfo => vipInfo.type === "fga_standard")
-      // 判断 standard 是否过期
-      if (payStandardPlan?.isExpire) {
-        return 'expiredPay'
-      }
-      const payAdvancedPlan = user?.vipInfoFga?.find(vipInfo => vipInfo.type === "fga_advanced")
-      const advancedCard = isAdvancedCard(cardId)
-      // 判断 advanced 是否过期
-      if (payAdvancedPlan?.isExpire && advancedCard) {
-        return 'expiredAdvancedPay'
-      }
-      // 如果当前用户不是standard付费用户 并且当前卡片是advanced卡片
-      if (!payAdvancedPlan && advancedCard) {
-        return 'advancedPay'
-      }
-      const web2Card = isWeb2Card(cardId)
-      const web2DataCreated = isWeb2DataCreated(cardId, this.props.chartTypeStatus)
-      // 如果当前card是web2，web2 数据没有创建 {
-      if (web2Card && !web2DataCreated) {
-        return 'integration'
-      }
-      const web3Card = isWeb3Card(cardId)
-      const web3DataCreated = isWeb3DataCreated(cardId, this.props.projectObject)
-      // // 如果当前card是web3，web3 数据没有创建 {
-      if (web3Card && !web3DataCreated) {
-        return 'submitProjectInfo'
-      }
-      return 'normal'
-    }
+    const type = getFgaFlowType(this.props.user, this.props.projectObject, series[0]?.card?.id, this.props.chartTypeStatus)
 
     const isCustom = !['text', 'image', 'filter'].includes(series[0]?.card?.display) &&
       // !(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935)) &&
       // !(this.props.showNormalChartData && (series[0]?.card?.id === 50934 || series[0]?.card?.id === 50935)) &&
       (
         window.location.pathname.startsWith("/fga/pro")
-        && getFgaFlowType(this.props, series[0]?.card?.id) !== 'normal'
+        && type !== 'normal'
         // [186,10, 52, 37,25].includes(this.props?.user?.id) &&
         // window.location.pathname.includes("acquisition_users_pro") &&
         // (getFgaFlowType() === 'pay' || getFgaFlowType() === 'integration' || getFgaFlowType() === 'login' || getFgaFlowType() === 'loading')
@@ -760,7 +713,6 @@ class DashCard extends Component {
     }
 
     const renderCustomLayout = () => {
-      const type = getFgaFlowType(this.props, series[0]?.card?.id)
       const cardName = get(series[0]?.card, 'originalCardName') || get(series[0]?.card, 'name')
       // const card = this.props?.dashcard?.card
       // const fgaFlowType = this.getFgaFlowType(this.props, card?.id)
@@ -1451,7 +1403,7 @@ const mapStateToProps = state => ({
   projectObject: getFgaProject(state),
   realtimeList: getRealtimeList(state),
   userExtend: getUserExtend(state),
-  chartTypeStatus: state?.currentFgaProject?.chartTypeStatus
+  chartTypeStatus: getFgaChartTypeStatus(state),
 });
 
 const mapDispatchToProps = {

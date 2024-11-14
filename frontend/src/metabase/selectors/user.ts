@@ -6,6 +6,7 @@ import type { State } from "metabase-types/store";
 export const getUser = (state: State) => state.currentUser;
 
 export const getFgaProject = (state: State) => state.currentFgaProject;
+export const getFgaChartTypeStatus = (state: State) => get(state.currentFgaProject, "chartTypeStatus");
 
 export const getUserId = createSelector([getUser], user => user?.id);
 

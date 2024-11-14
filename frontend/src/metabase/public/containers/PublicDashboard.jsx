@@ -45,13 +45,14 @@ import EmbedFrame from "../components/EmbedFrame";
 import Button from "metabase/core/components/Button/Button";
 import { loginModalShowAction } from "metabase/redux/control";
 import QueryCopyModal from "metabase/components/QueryCopyModal";
-import { getUser } from "metabase/selectors/user";
+import { getFgaChartTypeStatus, getUser } from "metabase/selectors/user";
 import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { isABPath, isBusinessTypePath, isFGAVCPath } from "metabase/ab/utils/utils";
 import { refreshCurrentUser } from "metabase/redux/user";
 import Link from "metabase/core/components/Link";
 import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
+import { getFgaFlowType } from 'metabase/ab/utils/mapping-utils';
 
 const mapStateToProps = (state, props) => {
   const user = getUser(state);
@@ -277,6 +278,7 @@ const mapStateToProps = (state, props) => {
     parameters: parameters,
     parameterValues: parameterValues,
     user: getUser(state),
+    chartTypeStatus: getFgaChartTypeStatus(state),
     filterChainFunction: filterChainFunction,
   };
 };
@@ -300,31 +302,21 @@ class PublicDashboard extends Component {
     };
   }
   _fetchDashboardCardData = debounce(
-    () => {
+    (params = {}) => {
       const { ignore_cache } = {
         ...parseHashOptions(location.hash),
       };
-      this.props.fetchDashboardCardData({ reload: false, clear: true, ignoreCache: this.props.ignoreCache || !!ignore_cache });
+      this.props.fetchDashboardCardData({
+        reload: false,
+        clear: true,
+        ignoreCache: params.ignoreCache || this.props.ignoreCache || !!ignore_cache,
+        cardIds: params.cardIds,
+      });
     },
     100,
     {
       leading: false,
       trailing: true,
-    },
-  );
-
-  _fetchDashboardCardDataRefresh = debounce(
-    params => {
-      this.props.fetchDashboardCardData({
-        reload: false,
-        clear: true,
-        ignoreCache: true,
-      });
-    },
-    1000,
-    {
-      leading: true,
-      trailing: false,
     },
   );
 
@@ -368,6 +360,7 @@ class PublicDashboard extends Component {
       filterChainFunction,
       params: { dashboardId, uuid, token },
     } = this.props;
+    const isProFga = window.location.pathname.startsWith("/fga/pro")
     let publicUuid;
     if (!dashboardId) {
       publicUuid = parseTitleId(uuid).id;
@@ -380,7 +373,15 @@ class PublicDashboard extends Component {
     initialize();
     try {
       await fetchDashboard(dashboardId || publicUuid || token, location.query);
-      this._fetchDashboardCardData();
+      // fga 需要根据需要限制 card 的请求
+      const cardIds = isProFga ? this.props.dashboard?.ordered_cards?.map(card => {
+        const flowType = getFgaFlowType(this.props.user, this.props.project, card.card_id, this.props.chartTypeStatus)
+        if (flowType && (flowType === "normal" || flowType === "")) {
+          return card.card_id
+        }
+      }).filter(Boolean): null
+
+      this._fetchDashboardCardData({ cardIds });
 
       const keyObject = this.getFgaMultiKeyObject();
       if (keyObject) {
@@ -470,7 +471,7 @@ class PublicDashboard extends Component {
               });
               return
             }
-            this._fetchDashboardCardDataRefresh({ ignoreCache: true });
+            this._fetchDashboardCardData({ ignoreCache: true });
           }}
         />
       </Tooltip>

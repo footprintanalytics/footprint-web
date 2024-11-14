@@ -392,7 +392,7 @@ class ABNavbar extends Component {
         </>
       );
     };
-
+    
     const onCreateAction = modal => {
       trackStructEvent(`click Navbar Add My Project`);
       console.log("onCreateAction");
@@ -478,7 +478,8 @@ class ABNavbar extends Component {
             onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
-              this.goLink(e, getGrowthRoot());
+              const path = isGrowthFga ? "/growthly" : "/fga";
+              this.goLink(e, `${path}`);
             }}
           >
             <div className="flex align-center" style={{ lineHeight: 1.2 }}>

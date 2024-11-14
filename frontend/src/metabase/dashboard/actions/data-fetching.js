@@ -430,7 +430,8 @@ export const fetchDashboardCardData = createThunkAction(
           return { card, dashcard }
         }
       })
-      .filter(p => !!p);
+      .filter(p => !!p)
+      .filter(p => !options.cardIds || options.cardIds?.includes(p.card?.id));
     // Optimized requests, concurrent 8
     if (tasks.length) {
       dispatch(setDocumentTitle(t`0/${tasks.length} loaded`));

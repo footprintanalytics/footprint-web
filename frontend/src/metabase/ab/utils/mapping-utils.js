@@ -64,3 +64,51 @@ export function getWeb2TypeText(cardId) {
   }
   return null;
 }
+
+export const getFgaFlowType = (user, projectObject, cardId, chartTypeStatus) => {
+  if (!cardId) {
+    return null
+  }
+  const userId = user?.id
+  if (!userId) {
+    return "login"
+  }
+  // 如果 projectid 为空 创建一个 project 
+  if (!projectObject?.id) {
+    return "createProject"
+  }
+
+  const payStandardPlan = user?.vipInfoFga?.find(vipInfo => vipInfo.type === "fga_standard")
+  // 判断 standard 是否过期
+  if (payStandardPlan?.isExpire) {
+    return 'expiredPay'
+  }
+
+  const payAdvancedPlan = user?.vipInfoFga?.find(vipInfo => vipInfo.type === "fga_advanced")
+  const advancedCard = isAdvancedCard(cardId)
+  // 判断 advanced 是否过期
+  if (payAdvancedPlan?.isExpire && advancedCard) {
+    return 'expiredAdvancedPay'
+  }
+  // 如果当前用户不是standard付费用户 并且当前卡片是advanced卡片
+  if (!payAdvancedPlan && advancedCard) {
+    return 'advancedPay'
+  }
+
+  const web2Card = isWeb2Card(cardId)
+  const web2DataCreated = isWeb2DataCreated(cardId, chartTypeStatus)
+  console.log("web2DataCreated", cardId, web2Card, web2DataCreated)
+  // 如果当前card是web2，web2 数据没有创建
+  if (web2Card && !web2DataCreated) {
+    return 'integration'
+  }
+
+  const web3Card = isWeb3Card(cardId)
+  const web3DataCreated = isWeb3DataCreated(cardId, projectObject)
+  // 如果当前card是web3，web3 数据没有创建
+  if (web3Card && !web3DataCreated) {
+    return 'submitProjectInfo'
+  }
+
+  return 'normal'
+}
