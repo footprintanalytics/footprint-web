@@ -478,8 +478,7 @@ class ABNavbar extends Component {
             onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
-              const path = isGrowthFga ? "/growthly" : "/fga";
-              this.goLink(e, `${path}`);
+              this.goLink(e, getGrowthRoot());
             }}
           >
             <div className="flex align-center" style={{ lineHeight: 1.2 }}>
