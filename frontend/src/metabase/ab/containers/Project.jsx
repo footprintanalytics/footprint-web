@@ -2,10 +2,19 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Button, Image, Result } from "antd";
+import { get } from "lodash";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { loadCurrentFgaProject } from "metabase/redux/user";
+import {
+  getBindGameMapping,
+  getFgaChain, getFgaDashboardKey,
+  getFgaFavoriteList,
+  getFgaProjectList,
+  getGamesByRedux,
+} from "metabase/selectors/control";
+import { loginModalShowAction, setFgaDashboardKey, setGames } from "metabase/redux/control";
 import ProjectInfo from "../components/ProjectInfo";
 import { checkVipMenuPermisson, getGrowthProjectPath, getLatestGAProjectId } from "../utils/utils";
 import { fga_menu_data_v2, getDashboardMap } from "../utils/data";
@@ -16,7 +25,6 @@ import ChannelList from "./ChannelList";
 import WalletProfile from "./WalletProfile";
 import MyAnalysis from "./MyAnalysis";
 import Airdrop from "./Airdrop";
-import { get } from "lodash";
 import CampaignDetail from "./CampaignDetail";
 import CampaignListNew from "./CampaignListNew";
 import CustomAnalysis from "./CustomAnalysis";
@@ -35,14 +43,6 @@ import SocialConnectList from "./SocialConnectList";
 import "../css/index.css";
 import GameList from "./gameList";
 import BindGame from "./bindGame";
-import {
-  getBindGameMapping,
-  getFgaChain, getFgaDashboardKey,
-  getFgaFavoriteList,
-  getFgaProjectList,
-  getGamesByRedux,
-} from "metabase/selectors/control";
-import { loginModalShowAction, setFgaDashboardKey, setGames } from "metabase/redux/control";
 import ProjectList from "metabase/ab/containers/projectList";
 import KeysIds from "metabase/ab/components/KeysIds";
 import MySubmitProject from "metabase/ab/containers/MySubmitProject";
@@ -73,18 +73,21 @@ const Project = props => {
   const [gaMenuTabs, setGaMenuTabs] = useState(null);
   useEffect(() => {
     if (menu && menu !== currentMenu && projectObject) {
-      let fixMenu = get(menu.split("?"), [0]);
+      const fixMenu = get(menu.split("?"), [0]);
       if (fixMenu === "funnel") {
         router.replace("/fga/dashboard/@0xABS/User-Journey-of-Mocaverse-FGA?series_date=past30days#type=dashboard&hide_edit");
         return;
       }
       setCurrentMenu(fixMenu);
     }
+    if (!menu && projectObject) {
+      replaceToDefault(projectObject.name, "");
+    }
   }, [menu]);
 
-  useEffect(() => {
-    if (projectObject) {
-      const menuData = fga_menu_data_v2(businessType, projectObject, chain, user);
+
+  const replaceToDefault = (projectPath, currentMenu) => {
+    const menuData = fga_menu_data_v2(businessType, projectObject, chain, user);
       const menuKeys = menuData.keys;
       const liveKeys = menuData.liveKeys;
       setGaMenuTabs(menuData);
@@ -107,14 +110,16 @@ const Project = props => {
             currentMenu,
           ),
           query: { ...location.query },
-        });
-      }
+      });
+    }
+  }
+
+  useEffect(() => {
+    if (projectObject) {
+      replaceToDefault(projectPath, currentMenu)
     } else {
       setGaMenuTabs(null);
     }
-    /*if (projectPath !== "Demo Project") {
-      localStorage.setItem("twitterEnable", "");
-    }*/
   }, [projectObject, user]);
 
   if (!businessType) {
@@ -248,7 +253,6 @@ const Project = props => {
     // if (!projectObject || !currentMenu || !gaMenuTabs) {
     //   return <LoadingSpinner message="Loading..." />;
     // }
-    console.log("fgaDashboardKeyfgaDashboardKey", fgaDashboardKey)
     const WrapPublicDashboard = current_tab =>
       getProjectObject()?.protocolSlug ? (
         <>
