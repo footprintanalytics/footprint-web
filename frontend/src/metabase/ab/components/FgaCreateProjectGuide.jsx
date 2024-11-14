@@ -6,8 +6,8 @@ import CreateProjectModalForFgaPro from "metabase/ab/components/Modal/CreateProj
 import LoginModal from "metabase/auth/containers/LoginModal";
 
 const FgaCreateProjectGuide = (props) => {
-  const { user, setLoginModalShow, setCreateFgaProjectModalShowAction, fgaProjectList } = props
-  const [state, setState] = useState(user ? 2 : 1);
+  const { user, } = props
+  const state = user ? 2 : 1
   return (
     <div className="flex flex-col h-full items-center pt4" style={{background: '#101014'}}>
       <Card className="flex flex-col justify-center items-center" style={{gap: 30, }}>

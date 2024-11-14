@@ -20,7 +20,7 @@ import FgaPricingLayout from "metabase/ab/components/FgaPricingLayout";
 
 const { Option } = Select
 const CreateProjectModalForFgaPro = props => {
-  const { force, isModal = false, open, onCancel, onSuccess, loadCurrentUserVipFGA, loadFgaProjectList, loadCurrentFgaProjectById, setFgaDashboardKey, projectObject, submitButtonText, user, isOnboard, fgaProjectList } = props;
+  const { force, isModal = false, open, onCancel, onSuccess, loadCurrentUserVipFGA, loadFgaProjectList, loadCurrentFgaProjectById, setFgaDashboardKey, projectObject, submitButtonText, user, fgaProjectList } = props;
   const [form] = Form.useForm();
   const isPayStandard = !!user?.vipInfoFga?.find(vipInfo => vipInfo.type === "fga_standard" && !vipInfo.isExpire);
   const steps = [
@@ -45,6 +45,8 @@ const CreateProjectModalForFgaPro = props => {
   const [projectId, setProjectId] = useState();
   const [contractResult, setContractResult] = useState([]);
   const [projectName, setProjectName] = useState();
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [addressForm] = Form.useForm()
 
   useEffect(() => {
     if (!open) {
@@ -91,50 +93,34 @@ const CreateProjectModalForFgaPro = props => {
 
   const getProjectInfo = async (values) => {
     setLoading(true);
-    const contractResult = await findContractMatchByName(values)
-    setContractResult(contractResult)
-    setData(contractResult.map((item, inx) => {
+    const addressResult = await findContractMatchByName(values)
+    setContractResult(addressResult)
+    const addressData = addressResult.map((item) => {
       return {
         ...item,
         key: uuidv4(),
-        checked: true
       }
-    }))
+    })
+    setData(addressData);
+    setSelectedRowKeys(addressData.map((item) => item.key)); //选中
     setLoading(false);
   }
 
   const handleAdd = () => {
-    setData([{ key: uuidv4(), address: '', standard: submitButtonText?.includes('Token') ? 'ERC20': 'ERC1155', chain: 'Ethereum', checked: true }, ...data]);
+    const key = uuidv4()
+    setData([{ key: key, address: '', standard: submitButtonText?.includes('Token') ? 'ERC20': 'ERC1155', chain: 'Ethereum' }, ...data]);
+    setSelectedRowKeys((pre) => [...pre, key]);
   };
 
-  const handleDelete = (key) => {
-    setData(data.filter(item => item.key !== key));
-  };
-
-  const handleInputChange = (value, key) => {
+  const handleAddressChange = (value, key) => {
     setData(data.map(item => (item.key === key ? { ...item, address: value } : item)));
   };
 
-  const handleSelectChange = (field, value, key) => {
+  const handleChainChange = (field, value, key) => {
     setData(data.map(item => (item.key === key ? { ...item, [field]: value } : item)));
   };
 
-  const handleCheckChange = (checked, key) => {
-    setData(data.map(item => (item.key === key ? { ...item, checked } : item)));
-  };
-
   const columns = [
-    {
-      title: '',
-      dataIndex: 'check',
-      width: 30,
-      render: (_, record) => (
-        <Checkbox
-          checked={record.checked}
-          onChange={(e) => handleCheckChange(e.target.checked, record.key)}
-        />
-      ),
-    },
     {
       title: '#',
       dataIndex: 'index',
@@ -150,7 +136,7 @@ const CreateProjectModalForFgaPro = props => {
           value={record.address}
           maxLength={42}
           style={{ fontSize: 12 }}
-          onChange={(e) => handleInputChange(e.target.value, record.key)}
+          onChange={(e) => handleAddressChange(e.target.value, record.key)}
         />
       ),
     },
@@ -161,7 +147,7 @@ const CreateProjectModalForFgaPro = props => {
       render: (_, record) => (
         <Select
           value={record.chain}
-          onChange={(value) => handleSelectChange('chain', value, record.key)}
+          onChange={(value) => handleChainChange('chain', value, record.key)}
           style={{ width: 110, fontSize: 12 }}
         >
           {CHAIN_LIST.map(chain => (
@@ -179,7 +165,7 @@ const CreateProjectModalForFgaPro = props => {
       render: (_, record) => (
         <Select
           value={record.standard}
-          onChange={(value) => handleSelectChange('standard', value, record.key)}
+          onChange={(value) => handleChainChange('standard', value, record.key)}
           style={{ width: 110, fontSize: 12 }}
         >
           <Option value="ERC1155">ERC1155</Option>
@@ -188,16 +174,6 @@ const CreateProjectModalForFgaPro = props => {
         </Select>
       ),
     },
-    /*{
-      title: '',
-      dataIndex: 'action',
-      width: 60,
-      render: (_, record) => (
-        <Button type="link" onClick={() => handleDelete(record.key)}>
-          <DeleteOutlined />
-        </Button>
-      ),
-    },*/
   ];
 
   const isValidAddress = contractAddress => {
@@ -206,8 +182,8 @@ const CreateProjectModalForFgaPro = props => {
     return array.every(address => regex.test(get(address.split(","),"[0]")));
   };
 
-  async function createProject() {
-    const contractData = data.filter(item => item.checked);
+  const createProject = async (data) => {
+    const contractData = data.filter(item => selectedRowKeys.includes(item.key));
     const emptyInputs = contractData
       .map((item, index) => ({ ...item, index: data.indexOf(item) + 1 }))
       .filter(item => item.address.trim() === '');
@@ -225,7 +201,6 @@ const CreateProjectModalForFgaPro = props => {
       message.error(errorMessage);
       return;
     }
-
     const hide = message.loading("Loading...", 60);
     setSubmitLoading(true);
     let result = null
@@ -261,6 +236,13 @@ const CreateProjectModalForFgaPro = props => {
     // window.location.reload();
   }
 
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (selectedKeys) => {
+      setSelectedRowKeys(selectedKeys);
+    },
+  };
+
   const renderProjectInfo = () => {
     return (
       <div>
@@ -271,20 +253,27 @@ const CreateProjectModalForFgaPro = props => {
           >
           </Result>
         ) : (
-          <div>
+          <Form
+            form={addressForm}
+            layout="vertical"
+            onFinish={() => createProject(data)}
+          >
             <h2>Project: {projectName || projectObject?.name}</h2>
             {!projectObject && (<div style={{ marginBottom: 16 }}>
               <h4>{contractResult?.length > 0 ? "The system has matched the following contracts through AI. Please select your contract for submission." : "No project info found. Please add your contact."}</h4>
             </div>)}
-            <Table
-              columns={columns}
-              dataSource={data}
-              pagination={false}
-              rowKey="key"
-              scroll={{ y: 300 }}
-              sticky
-              style={{ overflow: 'hidden' }}
-            />
+            <Form.Item label="" name="table">
+              <Table
+                columns={columns}
+                dataSource={data}
+                rowSelection={rowSelection}
+                pagination={false}
+                rowKey="key"
+                scroll={{ y: 300 }}
+                sticky
+                style={{ overflow: 'hidden' }}
+              />
+            </Form.Item>
             <style>
               {`
             .ant-table-body::-webkit-scrollbar {
@@ -300,11 +289,11 @@ const CreateProjectModalForFgaPro = props => {
               <Button onClick={handleAdd} style={{ marginRight: 8 }}>
                 Add a Contract
               </Button>
-              <Button type="primary" onClick={() => createProject(data)} loading={submitLoading}>
+              <Button type="primary"  htmlType="submit" loading={submitLoading}>
                 {`${isModal ? "Submit" : "Submit Project Info"}`}
               </Button>
             </div>
-          </div>
+          </Form>
         )}
       </div>
     );
@@ -317,8 +306,9 @@ const CreateProjectModalForFgaPro = props => {
         <h3>{"After purchasing the Standard package, you'll gain access to the standard dashboard analysis feature"}</h3>
         <FgaPricingLayout
           user={user}
+          isPayStandard={isPayStandard}
           onSuccess={() => {
-            message.success("Payment success")
+            message.success("Welcome to Footprint Growth Analytics")
             setTimeout(() => {
               handleSuccessSkip()
             }, 1000)

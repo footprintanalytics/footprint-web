@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PricingModal from "metabase/pricing_v2/components/PricingModal";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
 import { Collapse, message, Modal } from "antd";
@@ -8,7 +8,7 @@ import { getVipInfoV2 } from "metabase/new-service";
 import { debounce } from "lodash";
 
 const FgaPricingLayout = (props) => {
-  const { user, onSuccess, isModal = false, open, onClose, type = "fga_standard" } = props
+  const { user, onSuccess, isModal = false, open, onClose, type = "fga_standard", isPayStandard } = props
   const [activeKey, setActiveKey] = useState("payment");
   const { data } = useGetProductInfo("fga");
   const [isCompleteLoading, setCompleteLoading] = useState(false);
@@ -16,6 +16,12 @@ const FgaPricingLayout = (props) => {
     setActiveKey(value);
   };
   const fgaPaymentProducts = data?.filter((item) => item.productType === type) || []
+
+  useEffect(() => {
+    if (isPayStandard) {
+      setActiveKey("confirm");
+    }
+  }, [isPayStandard]);
 
   const checkPaymentStatus = async () => {
     setCompleteLoading(true)
