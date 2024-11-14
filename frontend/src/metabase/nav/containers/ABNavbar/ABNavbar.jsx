@@ -561,9 +561,10 @@ class ABNavbar extends Component {
           submitButtonText={createFgaProjectModalShow?.submitButtonText}
           location={location}
           onSuccess={async (projectId) => {
+            message.success("Contract added");
+            setCreateFgaProjectModalShowAction({ show: false });
             await this.props.loadCurrentFgaProjectById(projectId, "submit-project-info", true, false)
             this.props.setFgaDashboardKey({ key: "pro-submit-project-info" });
-            setCreateFgaProjectModalShowAction({ show: false });
           }}
           onCancel={() => {
             setCreateFgaProjectModalShowAction({ show: false });
