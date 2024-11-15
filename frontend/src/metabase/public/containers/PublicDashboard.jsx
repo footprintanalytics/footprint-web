@@ -5,7 +5,7 @@ import { push } from "react-router-redux";
 import cx from "classnames";
 
 import _ from "underscore";
-import { debounce, isArray, startCase, union } from "lodash";
+import { debounce, isArray, startCase } from "lodash";
 import { Breadcrumb, Select } from "antd";
 import { IFRAMED } from "metabase/lib/dom";
 import Tooltip from "metabase/components/Tooltip";
@@ -52,7 +52,7 @@ import { isABPath, isBusinessTypePath, isFGAVCPath } from "metabase/ab/utils/uti
 import { refreshCurrentUser } from "metabase/redux/user";
 import Link from "metabase/core/components/Link";
 import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
-import { getFgaFlowType } from 'metabase/ab/utils/mapping-utils';
+import { getFgaFlowType } from "metabase/ab/utils/mapping-utils";
 
 const mapStateToProps = (state, props) => {
   const user = getUser(state);
@@ -301,8 +301,24 @@ class PublicDashboard extends Component {
       cardName: "",
     };
   }
+
+  // 获取需要请求的 card id， null表示都需要，[1]表示1的card需要请求
+  getNeedRequestCardIds = (props) => {
+    const isProFga = window.location.pathname.startsWith("/fga/pro")
+    if (!isProFga) {
+      return null
+    }
+    return props.dashboard?.ordered_cards?.map(card => {
+      const flowType = getFgaFlowType(props.user, props.project, card.card_id, props.chartTypeStatus)
+      if (flowType && (flowType === "normal" || flowType === "")) {
+        return card.card_id
+      }
+    }).filter(Boolean)
+  }
+
   _fetchDashboardCardData = debounce(
     (params = {}) => {
+      const cardIds = this.getNeedRequestCardIds(this.props)
       const { ignore_cache } = {
         ...parseHashOptions(location.hash),
       };
@@ -310,7 +326,7 @@ class PublicDashboard extends Component {
         reload: false,
         clear: true,
         ignoreCache: params.ignoreCache || this.props.ignoreCache || !!ignore_cache,
-        cardIds: params.cardIds,
+        cardIds: cardIds,
       });
     },
     100,
@@ -360,7 +376,6 @@ class PublicDashboard extends Component {
       filterChainFunction,
       params: { dashboardId, uuid, token },
     } = this.props;
-    const isProFga = window.location.pathname.startsWith("/fga/pro")
     let publicUuid;
     if (!dashboardId) {
       publicUuid = parseTitleId(uuid).id;
@@ -373,15 +388,8 @@ class PublicDashboard extends Component {
     initialize();
     try {
       await fetchDashboard(dashboardId || publicUuid || token, location.query);
-      // fga 需要根据需要限制 card 的请求
-      const cardIds = isProFga ? this.props.dashboard?.ordered_cards?.map(card => {
-        const flowType = getFgaFlowType(this.props.user, this.props.project, card.card_id, this.props.chartTypeStatus)
-        if (flowType && (flowType === "normal" || flowType === "")) {
-          return card.card_id
-        }
-      }).filter(Boolean): null
 
-      this._fetchDashboardCardData({ cardIds });
+      this._fetchDashboardCardData();
 
       const keyObject = this.getFgaMultiKeyObject();
       if (keyObject) {
@@ -436,6 +444,11 @@ class PublicDashboard extends Component {
       return this._initialize();
     }
     if (!_.isEqual(this.props.parameterValues, prevProps.parameterValues)) {
+      this._fetchDashboardCardData();
+    }
+    // 只有 fga/pro 需要做判断是否重新刷新
+    const isProFga = window.location.pathname.startsWith("/fga/pro")
+    if (isProFga && !_.isEqual(this.getNeedRequestCardIds(this.props), this.getNeedRequestCardIds(prevProps))) {
       this._fetchDashboardCardData();
     }
   }
