@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { Button, message, Modal, Steps, Table, theme, Upload } from "antd";
+import { QueryClient, QueryClientProvider } from "react-query";
 import FgaFlowDataProcess from "metabase/visualizations/components/FgaFlowDataProcess";
 import FgaFlowProduceData from "metabase/visualizations/components/FgaFlowProduceData";
 import { fgaEventConfirmCsv } from "metabase/new-service";
-import { QueryClient, QueryClientProvider } from "react-query";
 import "./FgaFlowUploadModal.css";
 
 const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, open, onCancel}) => {
@@ -15,7 +15,6 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
   const [current, setCurrent] = useState(0);
   const projectId = projectObject?.id
   const [pipelineId, setPipelineId] = useState()
-  const isEditMode = !!projectObject
   const columns = [
     {
       title: 'Project Id',
@@ -143,16 +142,24 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
     },
     {
       title: 'Preview Data',
-      content: (<div className="flex flex-col" style={{lineHeight: 1.5, padding: 20}}>
-        <div className="mb1">Generated based on your data. Please confirm. Preview shows up to 10 lines.</div>
-        <Table columns={columns} dataSource={csvData} pagination={false} scroll={{ y: 300 }}/>
-        <div className={"flex justify-center "} style={{gap: 10, padding: 20}}>
-          <Button onClick={() => setCurrent(0)}>Not quite right? Upload Again</Button>
-          <Button loading={confirmCsvLoading} type="primary" onClick={() => {
-            handleConfirmCSV()
-          }}>{`Perfect! Let's Process the Data`}</Button>
+      content: (
+        <div className="flex flex-col" style={{ lineHeight: 1.5, padding: 20 }}>
+          <div className="mb1">{"Here's a preview of your data (up to 10 rows). Please review and confirm."}</div>
+          <Table
+            className="dark-scrollbar"
+            columns={columns}
+            dataSource={csvData}
+            pagination={false}
+            scroll={{ y: 300 }}
+          />
+          <div className={"flex justify-center "} style={{ gap: 10, padding: 20 }}>
+            <Button onClick={() => setCurrent(0)}>Not quite right? Upload Again</Button>
+            <Button loading={confirmCsvLoading} type="primary" onClick={() => {
+              handleConfirmCSV()
+            }}>{`Perfect! Let's Process the Data`}</Button>
+          </div>
         </div>
-      </div>),
+      ),
       onClick: () => setCurrent(2),
     },
     {
@@ -205,7 +212,7 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
 
   return (
     <Modal
-      title={isEditMode ? "Edit your project": "Create your project"}
+      title={"Upload Data"}
       open={open}
       destroyOnClose
       footer={null}

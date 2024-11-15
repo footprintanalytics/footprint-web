@@ -185,7 +185,7 @@ const CreateProjectModalForFgaPro = props => {
   const createProject = async (data) => {
     const contractData = data.filter(item => selectedRowKeys.includes(item.key));
     const emptyInputs = contractData
-      .map((item, index) => ({ ...item, index: data.indexOf(item) + 1 }))
+      .map((item, index) => ({ ...item, index: contractData.indexOf(item) + 1 }))
       .filter(item => item.address.trim() === '');
 
     if (emptyInputs.length > 0) {
@@ -194,7 +194,7 @@ const CreateProjectModalForFgaPro = props => {
       return;
     }
 
-    const invalidAddresses = data.filter(item => !isValidAddress(item.address));
+    const invalidAddresses = contractData.filter(item => !isValidAddress(item.address));
 
     if (invalidAddresses.length > 0) {
       const errorMessage = `Invalid address at row(s): ${invalidAddresses.map(item => item.key).join(', ')}`;
@@ -255,15 +255,17 @@ const CreateProjectModalForFgaPro = props => {
         ) : (
           <Form
             form={addressForm}
-            layout="vertical"
             onFinish={() => createProject(data)}
           >
-            <h2>Project: {projectName || projectObject?.name}</h2>
+            <Form.Item label="Project Name" name="projectName" >
+              <h2>{projectName || projectObject?.name}</h2>
+            </Form.Item>
             {!projectObject && (<div style={{ marginBottom: 16 }}>
               <h4>{contractResult?.length > 0 ? "The system has matched the following contracts through AI. Please select your contract for submission." : "No project info found. Please add your contact."}</h4>
             </div>)}
             <Form.Item label="" name="table">
               <Table
+                className="dark-scrollbar"
                 columns={columns}
                 dataSource={data}
                 rowSelection={rowSelection}
@@ -274,22 +276,11 @@ const CreateProjectModalForFgaPro = props => {
                 style={{ overflow: 'hidden' }}
               />
             </Form.Item>
-            <style>
-              {`
-            .ant-table-body::-webkit-scrollbar {
-              width: 8px;
-            }
-            .ant-table-body::-webkit-scrollbar-thumb {
-              background-color: rgba(0, 0, 0, 0.5);
-              border-radius: 4px;
-            }
-          `}
-            </style>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 32 }}>
               <Button onClick={handleAdd} style={{ marginRight: 8 }}>
                 Add a Contract
               </Button>
-              <Button type="primary"  htmlType="submit" loading={submitLoading}>
+              <Button type="primary" htmlType="submit" loading={submitLoading} >
                 {`${isModal ? "Submit" : "Submit Project Info"}`}
               </Button>
             </div>

@@ -904,4 +904,9 @@ export const findContractMatchByName = (params) => {
   // return GET(`api/v1/project/contract/match-by-name`, params);
 };
 
+export const removeProjectContract = (params) => {
+  return POST(`api/v1/project/contract/unavailable`, params);
+};
+
 export const fgaUploadCsvUrl = '/api/v1/fga/event/upload/csv'
+

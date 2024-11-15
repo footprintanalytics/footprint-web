@@ -816,16 +816,17 @@ class DashCard extends Component {
         isNightMode={isNightMode}
         isUsuallySlow={isSlow === "usually-slow"}
       >
-        {isProFga && (<DashCardHook
-          card={dashcard.card}
-          chartUpdatedAt={chartUpdatedAt}
-          chartTypeStatus={this.props.chartTypeStatus}
-          refreshCard={async () => {
-            console.log("refreshCard !!!!!", dashcard.card.id)
-            await this.props.refreshCardData({ dashcard, card: dashcard.card, clear: true })
-          }}
-        />)
-        }
+        {isProFga && (
+          <DashCardHook
+            card={dashcard.card}
+            chartUpdatedAt={chartUpdatedAt}
+            chartTypeStatus={this.props.chartTypeStatus}
+            refreshCard={async () => {
+              console.log("refreshCard !!!!!", dashcard.card.id)
+              await this.props.refreshCardData({ dashcard, card: dashcard.card, clear: true })
+            }}
+          />
+        )}
         {showButtons && (<div
           className="html2canvas-filter"
           style={{

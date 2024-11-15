@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from "react";
-import { Avatar, Button, Card, Empty, List, message, Tabs, Tag, Tooltip, Tour, Typography } from "antd";
+import { Avatar, Button, Card, Empty, List, message, Tabs, Tag, Tooltip, Tour, Typography, Modal } from "antd";
 // import Link from "antd/lib/typography/Link";
 import { connect } from "react-redux";
 import Title from "antd/lib/typography/Title";
@@ -8,17 +8,17 @@ import { SwapOutlined } from "@ant-design/icons";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import "../css/index.css";
-import UpdateProjectModal from "./Modal/UpdateProjectModal";
-import ProjectSubmitContactModal from "metabase/ab/components/Modal/ProjectSubmitContactModal";
 import { createFgaProjectModalShowAction, projectSubmitModalShowAction } from "metabase/redux/control";
-import InfoGenerate from "metabase/ab/components/InfoGenerate";
-import FgaVipInfoLayout from "metabase/ab/components/FgaVipInfoLayout";
+import { removeProjectContract } from "metabase/new-service";
+import { loadCurrentFgaProjectById } from 'metabase/redux/user';
+import UpdateProjectModal from "./Modal/UpdateProjectModal";
 
 const ProjectInfo = props => {
-  const { router, project, location, user, businessType, setProjectSubmitModalShowAction, setCreateFgaProjectModalShowAction } = props;
+  const { project, location, user, setProjectSubmitModalShowAction, setCreateFgaProjectModalShowAction, loadCurrentFgaProjectById } = props;
   const [currentProject, setCurrentProject] = useState(project);
   const [tourOpen, setTourOpen] = useState(false);
   const ref1 = useRef(null);
+  const [modal, contextHolder] = Modal.useModal();
   const [projectModalShow, setProjectModalShow] = useState({
     show: false,
     force: false,
@@ -56,6 +56,20 @@ const ProjectInfo = props => {
         return `https://etherscan.io/token/${address}`;
     }
   };
+
+  const removeClick = async (item) => {
+    await removeProjectContract({
+      "projectId": currentProject?.id,
+      "contractList": [
+        {
+          "address": item.address,
+          "chain": item.chain,
+        }
+      ]
+    })
+    await loadCurrentFgaProjectById(currentProject?.id, "project-info", true, false)
+  }
+
   const getTabPanel = type => {
     let datas = [];
     switch (type) {
@@ -146,42 +160,65 @@ const ProjectInfo = props => {
             </Typography.Text>
           </div>
         }
-        renderItem={item => (
-          <List.Item
-            actions={[
-              <CopyToClipboard
-                key="list-copy"
-                text={`${item.address}`}
-                onCopy={() => {
-                  message.success("Copied!");
-                }}
-              >
-                <Tooltip title={`Copy this contract address!`}>
-                  <a>copy</a>
-                </Tooltip>
-              </CopyToClipboard>,
-              // <Tooltip key="list-more" title={`View in scan!`}>
-              //   <a
-              //     onClick={() => {
-              //       window.open(getScanLink(item), "_blank");
-              //     }}
-              //   >
-              //     more
-              //   </a>
-              // </Tooltip>,
-            ]}
+        renderItem={item => {
+          const copyAction = <CopyToClipboard
+            key="list-copy"
+            text={`${item.address}`}
+            onCopy={() => {
+              message.success("Copied!");
+            }}
           >
-            <div>
-              <Avatar style={{ marginRight: 5 }}>{type}</Avatar>
-              {item.address} <Tag>{item.chain}</Tag>
-            </div>
-          </List.Item>
-        )}
+            <Tooltip title={`Copy this contract address!`}>
+              <a>Copy</a>
+            </Tooltip>
+          </CopyToClipboard>
+          const removeAction =  <Tooltip key="list-delete" title={`Remove this contract address from project!`}>
+            <a
+              onClick={() => {
+                modal.confirm({
+                  title: 'Confirm Removal',
+                  content: `Are you sure you want to remove this contract address from the project? ${item.address}`,
+                  okText: 'Confirm',
+                  cancelText: 'Cancel',
+                  width: 420,
+                  onOk: async () => {
+                    await removeClick(item);
+                  },
+                });
+              }}
+            >
+              Remove
+            </a>
+          </Tooltip>
+          /*const moreAction = <Tooltip key="list-more" title={`View in scan!`}>
+            <a
+              onClick={() => {
+                window.open(getScanLink(item), "_blank");
+              }}
+            >
+              more
+            </a>
+          </Tooltip>*/
+          return (
+            <List.Item
+              actions={[
+                copyAction,
+                isProFga && removeAction,
+              ].filter(Boolean)}
+            >
+              <div>
+                <Avatar style={{ marginRight: 5 }}>{type}</Avatar>
+                {item.address} <Tag>{item.chain}</Tag>
+              </div>
+            </List.Item>
+          )
+        }}
       />
     );
   };
   return (
     <div className="flex flex-col w-full items-center">
+      {contextHolder}
       <div
         className=" flex flex-column items-center"
         style={{
@@ -336,5 +373,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   setProjectSubmitModalShowAction: projectSubmitModalShowAction,
   setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
+  loadCurrentFgaProjectById,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfo);

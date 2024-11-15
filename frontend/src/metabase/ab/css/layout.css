@@ -212,3 +212,24 @@
 .ab-page .ant-list-item {
   background: var(--color-ab-bg-card-dark);
 }
+
+.dark-scrollbar .ant-table-body {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #2c2c2c;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #666;
+  }
+}
