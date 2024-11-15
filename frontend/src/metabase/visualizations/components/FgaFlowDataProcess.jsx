@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { Button, Spin, Timeline } from "antd";
-import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { fgaUploadCsvUrl } from "metabase/new-service";
 import { getWeb2TypeText } from "metabase/ab/utils/mapping-utils";
@@ -77,7 +77,7 @@ const FgaFlowDataProcess = ({ projectObject, callbackData, file, cardId, onUploa
   const getDotIcon = (index) => {
     // 控制前2个是模拟的绿色
     if (current > index) {
-      return <CheckCircleOutlined style={{ color: "green" }} />
+      return <CheckCircleOutlined style={{ color: "green", fontSize: "18px" }} />
     }
     // 最后一个是根据接口结果进行显示
     if (current === index) {
@@ -85,12 +85,13 @@ const FgaFlowDataProcess = ({ projectObject, callbackData, file, cardId, onUploa
         return <Spin />
       }
       if (timeItems[index].status === "error") {
-        return <CloseCircleOutlined style={{ color: "red" }} />
+        return <CloseCircleOutlined style={{ color: "red", fontSize: "18px" }} />
       } else {
-        return <CheckCircleOutlined style={{ color: "green" }} />
+        return <CheckCircleOutlined style={{ color: "green", fontSize: "18px" }} />
       }
     }
-    return <div />
+    // 默认图标
+    return <ClockCircleOutlined style={{ color: "gray", fontSize: "18px" }} />
   }
 
   return (

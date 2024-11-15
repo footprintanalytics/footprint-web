@@ -97,7 +97,6 @@ export const getFgaFlowType = (user, projectObject, cardId, chartTypeStatus) => 
 
   const web2Card = isWeb2Card(cardId)
   const web2DataCreated = isWeb2DataCreated(cardId, chartTypeStatus)
-  console.log("web2DataCreated", cardId, web2Card, web2DataCreated)
   // 如果当前card是web2，web2 数据没有创建
   if (web2Card && !web2DataCreated) {
     return 'integration'

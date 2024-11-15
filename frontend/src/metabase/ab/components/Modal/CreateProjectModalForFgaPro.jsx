@@ -264,6 +264,7 @@ const CreateProjectModalForFgaPro = props => {
             </div>)}
             <Form.Item label="" name="table">
               <Table
+                className="dark-scrollbar"
                 columns={columns}
                 dataSource={data}
                 rowSelection={rowSelection}
@@ -274,17 +275,6 @@ const CreateProjectModalForFgaPro = props => {
                 style={{ overflow: 'hidden' }}
               />
             </Form.Item>
-            <style>
-              {`
-            .ant-table-body::-webkit-scrollbar {
-              width: 8px;
-            }
-            .ant-table-body::-webkit-scrollbar-thumb {
-              background-color: rgba(0, 0, 0, 0.5);
-              border-radius: 4px;
-            }
-          `}
-            </style>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 32 }}>
               <Button onClick={handleAdd} style={{ marginRight: 8 }}>
                 Add a Contract

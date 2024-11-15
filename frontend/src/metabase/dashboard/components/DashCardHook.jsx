@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
-import { Button } from "antd";
-import { getWeb2TypeText, isWeb2DataCreated } from "metabase/ab/utils/mapping-utils";
-import { debounce, throttle } from "lodash";
+import React, { useEffect } from "react";
+import { debounce } from "lodash";
+import { getWeb2TypeText } from "metabase/ab/utils/mapping-utils";
+
 const DashCardHook = props => {
   const { chartTypeStatus, refreshCard, card, chartUpdatedAt } = props;
   useEffect(() => {
@@ -14,16 +14,16 @@ const DashCardHook = props => {
     if (!latestUpdateTimeStr) {
       return null;
     }
-    const latestUpdateTime = new Date(latestUpdateTimeStr).getTime() - 8*3600*1000;
-    const chartUpdatedTime = chartUpdatedAt ? new Date(chartUpdatedAt).getTime() : null;
+    const latestUpdateTime = new Date(latestUpdateTimeStr).getTime();
+    const chartUpdatedTime = chartUpdatedAt ? new Date(chartUpdatedAt).getTime() + 8*3600*1000 : null;
     if (chartUpdatedTime && latestUpdateTime > chartUpdatedTime) {
-      refreshCardThrottle()
+      refreshCardDebounce()
     }
-  }, [chartTypeStatus]);
+  }, [chartTypeStatus, chartUpdatedAt]);
 
-  const refreshCardThrottle = throttle((event) => {
+  const refreshCardDebounce = debounce(() => {
     refreshCard()
-  }, 10000);
+  }, 10000, { leading: true, trailing: false });
 
   return (
     <>
