@@ -64,6 +64,7 @@ const ProjectInfo = props => {
         {
           "address": item.address,
           "chain": item.chain,
+          "standard": item.standard,
         }
       ]
     })
