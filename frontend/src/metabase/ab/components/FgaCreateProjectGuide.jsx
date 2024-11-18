@@ -15,7 +15,7 @@ const FgaCreateProjectGuide = (props) => {
           {state === 1 && (
             <div className="flex flex-column" >
               <div className="flex flex-column items-center">
-                <h1>Welcome to Footprint Growth Analytics (FGA)</h1>
+                <h1>Welcome to <br/> Footprint Growth Analytics (FGA)</h1>
               </div>
               {/*<span>Unlock your growth potential in a web3 world. Dive into data insights and get an edge in your marketing strategy with Footprint GA by bringing all of your Web2 and Wed3 data sources together.</span>*/}
               <LoginModal

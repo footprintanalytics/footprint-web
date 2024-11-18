@@ -2,14 +2,12 @@
 import React, { useState } from "react";
 // import Link from "antd/lib/typography/Link";
 import { connect } from "react-redux";
-import { getFgaProject, getUser } from "metabase/selectors/user";
-import "../css/index.css";
-import FgaVipInfoLayout from "metabase/ab/components/FgaVipInfoLayout";
 import Title from "antd/lib/typography/Title";
 import { Card, message } from "antd";
+import { getFgaProject, getUser } from "metabase/selectors/user";
+import "../css/index.css";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
 import PricingModal from "metabase/pricing_v2/components/PricingModal";
-import { FgaProductMock } from "metabase/ab/utils/data";
 import { loadCurrentUserVipFGA } from "metabase/redux/user";
 import { useGetProductInfo } from "metabase/pricing_v2/use";
 import MyProfile from "metabase/containers/myStudio/Component/MyProfile";
@@ -18,7 +16,6 @@ const AccountInfo = props => {
   const { user, loadCurrentUserVipFGA } = props;
   const [fgaFlowPricingCallBackOpen, setFgaFlowPricingCallBackOpen] = useState(false);
   const [fgaFlowPricingOpen, setFgaFlowPricingOpen] = useState(false);
-  console.log("fgaFlowPricingOpen", fgaFlowPricingOpen)
   const renderPaymentCallbackModal = () => {
     return (
       <PaymentCallbackModal
@@ -77,7 +74,7 @@ const AccountInfo = props => {
             borderRadius: 10,
           }}
         >
-          <MyProfile user={user} name={user.name} showMenu={false}/>
+          <MyProfile user={user} name={user.name} textMode={true} />
           {/*<FgaVipInfoLayout upgradeOnclick={(type) => setFgaFlowPricingOpen(type)}/>*/}
         </Card>
       </div>

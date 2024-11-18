@@ -438,6 +438,13 @@ const growthIcon =
     <path d="M4.08333 9.91667L6.41666 5.25L9.33333 7.875L12.25 1.75" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 
+const projectOverviewIcon =
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M1.75 1.75H12.25V12.25H1.75V1.75Z" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M1.75 5.25H12.25" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M5.25 5.25V12.25" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+
 export const ReactIcons = {
   topGameIcon,
   gameTokensIcon,
@@ -492,4 +499,5 @@ export const ReactIcons = {
   layerIcon,
   crossChainIcon,
   blockChainIcon,
+  projectOverviewIcon,
 }

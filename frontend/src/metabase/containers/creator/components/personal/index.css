@@ -64,6 +64,9 @@
 
 .creator__personal-cell-buttons {
   margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .creator__personal-cell-buttons .ant-btn {

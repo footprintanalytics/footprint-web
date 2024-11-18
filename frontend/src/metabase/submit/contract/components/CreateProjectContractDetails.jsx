@@ -2,36 +2,19 @@
 /* eslint-disable curly */
 import React, { useState, useEffect } from "react";
 import {
-  AutoComplete,
   Button,
   Form,
   Input,
   message,
   Select,
   Tabs,
-  Modal,
   Tooltip,
-  Upload,
-  Spin, Tag,
 } from "antd";
-import { useQuery } from "react-query";
-import slug from "slug";
 import {
   CheckOutlined,
-  LoadingOutlined,
   ExclamationCircleOutlined,
-  DownOutlined,
-  UpOutlined,
-  SyncOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
 import { debounce, flatten, get, toLower, union } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { getRefProtocolList } from "metabase/new-service";
-import { uploadFile } from "metabase/lib/oss";
-import { ossPath } from "metabase/lib/ossPath";
-import ContractDecoding from "./ContractDecoding";
-import InputContractModal from "metabase/submit/contract/components/InputContractModal";
 
 const CHAIN_LIST = [
   { value: "Ethereum", label: "Ethereum" },
@@ -49,7 +32,7 @@ const CHAIN_LIST = [
   { value: "Ronin", label: "Ronin" },
 ];
 
-const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject, submitButtonText }) => {
+const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject }) => {
   const [refresh, setRefresh] = useState(0);
   const [contract, setContract] = useState([]);
   const [form] = Form.useForm();
@@ -362,7 +345,7 @@ const CreateProjectContractDetails = ({ onFinish, user, onClosed, projectObject,
           <div className="w-full flex flex-row-reverse justify-between align-center">
             <div className="flex align-center gap-2 mt4">
               <Button type="primary" htmlType="submit">
-                {submitButtonText || `${projectObject ? 'Edit Project': "Create Project"}`}
+                {`${projectObject ? 'Edit Project': "Create Project"}`}
               </Button>
             </div>
           </div>

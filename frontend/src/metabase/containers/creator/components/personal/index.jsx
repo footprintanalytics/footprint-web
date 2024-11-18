@@ -2,11 +2,10 @@
 /* eslint-disable react/prop-types */
 
 import React, { useState } from "react";
-import { Avatar, Button, Modal } from "antd";
+import { Avatar, Button } from "antd";
 import "./index.css";
 import { get } from "lodash";
-import { EditFilled, ExclamationCircleOutlined } from "@ant-design/icons";
-import { cancelSubscription } from "metabase/new-service";
+import { EditFilled } from "@ant-design/icons";
 import VipIcon from "metabase/containers/creator/components/personal/VipIcon";
 import Link from "metabase/core/components/Link";
 import { trackStructEvent } from "metabase/lib/analytics";
@@ -18,12 +17,9 @@ import SubscriptionDetailModal from "metabase/containers/creator/components/pers
 import { isFgaPath } from "metabase/growth/utils/utils";
 import { isABPath } from "metabase/ab/utils/utils";
 import Meta from "metabase/components/Meta";
-import { cancelAutoRenewal, showCancelAutoRenewal } from "metabase/utils/Utils";
 
 const Index = ({ router, user, data }) => {
-  const [loading, setLoading] = useState(false);
-  const [showSubscriptionDetailModal, setShowSubscriptionDetailModal] =
-    useState(false);
+  const [showSubscriptionDetailModal, setShowSubscriptionDetailModal] = useState(false);
   const isFga = isFgaPath();
   const isAB = isABPath();
   const totalInfo = [
@@ -61,16 +57,6 @@ const Index = ({ router, user, data }) => {
   const telegram = get(data, "userInfo.telegram");
   const discord = get(data, "userInfo.discord");
   // const email = get(data, "userInfo.email");
-
-  const onCancelSubscription = async productId => {
-    showCancelAutoRenewal({
-      productId,
-      title: "Do you want to cancel automatic renewal?",
-      onSuccess: () => {
-        location.reload();
-      }
-    });
-  };
 
   return (
     <div className="creator__personal">
@@ -213,10 +199,9 @@ const Index = ({ router, user, data }) => {
       </div>
       {showSubscriptionDetailModal && (
         <SubscriptionDetailModal
-          subscriptionDetailList={subscriptionDetailList}
-          onCancelSubscription={onCancelSubscription}
-          onClose={() => {
-            setShowSubscriptionDetailModal(false);
+        subscriptionDetailList={subscriptionDetailList}
+        onClose={() => {
+          setShowSubscriptionDetailModal(false);
           }}
         />
       )}

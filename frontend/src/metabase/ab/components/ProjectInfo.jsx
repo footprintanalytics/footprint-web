@@ -112,7 +112,7 @@ const ProjectInfo = props => {
               }
               // router?.push({ pathname: "/fga/game/submit/contract/add" });
               if (isProFga) {
-                setCreateFgaProjectModalShowAction({ show: true, projectObject: project });
+                setCreateFgaProjectModalShowAction({ show: true, projectObject: project, mode: type });
               } else {
                 setProjectSubmitModalShowAction({ show: true })
               }
@@ -148,7 +148,7 @@ const ProjectInfo = props => {
                   //   router?.push({ pathname: "/submit/contract/add" });
                   // }
                   if (isProFga) {
-                    setCreateFgaProjectModalShowAction({ show: true, projectObject: project });
+                    setCreateFgaProjectModalShowAction({ show: true, projectObject: project, mode: type });
                   } else {
                     setProjectSubmitModalShowAction({ show: true })
                   }

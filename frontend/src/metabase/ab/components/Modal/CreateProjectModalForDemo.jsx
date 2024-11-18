@@ -14,7 +14,7 @@ import { getGrowthProjectPath, saveLatestGAProject, saveLatestGAProjectId } from
 
 
 const CreateProjectModalForDemo = props => {
-  const { open, onCancel, onSuccess, router, loadFgaProjectList, force, setFgaDashboardKey, projectObject, loadCurrentFgaProjectById, isModal = true, submitButtonText } = props;
+  const { open, onCancel, onSuccess, router, loadFgaProjectList, force, setFgaDashboardKey, projectObject, loadCurrentFgaProjectById, isModal = true } = props;
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState(1);
@@ -83,39 +83,15 @@ const CreateProjectModalForDemo = props => {
   const renderContent = () => {
     return (
       <div className="flex flex-column" style={{ width: "100%" }}>
-        {state === 1 && (
-          <div className="flex flex-column">
-            {!projectObject && (<span className="mb2">You can create a new project to explore by entering key information, such as NFT or TOKEN, and we will help you generate a series of reports.</span>)}
-            <CreateProjectContractDetails
-              projectObject={projectObject}
-              submitButtonText={submitButtonText}
-              onClosed={(params) => {
-                createProject(params);
-              }}
-            />
-          </div>
-        )}
-        {state === 2 && (
-          <div className="flex flex-column justify-center">
-            <Result
-              status="success"
-              title={`${projectResult?.projectName} is created successfully.`}
-              extra={
-                <div className="flex justify-center" style={{ gap: 20 }}>
-                  <div
-                    loading={loading}
-                    className="mt3"
-                    onClick={async () => {
-                      await refreshData();
-                    }}
-                  >
-                    <Button>View Dashboard Overview</Button>
-                  </div>
-                </div>
-              }
-            />
-          </div>
-        )}
+        <div className="flex flex-column">
+          {!projectObject && (<span className="mb2">You can create a new project to explore by entering key information, such as NFT or TOKEN, and we will help you generate a series of reports.</span>)}
+          <CreateProjectContractDetails
+            projectObject={projectObject}
+            onClosed={(params) => {
+              createProject(params);
+            }}
+          />
+        </div>
       </div>
     )
   }

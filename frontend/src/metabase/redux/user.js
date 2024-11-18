@@ -856,8 +856,6 @@ export const loadCurrentFgaProjectById = createThunkAction(
         if (clearCurrent) {
           dispatch(clearCurrentFgaProject());
         }
-        console.log("loadCurrentFgaProjectByIdloadCurrentFgaProjectById")
-        // await dispatch(refreshCurrentFgaProject(project_id));
         await dispatch(refreshCurrentFgaProjectById(projectId, from));
         await dispatch(refreshCurrentFgaProjectChartType(projectId))
       }

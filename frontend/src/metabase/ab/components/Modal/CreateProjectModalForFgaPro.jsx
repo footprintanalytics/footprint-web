@@ -21,7 +21,7 @@ import FgaPricingLayout from "metabase/ab/components/FgaPricingLayout";
 
 const { Option } = Select
 const CreateProjectModalForFgaPro = props => {
-  const { force, isModal = false, open, onCancel, onSuccess, loadCurrentUserVipFGA, loadFgaProjectList, loadCurrentFgaProjectById, setFgaDashboardKey, projectObject, submitButtonText, user, fgaProjectList } = props;
+  const { force, isModal = false, open, onCancel, onSuccess, loadCurrentUserVipFGA, loadFgaProjectList, loadCurrentFgaProjectById, setFgaDashboardKey, projectObject, user, fgaProjectList, mode } = props;
   const [form] = Form.useForm();
   const isPayStandard = !!user?.vipInfoFga?.find(vipInfo => vipInfo.type === "fga_standard" && !vipInfo.isExpire);
   const steps = [
@@ -52,6 +52,10 @@ const CreateProjectModalForFgaPro = props => {
   useEffect(() => {
     if (!open) {
       setData([])
+    } else {
+      if (isModal) {
+        handleAdd()
+      }
     }
   }, [open]);
 
@@ -109,7 +113,7 @@ const CreateProjectModalForFgaPro = props => {
 
   const handleAdd = () => {
     const key = uuidv4()
-    setData([{ key: key, address: '', standard: submitButtonText?.includes('Token') ? 'ERC20': 'ERC1155', chain: 'Ethereum' }, ...data]);
+    setData([{ key: key, address: '', standard: mode === 'Token' ? 'ERC20': 'ERC1155', chain: 'Ethereum' }, ...data]);
     setSelectedRowKeys((pre) => [...pre, key]);
   };
 
@@ -190,7 +194,7 @@ const CreateProjectModalForFgaPro = props => {
       .filter(item => item.address.trim() === '');
 
     if (emptyInputs.length > 0) {
-      const errorMessage = `Please fill in all input fields for checked items at row(s): ${emptyInputs.map(item => item.index).join(', ')}`;
+      const errorMessage = `Please fill values at row(s): ${emptyInputs.map(item => item.index).join(', ')}`;
       message.error(errorMessage);
       return;
     }
@@ -292,7 +296,6 @@ const CreateProjectModalForFgaPro = props => {
   }
 
   const renderPricing = () => {
-    // FgaProductMock
     return (
       <div className="flex flex-column" style={{gap: 10}}>
         <h3>{"After purchasing the Standard package, you'll gain access to the standard dashboard analysis feature"}</h3>

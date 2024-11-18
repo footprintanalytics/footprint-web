@@ -556,7 +556,7 @@ class ABNavbar extends Component {
           isModal={true}
           open={createFgaProjectModalShow?.show}
           projectObject={createFgaProjectModalShow?.projectObject}
-          submitButtonText={createFgaProjectModalShow?.submitButtonText}
+          mode={createFgaProjectModalShow?.mode}
           location={location}
           onSuccess={async (projectId) => {
             message.success("Contract added");
