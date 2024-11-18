@@ -9,7 +9,7 @@ import { t } from "ttag";
 import cx from "classnames";
 import _ from "underscore";
 import { getIn } from "icepick";
-import { DatabaseOutlined, LockFilled } from "@ant-design/icons";
+import { LockFilled } from "@ant-design/icons";
 import visualizations, { getVisualizationRaw } from "metabase/visualizations";
 import { mergeSettings } from "metabase/visualizations/lib/settings";
 import Visualization, {
@@ -28,13 +28,11 @@ import Tooltip from "metabase/components/Tooltip";
 
 import { isVirtualDashCard } from "metabase/dashboard/utils";
 
-import { IS_EMBED_PREVIEW } from "metabase/lib/embed";
 
 import { isActionCard } from "metabase/writeback/utils";
 import { deviceInfo } from "metabase-lib/lib/Device";
 import Utils from "metabase/lib/utils";
 import { getClickBehaviorDescription } from "metabase/lib/click-behavior";
-import PublicMode from "metabase/modes/components/modes/PublicMode";
 import { trackStructEvent } from "metabase/lib/analytics";
 import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
 import { getParameterValuesBySlug } from "metabase-lib/parameters/utils/parameter-values";
@@ -46,16 +44,13 @@ import {
   addTextDashCardToDashboard,
   toggleSidebar,
 } from "metabase/dashboard/actions";
-import QueryRealtimeButton from "metabase/query_builder/components/QueryRealtimeButton";
 import { isRealtimeChart } from "metabase/dashboard/components/utils/realtime";
 import { getRealtimeList } from "metabase/selectors/config";
 import QueryStatusButton from "metabase/query_builder/components/QueryStatusButton";
-import QueryRefreshButton from "metabase/query_builder/components/QueryRefreshButton";
 import { isFgaPath } from "metabase/growth/utils/utils";
 import { isABPath, isFGAVCPath } from "metabase/ab/utils/utils";
 import { IFRAMED_IN_SELF } from "metabase/lib/dom";
 import { Button, Form, Input, message, Modal, Radio, Spin } from "antd";
-import { fgaPlanMapping } from "metabase/visualizations/util/data";
 import FgaProResult from "metabase/visualizations/components/FgaProResult";
 import FgaFlowUploadModal from "metabase/visualizations/components/FgaFlowUploadModal";
 import { getFgaProject, getFgaChartTypeStatus } from "metabase/selectors/user";
@@ -65,18 +60,11 @@ import {
   setFgaDashboardKey,
 } from "metabase/redux/control";
 import {
-  getFgaChartTypeMappingById, getWeb2TypeText, getWeb3TypeText,
-  isAdvancedCard,
-  isStandardCard,
-  isWeb2Card, isWeb2DataCreated,
-  isWeb3Card, isWeb3DataCreated,
+  getWeb2TypeText, getWeb3TypeText,
+  isWeb2DataCreated,
 } from "metabase/ab/utils/mapping-utils";
-import FgaFlowCreateProject from "metabase/visualizations/components/FgaFlowCreateProject";
 import { loadCurrentUserVipFGA, refreshCurrentFgaProjectChartType } from "metabase/redux/user";
 import DashCardHook from "metabase/dashboard/components/DashCardHook";
-import FgaPricingLayout from "metabase/ab/components/FgaPricingLayout";
-import { FgaProductMock } from "metabase/ab/utils/data";
-import PricingModal from "metabase/pricing_v2/components/PricingModal";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
 import DashCardPricingModal from "metabase/dashboard/components/DashCardPricingModal";
 import { getFgaFlowType } from "metabase/ab/utils/mapping-utils";
@@ -674,7 +662,7 @@ class DashCard extends Component {
             extra={[
               <Button className="text-white" key='xxx' onClick={() => {
                 this.props.setCreateFgaProjectModalShowAction(
-                  { show: true, projectObject: this.props.projectObject, submitButtonText: `Submit ${getWeb3TypeText(dashcard.card.id)}` }
+                  { show: true, projectObject: this.props.projectObject, mode: getWeb3TypeText(dashcard.card.id) }
                 );
                 // Modal.info({
                 //   icon: null,

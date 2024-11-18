@@ -1,21 +1,36 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 import React from "react";
-import { Button, Table } from "antd";
-import Modal from "metabase/components/Modal";
-import ModalContent from "metabase/components/ModalContent";
+import { Button, Table, Modal } from "antd";
 import "./SubscriptionDetailModal.css";
+import { showCancelAutoRenewal } from 'metabase/utils/Utils';
 
-const SubscriptionDetailModal = ({ onClose, subscriptionDetailList, onCancelSubscription }) => {
+const SubscriptionDetailModal = ({ open, onClose, subscriptionDetailList }) => {
+  const [modal, contextHolder] = Modal.useModal();
+  const onCancelSubscription = async productId => {
+    showCancelAutoRenewal({
+      modal: modal,
+      productId,
+      title: "Do you want to cancel automatic renewal?",
+      onSuccess: () => {
+        location.reload();
+      }
+    });
+  };
   const columns = [
     {
       title: 'Type',
       width: 160,
       align: "center",
       render: (_, record) => {
+        const mapping = {
+          dataApi: "Data API",
+          footprint: "Footprint Analytics",
+          fga: "FGA"
+        }
         return (
           <div>
-            {record.service === "dataApi" ? "Data API" : "Footprint Analytics"}
+            {mapping[record.service]}
           </div>
         )
       }
@@ -29,33 +44,36 @@ const SubscriptionDetailModal = ({ onClose, subscriptionDetailList, onCancelSubs
     {
       title: "",
       key: "action",
-      width: 200,
+      width: 220,
       align: "center",
       render: (_, record) => {
         return (
           <div>
-            <Button onClick={() => onCancelSubscription(record.productId)}>cancel automatic renewal</Button>
+            <Button onClick={() => onCancelSubscription(record.productId)}>Cancel Automatic Renewal</Button>
           </div>
         )
       }
     }
   ];
   return (
-    <Modal ModalClass="subscription-detail-modal">
-      <ModalContent
-        onClose={onClose}
-        className="subscription-detail-modal__root"
-        formModal={false}
-      >
-        <div style={{ marginTop: 12, maxHeight: 300, overflow: "auto", maxWidth: 640 }}>
-          <Table
-            columns={columns}
-            dataSource={subscriptionDetailList}
-            pagination={false}
-            sticky={true}
-          />
-        </div>
-      </ModalContent>
+    <Modal 
+      width={640}
+      style={{ maxHeight: 400, overflow: "auto"}}
+      open={true}
+      onCancel={onClose}
+      closable={true}
+      title="Subscription Detail"
+      footer={null}
+      destroyOnClose
+      maskClosable={true}
+    >
+      {contextHolder}
+      <Table
+        columns={columns}
+        dataSource={subscriptionDetailList}
+        pagination={false}
+        sticky={true}
+      />
     </Modal>
   );
 };

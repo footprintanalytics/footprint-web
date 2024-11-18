@@ -1,10 +1,12 @@
+/* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./MyApi.css";
 import { get } from "lodash";
-import { Avatar, Button, Dropdown, Skeleton, Tooltip } from "antd";
+import { Avatar, Dropdown, Skeleton, Tooltip, Tag } from "antd";
 import { useQuery } from "react-query";
+import dayjs from "dayjs";
 import { personalInfo } from "metabase/new-service";
 import { getProject } from "metabase/lib/project_info";
 import { getOssUrl } from "metabase/lib/image";
@@ -16,19 +18,20 @@ import Link from "metabase/core/components/Link";
 import { logout } from "metabase/auth/actions";
 import * as Urls from "metabase/lib/urls";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
-import dayjs from "dayjs";
 import { useGetPaymentSubscriptionDetail } from "metabase/pricing_v2/use";
+import SubscriptionDetailModal from "metabase/containers/creator/components/personal/SubscriptionDetailModal";
 
 const MyProfile = props => {
-  const { user, name, onLogout, showMenu = true } = props;
+  const { user, name, onLogout, showMenu = true, textMode = false } = props;
+  const [showSubscriptionDetailModal, setShowSubscriptionDetailModal] = useState(false);
 
   const personalInfoParams = {
     name: name,
     project: getProject(),
   };
   const isProFga = window.location.pathname.startsWith("/fga/pro")
-  const { subscriptionDetailData, refetch } = useGetPaymentSubscriptionDetail(user, "fga", () => !!user && isProFga);
-
+  const { subscriptionDetailData, refetch } = useGetPaymentSubscriptionDetail(user, isProFga ? "fga" : "footprint", () => !!user);
+  console.log("subscriptionDetailData", subscriptionDetailData)
   const { isLoading, data, error } = useQuery(
     ["personalInfo", personalInfoParams],
     async () => {
@@ -46,6 +49,9 @@ const MyProfile = props => {
   const twitter = get(data, "userInfo.twitter");
   const telegram = get(data, "userInfo.telegram");
   const discord = get(data, "userInfo.discord");
+
+  const subscriptionDetailList = subscriptionDetailData?.list;
+  const showSubscriptionCancelButton = subscriptionDetailList?.length > 0;
 
   const SocialList = ({ list }) => {
     return (
@@ -93,11 +99,21 @@ const MyProfile = props => {
 
   const getContent = () => {
    return [
-     {
+      !isProFga && {
        key: 'account-settings',
        label: (
          <Link className="my-profile__menu-link" to={Urls.accountSettings()} style={{ color: "white" }}>
            Account settings
+         </Link>
+       ),
+     },
+     showSubscriptionCancelButton && {
+       key: 'cancel-automatic-renewal',
+       label: (
+         <Link className="my-profile__menu-link" onClick={() => {
+          setShowSubscriptionDetailModal(true);
+         }} style={{ color: "white" }}>
+           Cancel Automatic Renewal
          </Link>
        ),
      },
@@ -120,12 +136,12 @@ const MyProfile = props => {
       {
         key: 'sign-out',
         label: (
-          <Link className="my-profile__menu-link" onClick={() => onLogout()}  style={{ color: "white" }}>
+          <Link className="my-profile__menu-link" onClick={() => onLogout(location.pathname)}  style={{ color: "white" }}>
             Sign out
           </Link>
         ),
       },
-     ]
+     ]?.filter(Boolean)
   }
   const vipInfo = user?.vipInfo;
   const dataApiVipInfo = user?.vipInfoDataApi;
@@ -138,16 +154,34 @@ const MyProfile = props => {
       isExpire: vipInfo.isExpire,
     }
   })
-  const standardFgaVip = vipInfoFgaWithRenewals?.find(vipInfo => vipInfo.type === "fga_standard" && !vipInfo.isExpire)
-  const advancedFgaVip = vipInfoFgaWithRenewals?.find(vipInfo => vipInfo.type === "fga_advanced" && !vipInfo.isExpire);
+  const standardFgaVip = isProFga && vipInfoFgaWithRenewals?.find(vipInfo => vipInfo.type === "fga_standard" && !vipInfo.isExpire)
+  const advancedFgaVip = isProFga && vipInfoFgaWithRenewals?.find(vipInfo => vipInfo.type === "fga_advanced" && !vipInfo.isExpire);
 
-  const showFpVip = vipInfo && vipInfo?.type !== "free";
-  const showApiVip = dataApiVipInfo && dataApiVipInfo?.type !== "free";
+  const showFpVip = !isProFga && vipInfo && vipInfo?.type !== "free";
+  const showApiVip = !isProFga && dataApiVipInfo && dataApiVipInfo?.type !== "free";
   const getVipToolTip = (info, title) => {
     const titleStr = title ? `${title} :` : "";
     return `${titleStr} ${formatTableTitle(info?.type)} plan to ${dayjs(info.validEndDate).format("YYYY-MM-DD")}`;
   }
-
+  const renderVipLayout = ({img, title}) => {
+    if (textMode) {
+      return (
+        <Tag className="flex justify-center items-center p1">
+          <div className="flex justify-center" style={{ width: 16, height: 16, marginRight: 4 }}>
+            <AboutImage src={getOssUrl(img)} />
+          </div>
+          {title}
+        </Tag>
+      )
+    }
+    return (
+      <Tooltip title={title}>
+        <div className="flex justify-center items-center p1" style={{ width: 36, height: 36 }}>
+          <AboutImage src={getOssUrl(img)} />
+        </div>
+      </Tooltip>
+    )
+  }
   return (
     <>
       <div className="my-profile">
@@ -168,38 +202,26 @@ const MyProfile = props => {
         </Tooltip>
         <div className="my-profile__right">
           {userName && (
-            <div style={{ display: "flex", alignItems: "center"}}>
+            <div className="flex items-center flex-wrap">
               <Tooltip title={userName}>
                 <h3 className="mr1">{userName}</h3>
               </Tooltip>
-              {showFpVip && (
-                <Tooltip title={getVipToolTip(vipInfo, "Footprint web")}>
-                  <div className="flex justify-center p1">
-                    <AboutImage src={getOssUrl("/studio/img-fp-vip.png?x-oss-process=image/resize,m_fill,h_20,w_20")} />
-                  </div>
-                </Tooltip>
-              )}
-              {showApiVip && (
-                <Tooltip title={getVipToolTip(dataApiVipInfo, "Data API")}>
-                  <div className="flex justify-center p1">
-                    <AboutImage src={getOssUrl("/studio/img-api-vip.png?x-oss-process=image/resize,m_fill,h_20,w_20")} />
-                  </div>
-                </Tooltip>
-              )}
-              {standardFgaVip && (
-                <Tooltip title={getVipToolTip(standardFgaVip, "")}>
-                  <div className="flex justify-center p1">
-                    <AboutImage src={getOssUrl("/studio/img-fp-vip.png?x-oss-process=image/resize,m_fill,h_20,w_20")} style={{filter: standardFgaVip?.isExpire ? "grayscale(100%)" : ""}}/>
-                  </div>
-                </Tooltip>
-              )}
-              {advancedFgaVip && (
-                <Tooltip title={getVipToolTip(advancedFgaVip, "")}>
-                  <div className="flex justify-center p1">
-                    <AboutImage src={getOssUrl("/studio/img-api-vip.png?x-oss-process=image/resize,m_fill,h_20,w_20")} style={{filter: standardFgaVip?.isExpire ? "grayscale(100%)" : ""}}/>
-                  </div>
-                </Tooltip>
-              )}
+              {showFpVip && renderVipLayout({
+                img: getOssUrl("/studio/img-fp-vip.png?x-oss-process=image/resize,m_fill,h_20,w_20"),
+                title: getVipToolTip(vipInfo, "Footprint web")
+              })}
+              {showApiVip && renderVipLayout({
+                img: getOssUrl("/studio/img-api-vip.png?x-oss-process=image/resize,m_fill,h_20,w_20"),
+                title: getVipToolTip(dataApiVipInfo, "Data API")
+              })}
+              {standardFgaVip && renderVipLayout({
+                img: getOssUrl("/studio/img-fp-vip.png?x-oss-process=image/resize,m_fill,h_20,w_20"),
+                title: getVipToolTip(standardFgaVip, "")
+              })} 
+              {advancedFgaVip && renderVipLayout({
+                img: getOssUrl("/studio/img-api-vip.png?x-oss-process=image/resize,m_fill,h_20,w_20"),
+                title: getVipToolTip(advancedFgaVip, "")
+              })}
             </div>
           )}
           {/*<SocialList
@@ -215,22 +237,14 @@ const MyProfile = props => {
           <>
             <div className="my-profile__vertical-line"/>
             <Dropdown
+              trigger={['click']}
               menu={{ items: getContent() }}
-              overlayStyle={{ borderRadius: 10, border: "1px solid #ffffff20", background: "#121728" }}
-              dropdownRender={(menu) => {
-                return (
-                  <div className="my-profile__menu">
-                    {menu.props.items.filter(Boolean).map(item => {
-                      return (
-                        <li key={item.key}>
-                          {item.label}
-                        </li>
-                      )
-                    })}
-
-                  </div>
-                )
-              }}
+              overlayStyle={{ borderRadius: 10, border: "1px solid #ffffff20" }}
+              dropdownRender={(menu) => (
+                <div>
+                  {menu}
+                </div>
+              )}
               placement="rightBottom"
             >
               <div className="px3 cursor-pointer">
@@ -239,6 +253,14 @@ const MyProfile = props => {
             </Dropdown>
           </>
         )}
+        {showSubscriptionDetailModal && (
+          <SubscriptionDetailModal
+            subscriptionDetailList={subscriptionDetailList}
+            onClose={() => {
+              setShowSubscriptionDetailModal(false);
+          }}
+        />
+      )}
       </div>
     </>
   );

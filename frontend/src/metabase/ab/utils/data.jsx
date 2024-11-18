@@ -1,10 +1,9 @@
 import React from "react";
 import { SettingOutlined, ShrinkOutlined, FireOutlined } from "@ant-design/icons";
-import { ReactIcons } from "../../nav/containers/FpNavbar/utils/data";
-import Icon from "metabase/components/Icon";
-import { getChainDataList } from "../../query_builder/components/question/handle";
 import { Tooltip } from "antd";
+import Icon from "metabase/components/Icon";
 import GAIcon from "metabase/ab/utils/GAIcon";
+import { ReactIcons } from "../../nav/containers/FpNavbar/utils/data";
 //public/dashboard/uuid
 export const wallet_profile_link =
   "/fga/public/dashboard/fdcf253d-24b4-4f6e-839e-3880242041a8"; //query: wallet_address
@@ -419,7 +418,7 @@ const GaIconLayout = ({children}) => {
 export const fga_menu_data_v2 = (businessType, project, chain, user) => {
   if (businessType === "pro" || businessType === "pro_beta") {
     const menuTabs = [
-      getItem("Project Overview", "asset_overview_pro", null),
+      getItem("Project Overview", "asset_overview_pro", ReactIcons.projectOverviewIcon, null),
       getItem("User Acquisition", "user_acquisition_parent", ReactIcons.trendingIcon14, [
         getItem("User Acquisition", "acquisition_users_pro", null),
         getItem("User Retention", "Retention_users_pro", null),

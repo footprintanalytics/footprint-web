@@ -36,8 +36,8 @@ export const SET_PEA_TOKEN = "metabase/control/SET_PEA_TOKEN";
 
 export const createFgaProjectModalShowAction = createThunkAction(
   CREATE_FGA_PROJECT_MODAL_SHOW,
-  ({ show, projectObject, submitButtonText, force = false }) => {
-    return { show: show, projectObject, submitButtonText, force: force };
+  ({ show, projectObject, mode, force = false }) => {
+    return { show: show, projectObject, mode, force: force };
   },
 );
 
