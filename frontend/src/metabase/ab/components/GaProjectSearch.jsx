@@ -2,13 +2,12 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { Avatar, Select, Tour } from "antd";
+import { Select, Tour } from "antd";
 import { withRouter } from "react-router";
+import _ from "underscore";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { loadCurrentFgaProjectById, loadCurrentFgaProjectNew } from "metabase/redux/user";
 import "../css/index.css";
-import { head, throttle } from "lodash";
-import _ from "underscore";
 import { getFgaChain, getFgaProjectList, getGamesByRedux, getHistoryGamesByRedux } from "metabase/selectors/control";
 import { loadFgaProjectList, loginModalShowAction, setGames, setHistoryGames } from "metabase/redux/control";
 import { fga_menu_data_v2 } from "metabase/ab/utils/data";

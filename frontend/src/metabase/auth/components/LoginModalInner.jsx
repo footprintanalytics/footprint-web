@@ -9,10 +9,9 @@ import VerifyEmailPanel from "metabase/auth/components/VerifyEmailPanel";
 import ForgotPasswordPanel from "metabase/auth/components/ForgotPasswordPanel";
 import ResetPasswordPanel from "metabase/auth/components/ResetPasswordPanel";
 import { SessionApi } from "metabase/services";
-import { quickRegister, quickRegisterDefi360 } from "metabase/new-service";
+import { quickRegister } from "metabase/new-service";
 import { trackStructEvent } from "metabase/lib/analytics";
 import Settings from "metabase/lib/settings";
-import { isDefi360 } from "metabase/lib/project_info";
 
 const LoginModalInner = props => {
   const ldapEnabled = Settings.isLdapEnabled();
@@ -25,10 +24,8 @@ const LoginModalInner = props => {
   const [tokenValid, setTokenValid] = useState(undefined);
   const [resetSuccess, setResetSuccess] = useState(false);
   const [project, setProject] = useState("footprint");
-  const quickRegisterApi = isDefi360(project)
-    ? quickRegisterDefi360
-    : quickRegister;
-
+  const quickRegisterApi = quickRegister;
+  console.log("props", props)
   const {
     onClose,
     login,
@@ -130,6 +127,7 @@ const LoginModalInner = props => {
   };
 
   const getRedirect = () => {
+    console.log("redirect", redirect)
     const redirectStr = redirect || location.query.redirect;
     return redirectStr ? { redirect: redirectStr } : {};
   };

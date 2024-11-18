@@ -3,51 +3,27 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, message, Modal, Result } from "antd";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import Link from "metabase/core/components/Link";
-import { getProtocolList, postProject, submitFGAContractForPro } from "metabase/new-service";
-import { getUser } from "metabase/selectors/user";
-import { getGrowthProjectPath, saveLatestGAProject, saveLatestGAProjectId } from "../../utils/utils";
 import _ from "lodash";
-import { loadFgaProjectList, setFgaDashboardKey, setUserExtend } from "metabase/redux/control";
-import PaymentDecoding from "metabase/ab/components/Modal/PaymentDecoding";
-import { getUserExtend } from "metabase/selectors/control";
-import CreateProjectContractDetails from "metabase/submit/contract/components/CreateProjectContractDetails";
-import { loadCurrentFgaProjectById } from "metabase/redux/user";
 import { push, replace } from "react-router-redux";
+import { loadFgaProjectList, setFgaDashboardKey } from "metabase/redux/control";
+import { postProject, submitFGAContractForPro } from "metabase/new-service";
+import { getUser } from "metabase/selectors/user";
+import { loadCurrentFgaProjectById } from "metabase/redux/user";
+import CreateProjectContractDetails from "metabase/submit/contract/components/CreateProjectContractDetails";
+import { getGrowthProjectPath, saveLatestGAProject, saveLatestGAProjectId } from "../../utils/utils";
 
-const layout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 18 },
-};
-const tailLayout = {
-  wrapperCol: { offset: 0, span: 24 },
-};
 
 const CreateProjectModalForDemo = props => {
-  const { open, onCancel, onSuccess, router, replace, loadFgaProjectList, force, setFgaDashboardKey, setUserExtend, userExtend, projectObject, loadCurrentFgaProjectById, isModal = true, submitButtonText } = props;
+  const { open, onCancel, onSuccess, router, loadFgaProjectList, force, setFgaDashboardKey, projectObject, loadCurrentFgaProjectById, isModal = true, submitButtonText } = props;
   const [form] = Form.useForm();
-  const [loadingData, setLoadingData] = useState(false);
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState(1);
-  const [submitProtocol, setSubmitProtocol] = useState();
-  const [protocolList, setProtocolList] = useState();
   const [input, setInput] = useState();
   const [projectResult, setProjectResult] = useState();
   useEffect(() => {
     if (open) {
-      setLoadingData(true);
-      // old uuid 5276dcf1-0e5f-49d1-a49a-c405d2caa3d4
-      // new uuid af524d7d-d565-429b-af91-d3028f5ee8ad
-      getProtocolList()
-        .then(result => {
-          setProtocolList(result?.protocolList);
-        })
-        .finally(() => {
-          setLoadingData(false);
-        });
     } else {
       setState(1);
-      setSubmitProtocol();
       setInput();
     }
   }, [open]);
@@ -168,13 +144,11 @@ const CreateProjectModalForDemo = props => {
 const mapStateToProps = state => {
   return {
     user: getUser(state),
-    userExtend: getUserExtend(state),
   };
 };
 
 const mapDispatchToProps = {
   loadFgaProjectList: loadFgaProjectList,
-  setUserExtend: setUserExtend,
   setFgaDashboardKey,
   loadCurrentFgaProjectById,
   onChangeLocation: push,

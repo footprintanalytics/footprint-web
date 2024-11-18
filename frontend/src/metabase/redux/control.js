@@ -27,7 +27,6 @@ export const NEXT_CHART_POPOVER_Action =
 export const CLOSE_ALL_CHART_POPOVER_Action =
   "metabase/control/closeAllChartPopoverAction";
 export const SET_NEW_GUIDE_INFO = "metabase/control/setNewGuideInfo";
-export const SET_USER_EXTEND = "metabase/control/setUserExtend";
 export const SET_DARK_MODE = "metabase/control/setDarkMode";
 export const SET_GAMES = "metabase/control/SET_GAMES";
 export const SET_HISTORY_GAMES = "metabase/control/SET_HISTORY_GAMES";
@@ -144,12 +143,6 @@ export const setNewGuideInfo = createThunkAction(
 );
 
 //设置用户额外信息
-export const setUserExtend = createThunkAction(
-  SET_USER_EXTEND,
-  userExtend => {
-    return userExtend;
-  },
-);
 export const setDarkMode = createThunkAction(SET_DARK_MODE, darkMode => {
   localStorage.setItem("sql-editor-dark-mode", darkMode);
   return darkMode;
@@ -351,14 +344,6 @@ export const control = handleActions(
         return {
           ...state,
           newGuideInfo: payload,
-        };
-      },
-    },
-    [SET_USER_EXTEND]: {
-      next: (state, { payload }) => {
-        return {
-          ...state,
-          userExtend: payload,
         };
       },
     },

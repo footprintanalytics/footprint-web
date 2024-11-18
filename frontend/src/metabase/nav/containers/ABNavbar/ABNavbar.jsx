@@ -16,7 +16,7 @@ import {
   getCreateFgaProjectModalShow,
   getLoginModalShow,
   getSubmitAddrZkspaceModal,
-  getLoginModalDefaultRegister, getProjectSubmitModalShow, getUserExtend, getFgaProjectList,
+  getLoginModalDefaultRegister, getProjectSubmitModalShow, getFgaProjectList,
 } from "metabase/selectors/control";
 import {
   cancelFeedbackAction,
@@ -69,7 +69,6 @@ const mapStateToProps = (state, props) => ({
   getIsUserFeedbackBlock: getIsUserFeedbackBlock(state, props),
   getSubmitAddrZkspaceModal: getSubmitAddrZkspaceModal(state, props),
   channel: getChannel(state) || "homepage",
-  userExtend: getUserExtend(state),
   fgaProjectList: getFgaProjectList(state),
 });
 
@@ -492,7 +491,6 @@ class ABNavbar extends Component {
         <React.Fragment>
           {/*<div className="flex justify-start" style={{ paddingLeft: 30, fontSize: 20, color: "#FFFFFF" }}>{`👏 Welcome`}</div>*/}
           <div className="Nav__search-bar" style={{ width: "100%", justifyContent: "center",  }}>
-          {/*<div className="Nav__search-bar" style={{ width: "100%", justifyContent: "center", display: !isProFga ? "" : this.props.userExtend?.project ? "" : "none" }}>*/}
             {showSearch && (
               <GaProjectSearch
                 style={{ display: isProFga ? "none": "" }}

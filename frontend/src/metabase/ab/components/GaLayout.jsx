@@ -3,17 +3,17 @@ import React, { useContext, useEffect } from "react";
 import { connect } from "react-redux";
 import { Layout, Skeleton } from "antd";
 import { Content } from "antd/lib/layout/layout";
+import { push } from "react-router-redux";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
 import Meta from "metabase/components/Meta";
+import { createFgaProjectModalShowAction, loadFgaProjectList, loginModalShowAction } from "metabase/redux/control";
+import { refreshCurrentFgaProjectChartType } from "metabase/redux/user";
+import { getFgaDashboardKey, getFgaProjectList } from "metabase/selectors/control";
+import FgaCreateProjectGuide from "metabase/ab/components/FgaCreateProjectGuide";
 import { StateContext, StateProvider } from "./StateProvider";
 import "../css/index.css";
 import GaSidebar from "./GaSidebar";
-import { createFgaProjectModalShowAction, loadFgaProjectList, loginModalShowAction } from "metabase/redux/control";
-import { push } from "react-router-redux";
-import { getFgaDashboardKey, getFgaProjectList, getUserExtend } from "metabase/selectors/control";
-import FgaCreateProjectGuide from "metabase/ab/components/FgaCreateProjectGuide";
-import { refreshCurrentFgaProjectChartType } from "metabase/redux/user";
 
 const ABLayout = props => {
   const pathname = location.pathname;
@@ -27,7 +27,7 @@ const ABLayout = props => {
 
 const LayoutView = props => {
   const { isOpenSubMenu } = useContext(StateContext);
-  const { fgaDashboardKey, user, projectObject, setLoginModalShow, setCreateFgaProjectModalShowAction, userExtend, fgaProjectList, loadFgaProjectList, refreshCurrentFgaProjectChartType } = props;
+  const { fgaDashboardKey, user, projectObject, setLoginModalShow, setCreateFgaProjectModalShowAction, fgaProjectList, refreshCurrentFgaProjectChartType } = props;
   const isGamesManage = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-manage")
   const isProjectList = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-list")
   const isBindGame = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("bind-game")
@@ -123,7 +123,6 @@ const LayoutView = props => {
 const mapStateToProps = state => {
   return {
     user: getUser(state),
-    userExtend: getUserExtend(state),
     projectObject: getFgaProject(state),
     fgaProjectList: getFgaProjectList(state),
     chartTypeStatus: state?.currentFgaProject?.chartTypeStatus,
