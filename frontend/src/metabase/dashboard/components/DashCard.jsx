@@ -63,7 +63,6 @@ import {
   createFgaProjectModalShowAction,
   loginModalShowAction,
   setFgaDashboardKey,
-  setUserExtend,
 } from "metabase/redux/control";
 import {
   getFgaChartTypeMappingById, getWeb2TypeText, getWeb3TypeText,
@@ -72,7 +71,6 @@ import {
   isWeb2Card, isWeb2DataCreated,
   isWeb3Card, isWeb3DataCreated,
 } from "metabase/ab/utils/mapping-utils";
-import { getPeaToken, getUserExtend } from "metabase/selectors/control";
 import FgaFlowCreateProject from "metabase/visualizations/components/FgaFlowCreateProject";
 import { loadCurrentUserVipFGA, refreshCurrentFgaProjectChartType } from "metabase/redux/user";
 import DashCardHook from "metabase/dashboard/components/DashCardHook";
@@ -514,10 +512,6 @@ class DashCard extends Component {
                   onOk: () => {
                     message.success("Subscribe successfully!");
                     // changeFgaFlowType("integration")
-                    this.props.setUserExtend({
-                      ...(this.props.userExtend || {}),
-                      plan: 'standard'
-                    })
                   },
                 });
               }}>
@@ -660,10 +654,6 @@ class DashCard extends Component {
                   onOk: () => {
                     message.success("Crate Project successfully!");
                     // changeFgaFlowType("normal")
-                    this.props.setUserExtend({
-                      ...(this.props.userExtend || {}),
-                      project: true
-                    })
                   },
                 });
               }}>
@@ -1403,7 +1393,6 @@ const ClickBehaviorSidebarOverlay = ({
 const mapStateToProps = state => ({
   projectObject: getFgaProject(state),
   realtimeList: getRealtimeList(state),
-  userExtend: getUserExtend(state),
   chartTypeStatus: getFgaChartTypeStatus(state),
 });
 
@@ -1411,7 +1400,6 @@ const mapDispatchToProps = {
   toggleSidebar,
   addTextDashCardToDashboard,
   setLoginModalShow: loginModalShowAction,
-  setUserExtend: setUserExtend,
   setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
   refreshCurrentFgaProjectChartType,
   setFgaDashboardKey,

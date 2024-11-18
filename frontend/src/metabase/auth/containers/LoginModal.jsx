@@ -2,6 +2,7 @@ import React from "react";
 import connect from "react-redux/lib/connect/connect";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
+import cx from "classnames";
 import ModalContent from "metabase/components/ModalContent";
 import Modal from "metabase/components/Modal";
 import {
@@ -15,7 +16,6 @@ import { getUser } from "metabase/home/selectors";
 import { getChannel } from "metabase/selectors/app";
 import LoginModalInner from "metabase/auth/components/LoginModalInner";
 import { trackStructEvent } from "metabase/lib/analytics";
-import cx from "classnames";
 import { isDark } from "metabase/dashboard/components/utils/dark";
 
 const mapStatusToProps = (state, props) => {

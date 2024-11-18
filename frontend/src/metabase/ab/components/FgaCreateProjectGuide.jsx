@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
-import { Button, Card, message } from "antd";
-import React, { useState } from "react";
-import CreateProjectModalForDemo from "metabase/ab/components/Modal/CreateProjectModalForDemo";
+import { Card } from "antd";
+import React from "react";
 import CreateProjectModalForFgaPro from "metabase/ab/components/Modal/CreateProjectModalForFgaPro";
 import LoginModal from "metabase/auth/containers/LoginModal";
 
@@ -16,10 +15,11 @@ const FgaCreateProjectGuide = (props) => {
           {state === 1 && (
             <div className="flex flex-column" >
               <div className="flex flex-column items-center">
-                <h1>Welcome to</h1><h1>Footprint Growth Analytics (FGA)</h1>
+                <h1>Welcome to Footprint Growth Analytics (FGA)</h1>
               </div>
               {/*<span>Unlock your growth potential in a web3 world. Dive into data insights and get an edge in your marketing strategy with Footprint GA by bringing all of your Web2 and Wed3 data sources together.</span>*/}
               <LoginModal
+                redirect="/fga/pro"
                 fromNav={false}
                 hideClose={true}
                 showLeftSlider={false}

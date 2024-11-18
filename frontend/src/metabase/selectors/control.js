@@ -161,6 +161,3 @@ export const getFgaDashboardKey = createSelector([getControl], (data) => {
   return data?.fgaDashboardKey;
 });
 
-export const getUserExtend = createSelector([getControl], (data) => {
-  return data?.userExtend || [];
-});

@@ -1,17 +1,18 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Form, Input, message, Modal, Result, Select, Steps, Table } from "antd";
+import { Button, Form, Input, message, Modal, Result, Select, Steps, Table } from "antd";
 import { withRouter } from "react-router";
 import { v4 as uuidv4 } from "uuid";
 import { connect } from "react-redux";
-import { getFgaProject, getUser } from "metabase/selectors/user";
-import { loadFgaProjectList, setFgaDashboardKey, setUserExtend } from "metabase/redux/control";
-import { getFgaProjectList, getUserExtend } from "metabase/selectors/control";
-import { loadCurrentFgaProjectById, loadCurrentUserVipFGA } from "metabase/redux/user";
 import { push, replace } from "react-router-redux";
-import { CHAIN_LIST } from "metabase/submit/contract/components/ContractDetailsV4";
 import { LoadingOutlined } from "@ant-design/icons";
 import _, { get } from "lodash";
+import { getFgaProject, getUser } from "metabase/selectors/user";
+import { loadFgaProjectList, setFgaDashboardKey } from "metabase/redux/control";
+import { getFgaProjectList } from "metabase/selectors/control";
+import { loadCurrentFgaProjectById, loadCurrentUserVipFGA } from "metabase/redux/user";
+import { CHAIN_LIST } from "metabase/submit/contract/components/ContractDetailsV4";
 import { findContractMatchByName, postProject, submitFGAContractForPro } from "metabase/new-service";
 import { saveLatestGAProject, saveLatestGAProjectId } from "metabase/ab/utils/utils";
 import "metabase/pricing_v2/index.css";
@@ -315,7 +316,7 @@ const CreateProjectModalForFgaPro = props => {
     }
     return (
       <div className="flex flex-column" style={{ width: "100%", gap: 20 }}>
-        <h2>Get Started</h2>
+        <h2>{"Welcome, let's get started!"}</h2>
         <Steps current={current} items={items} onChange={(index) => {
           if (index === 0 && current === 1) {
             setCurrent(index)
@@ -354,7 +355,6 @@ const CreateProjectModalForFgaPro = props => {
 const mapStateToProps = state => {
   return {
     user: getUser(state),
-    userExtend: getUserExtend(state),
     projectObject: getFgaProject(state),
     fgaProjectList: getFgaProjectList(state),
   };
@@ -362,7 +362,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   loadFgaProjectList: loadFgaProjectList,
-  setUserExtend: setUserExtend,
   setFgaDashboardKey,
   loadCurrentFgaProjectById,
   onChangeLocation: push,
