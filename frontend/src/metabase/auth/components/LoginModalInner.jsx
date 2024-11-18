@@ -25,7 +25,7 @@ const LoginModalInner = props => {
   const [resetSuccess, setResetSuccess] = useState(false);
   const [project, setProject] = useState("footprint");
   const quickRegisterApi = quickRegister;
-  console.log("props", props)
+  
   const {
     onClose,
     login,
@@ -127,7 +127,6 @@ const LoginModalInner = props => {
   };
 
   const getRedirect = () => {
-    console.log("redirect", redirect)
     const redirectStr = redirect || location.query.redirect;
     return redirectStr ? { redirect: redirectStr } : {};
   };
