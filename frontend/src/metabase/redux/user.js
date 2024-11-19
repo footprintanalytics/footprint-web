@@ -460,6 +460,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
           res = {
             "isDemo": true,
             "protocolSlug": "Gaming Demo Project 2",
+            "name": "Gaming Demo Project 2",
             "contractAddress": [
               {
                 "chain": "Ethereum",

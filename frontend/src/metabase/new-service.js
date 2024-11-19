@@ -286,6 +286,7 @@ export const getProjectList = async params => {
         "projectName": "Gaming Demo Project 2",
         "protocolName": "Gaming Demo Project 2",
         "protocolSlug": "Gaming Demo Project 2",
+        "name": "Gaming Demo Project 2",
         "protocolType": "NFT",
         "logo": ""
       },

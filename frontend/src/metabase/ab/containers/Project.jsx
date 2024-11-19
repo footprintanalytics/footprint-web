@@ -116,7 +116,8 @@ const Project = props => {
 
   useEffect(() => {
     if (projectObject) {
-      replaceToDefault(projectPath, currentMenu)
+      const path = projectPath ? projectPath : projectObject.name;
+      replaceToDefault(path, currentMenu)
     } else {
       setGaMenuTabs(null);
     }

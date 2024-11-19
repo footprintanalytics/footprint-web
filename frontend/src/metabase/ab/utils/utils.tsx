@@ -494,3 +494,9 @@ export function getGAFavoritedTemplate() {
 export function getPeaHost() {
   return isProduction ? "https://growthly.footprint.network" : "https://dev-growthly.footprint.network";
 }
+
+// like /fga/pro /fga/pro/
+export function isValidPathnameWithoutProjectParam(pathname: string) {
+  const regex = /^\/\w+\/\w+\/?$/;
+  return regex.test(pathname);
+}
