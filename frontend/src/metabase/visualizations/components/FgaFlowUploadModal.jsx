@@ -11,7 +11,7 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
   const { token } = theme.useToken();
   const [confirmCsvLoading, setConfirmCsvLoading] = useState();
   const [csvData, setCSVData] = useState([]);
-  const [file, setFile] = useState()
+  const [fileList, setFileList] = useState([]);
   const [current, setCurrent] = useState(0);
   const projectId = projectObject?.id
   const [pipelineId, setPipelineId] = useState()
@@ -52,7 +52,7 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
     if (!open) {
       setCurrent(0)
       setCSVData([])
-      setFile(null)
+      setFileList([])
       setPipelineId(null)
     }
   }, [open]);
@@ -62,9 +62,11 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
   const propsUploadAvatarTcOss = {
     name: 'file',
     accept: '.csv',
-    showUploadList: false,
-    maxCount: 1,
+    multiple: true,
+    showUploadList: true,
+    maxCount: 5,
     method: 'post',
+    fileList: fileList,
     // eslint-disable-next-line no-undef
     headers: {
       // token: getUserToken(),
@@ -73,11 +75,19 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
       "projectId": projectId + "",
     },
     beforeUpload: async (file) => {
-      setFile(file);
-      setCurrent(current + 1)
-      return false
+      setFileList(prev => [...prev, file]);
+      return false;
+    },
+    onRemove: file => {
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
     },
     onChange(info) {
+      if (info.fileList.length > 0) {
+        setCurrent(current + 1);
+      }
     },
   }
 
@@ -100,7 +110,7 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
 
             <Button className="w-full" >
               <Upload className="w-full" style={{width: "100%"}} name="avatar" {...propsUploadAvatarTcOss}>
-                <div style={{width: 300, height: 30}}>CSV</div>
+                <div style={{width: 300, height: 30}}>Upload CSV Files (Max 5)</div>
               </Upload>
             </Button>
 
@@ -132,7 +142,7 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
             setCSVData(data)
             setCurrent(current + 1)
           }}
-          file={file}
+          fileList={fileList}
           onUploadAgainClick={() => {
             setCurrent(0)
           }}

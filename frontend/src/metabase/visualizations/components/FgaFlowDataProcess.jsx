@@ -6,7 +6,7 @@ import axios from "axios";
 import { fgaUploadCsvUrl } from "metabase/new-service";
 import { getWeb2TypeText } from "metabase/ab/utils/mapping-utils";
 
-const FgaFlowDataProcess = ({ projectObject, callbackData, file, cardId, onUploadAgainClick }) => {
+const FgaFlowDataProcess = ({ projectObject, callbackData, fileList, cardId, onUploadAgainClick }) => {
   const projectId = projectObject?.id
 
   const [current, setCurrent] = useState(0);
@@ -31,14 +31,16 @@ const FgaFlowDataProcess = ({ projectObject, callbackData, file, cardId, onUploa
 
   useEffect(() => {
     const handleUpload = async () => {
-      if (!file) {
-        console.error('No file selected');
+      if (!fileList || fileList.length === 0) {
+        console.error('No files selected');
         return;
       }
 
       const chartType = getWeb2TypeText(cardId);
       const formData = new FormData();
-      formData.append('file', file);
+      fileList.forEach((file, index) => {
+        formData.append('files', file);
+      });
       formData.append('projectId', projectId + "");
       formData.append('chartType', chartType);
 
@@ -60,10 +62,10 @@ const FgaFlowDataProcess = ({ projectObject, callbackData, file, cardId, onUploa
       }
     };
 
-    if (file) {
-      handleUpload(file);
+    if (fileList && fileList.length > 0) {
+      handleUpload();
     }
-  }, [file]);
+  }, [fileList]);
 
   useEffect(() => {
     if (current < timeItems.length - 1) {
