@@ -11,7 +11,7 @@ import "../css/index.css";
 import { getFgaChain, getFgaProjectList, getGamesByRedux, getHistoryGamesByRedux } from "metabase/selectors/control";
 import { loadFgaProjectList, loginModalShowAction, setGames, setHistoryGames } from "metabase/redux/control";
 import { fga_menu_data_v2 } from "metabase/ab/utils/data";
-import { getGrowthProjectPath, getLatestGAProject, saveLatestGAProject, saveLatestGAProjectId } from "../utils/utils";
+import { getGrowthProjectPath, getLatestGAProject, saveLatestGAProject, saveLatestGAProjectId, isValidPathnameWithoutProjectParam } from "../utils/utils";
 
 const GaProjectSearch = props => {
   const {
@@ -100,10 +100,9 @@ const GaProjectSearch = props => {
         setCurrentProject(project.projectName);
         saveLatestGAProject(project.projectName);
         loadProjectDetail(project.projectId);
-
         setUserProject(projects);
         if (
-          index === -1 && location.pathname.startsWith("/fga/") && location.pathname.includes("/project")
+          (index === -1 && location.pathname.startsWith("/fga/") && location.pathname.includes("/project")) || isValidPathnameWithoutProjectParam(window.location.pathname)
         ) {
           router?.push({
             pathname: getGrowthProjectPath(project.projectName, menu),
