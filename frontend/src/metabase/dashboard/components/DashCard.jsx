@@ -1132,9 +1132,9 @@ class DashCard extends Component {
           chartStyle={chartStyle}
           hideWatermark={hideWatermark}
         />
-        {renderFlowModal()}
-        {renderFgaPriceModal()}
-        {renderPaymentCallbackModal()}
+        {isProFga && renderFlowModal()}
+        {isProFga && renderFgaPriceModal()}
+        {isProFga && renderPaymentCallbackModal()}
       </DashCardRoot>
     );
   }
