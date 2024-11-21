@@ -64,12 +64,11 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
     accept: '.csv',
     multiple: true,
     showUploadList: true,
-    maxCount: 5,
+    maxCount: 10,
     method: 'post',
     fileList: fileList,
     // eslint-disable-next-line no-undef
     headers: {
-      // token: getUserToken(),
     },
     data: {
       "projectId": projectId + "",
@@ -110,7 +109,7 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
 
             <Button className="w-full" >
               <Upload className="w-full" style={{width: "100%"}} name="avatar" {...propsUploadAvatarTcOss}>
-                <div style={{width: 300, height: 30}}>Upload CSV Files (Max 5)</div>
+                <div style={{width: 300, height: 30}}>Upload CSV Files (Max 10)</div>
               </Upload>
             </Button>
 
@@ -163,7 +162,10 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
             scroll={{ y: 300 }}
           />
           <div className={"flex justify-center "} style={{ gap: 10, padding: 20 }}>
-            <Button onClick={() => setCurrent(0)}>Not quite right? Upload Again</Button>
+            <Button onClick={() => {
+              setFileList([])
+              setCurrent(0)
+            }}>Not quite right? Upload Again</Button>
             <Button loading={confirmCsvLoading} type="primary" onClick={() => {
               handleConfirmCSV()
             }}>{`Perfect! Let's Process the Data`}</Button>
