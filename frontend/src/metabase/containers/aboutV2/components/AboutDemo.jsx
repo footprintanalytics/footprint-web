@@ -138,7 +138,7 @@ const AboutDemo = () => {
           </ul>
         </div>
         <div className="About__demo-top-right">
-          <div className="About__demo-top-right-bottom" style={{ marginTop: "100px" }}>
+          <div className="About__demo-top-right-bottom" style={{ marginTop: "90px" }}>
             {renderBlock({ item: batchDownloadData, style: { marginRight: "300px" } })}
             <div className="absolute" style={{ right: "-10px", top: "120px", transform: "scale(0.8)" }}>
               <img src={getOssUrl("home-v2/img-data-batch-download.png")} alt="Batch Download" />
