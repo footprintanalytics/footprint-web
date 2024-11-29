@@ -39,7 +39,7 @@ const About = props => {
   );
 
   const defaultDesc =
-    "Footprint Analytics is a blockchain data solutions provider. We leverage cutting-edge AI technology to help analysts, builders, and investors turn blockchain data and combine Web2 data into insights with accessible visualization tools and a powerful multi-chain API across 30+ chains for NFTs, games, wallet profiles, and money flow data.";
+    "Footprint Analytics is a comprehensive blockchain data analytics platform that simplifies analysis and community management for sustainable growth in Web3 projects.";
   const keywords = "Footprint Analytics, Web3 AI, blockchain AI, reference data, wallet profile, money flow, Web3 metadata, Protocol graph, blockchain data, crypto data provider, Web3 data solution, web3 gaming, web3 gaming analytics, web3 gaming data, NFT game, Web3 marketing, web3 growth marketing, Growth Marketing, cross chain data, blockchain data api, Zero coding analytics";
   const title = "Footprint Analytics | Web3 Data Solution Provider with AI Technology. ";
 
