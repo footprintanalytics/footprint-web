@@ -33,10 +33,10 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
       title: "Footprint Analytics",
       value: "footprint",
     },
-    {
-      title: "Data API",
-      value: "data-api",
-    }
+    // {
+    //   title: "Data API",
+    //   value: "data-api",
+    // }
   ]
 
 

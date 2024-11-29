@@ -57,6 +57,12 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
     }
   }, [open]);
 
+  useEffect(() => {
+    if (current === 0) {
+      setFileList([])
+    }
+  }, [current])
+
   const queryClient = new QueryClient();
 
   const propsUploadAvatarTcOss = {
@@ -85,7 +91,9 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
     },
     onChange(info) {
       if (info.fileList.length > 0) {
-        setCurrent(current + 1);
+        setTimeout(() => {
+          setCurrent(current + 1);
+        }, 500)
       }
     },
   }
@@ -163,7 +171,6 @@ const FgaFlowUploadModal = ({onSuccess, projectObject, cardId, isModal, force, o
           />
           <div className={"flex justify-center "} style={{ gap: 10, padding: 20 }}>
             <Button onClick={() => {
-              setFileList([])
               setCurrent(0)
             }}>Not quite right? Upload Again</Button>
             <Button loading={confirmCsvLoading} type="primary" onClick={() => {
