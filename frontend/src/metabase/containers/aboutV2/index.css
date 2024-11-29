@@ -551,7 +551,6 @@
   width: fit-content;
   font-size: 36px;
   color: white;
-  margin-top: -40px;
   background: linear-gradient(90deg, #FFFFFF 0%, #4444FF 100%), #FFFFFF;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -560,7 +559,6 @@
 .About__demo-top {
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .About__demo-block {
@@ -597,7 +595,7 @@
 .About__demo-analytics-app ul, .About__demo-data-api ul {
   display: flex;
   flex-direction: column;
-  margin-top: 60px;
+  margin-top: 48px;
 }
 
 .About__demo-analytics-app li, .About__demo-data-api li {
@@ -614,6 +612,7 @@
   flex-direction: column;
   align-items: center;
   margin-right: 20px;
+  position: relative;
 }
 
 .About__demo-top-right-bottom {
@@ -714,7 +713,7 @@
   min-width: calc((100% - 100px) / 2);
   flex: 1;
   background-color: #182034ee;
-  padding: 80px 0 0 0;
+  padding: 54px 0 0 0;
   height: 620px;
   border-radius: 30px;
   background-repeat: no-repeat;
@@ -722,7 +721,7 @@
 }
 
 .About__demo-data-api-content {
-  height: 80px;
+  height: 72px;
 }
 
 .About__demo-data-api-content span {
@@ -744,7 +743,7 @@
 .About__demo-data-api {
   width: 1280px;
   height: 510px;
-  padding: 0;
+  padding: 54px 0 0 0;
   margin-top: 20px;
   flex-direction: row;
   justify-content: space-between;
