@@ -69,17 +69,17 @@ const DeveloperAppForm = ({ user, refreshCurrentUser }) => {
             initial={authKey || ""}
           />
           {authKey && (
-            <div style={{ textAlign: "right" }}>
-              <Link
-                to={doc}
+            <div className="flex justify-end">
+              <div
+                // to={doc}
                 target="_blank"
                 className="text-underline text-underline-hover mt1"
                 style={{ width: "fit-content" }}
                 onClick={e => {
                   e.preventDefault();
-                  setTimeout(() => {
-                    window.open(doc);
-                  }, 1500);
+                  // setTimeout(() => {
+                  //   window.open(doc);
+                  // }, 1500);
                 }}
               >
                 <Tooltip tooltip={t`Copied!`} isOpen={copied}>
@@ -89,7 +89,7 @@ const DeveloperAppForm = ({ user, refreshCurrentUser }) => {
                     </Button>
                   </CopyToClipboard>
                 </Tooltip>
-              </Link>
+              </div>
             </div>
           )}
         </Form>
