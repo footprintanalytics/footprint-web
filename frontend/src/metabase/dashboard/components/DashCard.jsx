@@ -373,7 +373,7 @@ class DashCard extends Component {
 
     const showPreview = !isABPath() && !isFGAVCPath() && !isPublic && !showEdit && !singleDisplay;
 
-    const showGetDataViaSqlApi = showEdit || showPreview || isIframeShow;
+    const showGetDataViaSqlApi = false;
     const showDownload = showEdit || showPreview || isIframeShow;
     const showChartInfo = false;
     const showChartRefresh = !isPublic && !singleDisplay;
