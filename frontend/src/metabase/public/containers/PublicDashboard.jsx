@@ -740,7 +740,7 @@ class PublicDashboard extends Component {
 
     const backgroundColor = bg_color === "black" ? "black": "";
 
-    const showAPITip = this.props.showAPITip;
+    const showAPITip = false;
 
     return (
       <EmbedFrame

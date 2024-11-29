@@ -58,7 +58,7 @@ const AboutDemo = () => {
     {
       title: "Analytics",
       desc: "Zero-Coding Analytics as Tableau for Crypto",
-      content: <span>Use Footprint’s real-time on-chain and uploaded data to showcase cutting-edge <br/>insights using a drag-and-drop interface or SQL. </span>,
+      content: <span>Use Footprint’s real-time on-chain and uploaded data to <br/>showcase cutting-edge insights using a drag-and-drop <br/>interface or SQL. </span>,
       buttons: [
         {
           buttonText: "Explore Dashboards",
@@ -98,22 +98,14 @@ const AboutDemo = () => {
     "Ease of Use Abstraction",
   ]
 
-  const blockData = [
-    {
-      "img": getOssUrl("home-v2/img_demo_2.png"),
-      "title": "REST API",
-      "desc": "Everything you need to build in Web3.",
-      "buttonText": "Explore Data API",
-      "buttonLink": "https://docs.footprint.network/reference/introduction",
-    },
-    {
-      "img": getOssUrl("home-v2/img_demo_3.png"),
-      "title": "Batch Download",
-      "desc": "Sync blockchain historical data in one batch",
-      "buttonText": "Explore Batch Download",
-      "buttonLink": "https://www.footprint.network/batch-download",
-    },
-  ]
+  const batchDownloadData = {
+    "img": getOssUrl("home-v2/img_demo_3.png"),
+    "title": "Batch Download",
+    "desc": "Sync blockchain historical data in one batch",
+    "buttonText": "Explore Batch Download",
+    "buttonLink": "https://www.footprint.network/batch-download",
+  }
+  
 
   return (
     <div className="About__demo">
@@ -124,7 +116,7 @@ const AboutDemo = () => {
         <div className="About__demo-top" style={{ paddingLeft: 60, paddingBottom: 50 }}>
           <h3>Data Room</h3>
           <h4>Structured, Simple, and Semantic Business Blockchain Data.</h4>
-          <span>Gain access to a wide array of abstracted datasets, <br/>facilitating effortless data exploration and empowering the creation of <br/>next-generation applications whenever required.</span>
+          <span>Gain access to a wide array of abstracted datasets, <br/>facilitating effortless data exploration and empowering <br/>the creation of next-generation applications whenever <br/>required.</span>
           <ul>
             {advantage.map(a => {
               return (
@@ -146,9 +138,11 @@ const AboutDemo = () => {
           </ul>
         </div>
         <div className="About__demo-top-right">
-          {renderBlock({ item: blockData[0], style: { marginRight: "200px" }})}
-          <div className="About__demo-top-right-bottom" style={{ marginTop: "40px" }}>
-            {renderBlock({ item: blockData[1], style: { marginLeft: "200px" } })}
+          <div className="About__demo-top-right-bottom" style={{ marginTop: "100px" }}>
+            {renderBlock({ item: batchDownloadData, style: { marginRight: "300px" } })}
+            <div className="absolute" style={{ right: "-10px", top: "120px", transform: "scale(0.8)" }}>
+              <img src={getOssUrl("home-v2/img-data-batch-download.png")} alt="Batch Download" />
+            </div>
           </div>
         </div>
       </div>

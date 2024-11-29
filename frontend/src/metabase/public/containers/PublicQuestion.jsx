@@ -244,7 +244,7 @@ class PublicQuestion extends Component {
       hideTitle = true;
     }
     const shouldRenderAsNightMode = isNightMode || canShowDarkMode();
-    const showAPITip = this.props.showAPITip;
+    const showAPITip = false;
     return (
       <EmbedFrame
         name={card && card.name}
