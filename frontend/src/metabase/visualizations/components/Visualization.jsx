@@ -617,7 +617,7 @@ class Visualization extends React.PureComponent {
       if (isFga && _.isString(error) && error.indexOf("iceberg.footprint.") && error.indexOf("_address_nft_latest_balance") && error.indexOf("does not exist")) {
         return (
           <div className="noResults">
-            The data is not yet available, please
+            The data is not yet available.
             <br />
             feel free to contact our{" "}
             <Link target="_blank" href="mailto:sales@footprint.network">
