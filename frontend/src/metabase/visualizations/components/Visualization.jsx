@@ -519,7 +519,7 @@ class Visualization extends React.PureComponent {
       if (isFga || isGrowthly) {
         return (
           <div className="noResults">
-            The data is not yet available, please.
+            The data is not yet available.
             {/*<br />
             {isABWeb3Dashboard ? (<>
               {" "}
