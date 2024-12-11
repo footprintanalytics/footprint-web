@@ -602,11 +602,11 @@ const chainData = [
         "value": "boba-network-overview",
         "publicUuid": "f46cb011-db68-4228-9f3d-ce8f20e6819b",
       },
-      {
-        "label": "Harmony Overview",
-        "value": "harmony-overview",
-        "publicUuid": "f58fcef6-b8f4-4b60-9a38-41ea0d9d38d4",
-      },
+      // {
+      //   "label": "Harmony Overview",
+      //   "value": "harmony-overview",
+      //   "publicUuid": "f58fcef6-b8f4-4b60-9a38-41ea0d9d38d4",
+      // },
       {
         "label": "Moonriver Overview",
         "value": "moonriver-overview",
@@ -642,11 +642,11 @@ const chainData = [
         "value": "thundercore-overview",
         "publicUuid": "912bb075-9468-49f9-8c04-542c84cc20ef",
       },
-      {
-        "label": "Nautilus Overview",
-        "value": "nautilus-overview",
-        "publicUuid": "62908ce3-43e2-450f-89c1-a1066ba1e7fe",
-      },
+      // {
+      //   "label": "Nautilus Overview",
+      //   "value": "nautilus-overview",
+      //   "publicUuid": "62908ce3-43e2-450f-89c1-a1066ba1e7fe",
+      // },
       {
         "label": "Home Verse Overview",
         "value": "home-verse-overview",

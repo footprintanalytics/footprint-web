@@ -155,12 +155,12 @@ const AboutDataCoverage = () => {
     {
       title: "Nautilus",
       img: getOssUrl("home-v2/chain/img-chain-Nautilus.png?image_process=resize,w_68/crop,h_68/format,png"),
-      link: "/research/chain/evm-chain-stats/nautilus-overview",
+      link: "",
     },
     {
       title: "Harmony",
       img: getOssUrl("home-v2/chain/img-chain-Harmony.png?1=1&image_process=resize,w_68/crop,h_68/format,png"),
-      link: "/research/chain/evm-chain-stats/harmony-overview",
+      link: "",
     },
     {
       title: "Moonbeam",

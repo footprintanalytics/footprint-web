@@ -193,7 +193,7 @@ const ResearchContent = props => {
           {
             title: "Harmony",
             img: getOssUrl("studio/img-chain-4.png"),
-            link: "/research/chain/chain-stats/harmony-overview",
+            link: "",
           },
           {
             title: "Fantom",
@@ -253,7 +253,7 @@ const ResearchContent = props => {
           {
             title: "Nautilus",
             img: getOssUrl("fp-chains/nautilus.png?1=1&image_process=resize,w_36/crop,h_36/format,webp"),
-            link: "/research/chain/chain-stats/nautilus-overview",
+            link: "",
           },
           {
             title: "Core",
