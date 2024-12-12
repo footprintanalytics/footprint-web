@@ -206,42 +206,42 @@ export function getChainDataList({ includeAll = true }) {
           protocolName: "Pizza Game",
         },
       },
-      {
-        value: "boba",
-        label: "Boba",
-        icon: getOssUrl("fp-chains/boba.webp"),
-        defaultProject: {
-          protocolSlug: "domination-finance",
-          protocolName: "Domination Finance",
-        },
-      },
-      {
-        value: "cronos",
-        label: "Cronos",
-        icon: getOssUrl("fp-chains/cronos.webp"),
-        defaultProject: {
-          protocolSlug: "defira",
-          protocolName: "Defira",
-        },
-      },
-      {
-        value: "celo",
-        label: "Celo",
-        icon: getOssUrl("fp-chains/celo.webp"),
-        defaultProject: {
-          protocolSlug: "2048-token-everest",
-          protocolName: "2048 Token - Everest",
-        },
-      },
-      {
-        value: "dfk",
-        label: "DFK",
-        icon: getOssUrl("fp-chains/dfk.webp"),
-        defaultProject: {
-          protocolSlug: "defi-kingdoms",
-          protocolName: "Defi Kingdoms",
-        },
-      },
+      // {
+      //   value: "boba",
+      //   label: "Boba",
+      //   icon: getOssUrl("fp-chains/boba.webp"),
+      //   defaultProject: {
+      //     protocolSlug: "domination-finance",
+      //     protocolName: "Domination Finance",
+      //   },
+      // },
+      // {
+      //   value: "cronos",
+      //   label: "Cronos",
+      //   icon: getOssUrl("fp-chains/cronos.webp"),
+      //   defaultProject: {
+      //     protocolSlug: "defira",
+      //     protocolName: "Defira",
+      //   },
+      // },
+      // {
+      //   value: "celo",
+      //   label: "Celo",
+      //   icon: getOssUrl("fp-chains/celo.webp"),
+      //   defaultProject: {
+      //     protocolSlug: "2048-token-everest",
+      //     protocolName: "2048 Token - Everest",
+      //   },
+      // },
+      // {
+      //   value: "dfk",
+      //   label: "DFK",
+      //   icon: getOssUrl("fp-chains/dfk.webp"),
+      //   defaultProject: {
+      //     protocolSlug: "defi-kingdoms",
+      //     protocolName: "Defi Kingdoms",
+      //   },
+      // },
       /*{
         value: "doge",
         label: "Doge",
@@ -252,25 +252,25 @@ export function getChainDataList({ includeAll = true }) {
         label: "EOS",
         icon: getOssUrl("fp-chains/eos.webp"),
       },*/
-      {
-        value: "fantom",
-        label: "Fantom",
-        hasTraces: true,
-        icon: getOssUrl("fp-chains/fantom.webp"),
-        defaultProject: {
-          protocolSlug: "tank-wars-zone",
-          protocolName: "Tank Wars Zone",
-        }
-      },
-      {
-        value: "harmony",
-        label: "Harmony",
-        icon: getOssUrl("fp-chains/harmony.webp"),
-        defaultProject: {
-          protocolSlug: "defira",
-          protocolName: "Defira",
-        }
-      },
+      // {
+      //   value: "fantom",
+      //   label: "Fantom",
+      //   hasTraces: true,
+      //   icon: getOssUrl("fp-chains/fantom.webp"),
+      //   defaultProject: {
+      //     protocolSlug: "tank-wars-zone",
+      //     protocolName: "Tank Wars Zone",
+      //   }
+      // },
+      // {
+      //   value: "harmony",
+      //   label: "Harmony",
+      //   icon: getOssUrl("fp-chains/harmony.webp"),
+      //   defaultProject: {
+      //     protocolSlug: "defira",
+      //     protocolName: "Defira",
+      //   }
+      // },
       /*{
         value: "hive",
         label: "Hive",
@@ -290,24 +290,24 @@ export function getChainDataList({ includeAll = true }) {
           protocolName: "My Crypto Heroes",
         }
       },
-      {
-        value: "moonbeam",
-        label: "Moonbeam",
-        icon: getOssUrl("fp-chains/moonbeam.webp"),
-        defaultProject: {
-          protocolSlug: "the-great-escape",
-          protocolName: "The Great Escape",
-        }
-      },
-      {
-        value: "moonriver",
-        label: "Moonriver",
-        icon: getOssUrl("fp-chains/moonriver.webp"),
-        defaultProject: {
-          protocolSlug: "zoombies-nft-world",
-          protocolName: "Zoombies NFT World",
-        }
-      },
+      // {
+      //   value: "moonbeam",
+      //   label: "Moonbeam",
+      //   icon: getOssUrl("fp-chains/moonbeam.webp"),
+      //   defaultProject: {
+      //     protocolSlug: "the-great-escape",
+      //     protocolName: "The Great Escape",
+      //   }
+      // },
+      // {
+      //   value: "moonriver",
+      //   label: "Moonriver",
+      //   icon: getOssUrl("fp-chains/moonriver.webp"),
+      //   defaultProject: {
+      //     protocolSlug: "zoombies-nft-world",
+      //     protocolName: "Zoombies NFT World",
+      //   }
+      // },
       {
         value: "oasys",
         label: "Oasys",
@@ -326,24 +326,24 @@ export function getChainDataList({ includeAll = true }) {
           protocolName: "Axie Infinity",
         }
       },
-      {
-        value: "thundercore",
-        label: "Thundercore",
-        noProtocol: true,
-        icon: getOssUrl("fp-chains/thundercore.webp"),
-      },
+      // {
+      //   value: "thundercore",
+      //   label: "Thundercore",
+      //   noProtocol: true,
+      //   icon: getOssUrl("fp-chains/thundercore.webp"),
+      // },
       {
         value: "sui",
         label: "Sui",
         noTransactions: true,
         icon: getOssUrl("studio/img-chain-27.png?image_process=resize,w_36/crop,h_36/format,webp"),
       },
-      {
-        value: "tcg",
-        label: "TCG Verse",
-        noProtocol: true,
-        icon: getOssUrl("studio/img-chain-37.png?image_process=resize,w_36/crop,h_36/format,webp"),
-      },
+      // {
+      //   value: "tcg",
+      //   label: "TCG Verse",
+      //   noProtocol: true,
+      //   icon: getOssUrl("studio/img-chain-37.png?image_process=resize,w_36/crop,h_36/format,webp"),
+      // },
       {
         value: "home",
         label: "HOME Verse",
@@ -363,15 +363,15 @@ export function getChainDataList({ includeAll = true }) {
           protocolName: "XY Finance",
         }
       },
-      {
-        value: "nautilus",
-        label: "Nautilus",
-        icon: getOssUrl("fp-chains/nautilus.png?image_process=resize,w_36/crop,h_36/format,webp"),
-        defaultProject: {
-          protocolSlug: "the-sandbox",
-          protocolName: "The Sandbox",
-        }
-      },
+      // {
+      //   value: "nautilus",
+      //   label: "Nautilus",
+      //   icon: getOssUrl("fp-chains/nautilus.png?image_process=resize,w_36/crop,h_36/format,webp"),
+      //   defaultProject: {
+      //     protocolSlug: "the-sandbox",
+      //     protocolName: "The Sandbox",
+      //   }
+      // },
       {
         value: "starknet",
         label: "Starknet",
@@ -390,15 +390,15 @@ export function getChainDataList({ includeAll = true }) {
           protocolName: "The Sandbox",
         }
       },
-      {
-        value: "combo",
-        label: "Combo",
-        icon: getOssUrl("fp-chains/combo.png?image_process=resize,w_36/crop,h_36/format,webp"),
-        defaultProject: {
-          protocolSlug: "the-sandbox",
-          protocolName: "The Sandbox",
-        }
-      },
+      // {
+      //   value: "combo",
+      //   label: "Combo",
+      //   icon: getOssUrl("fp-chains/combo.png?image_process=resize,w_36/crop,h_36/format,webp"),
+      //   defaultProject: {
+      //     protocolSlug: "the-sandbox",
+      //     protocolName: "The Sandbox",
+      //   }
+      // },
       {
         value: "arbitrum nova",
         label: "Arbitrum Nova",
