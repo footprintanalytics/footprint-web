@@ -1,12 +1,12 @@
 /* eslint-disable curly */
 /* eslint-env node */
-import BrowserLogger from "alife-logger";
-import { isProduction, armsPid } from "metabase/env";
+// import BrowserLogger from "alife-logger";
+// import { isProduction, armsPid } from "metabase/env";
 
 let logger = null;
 // const production = process.env.NODE_ENV === "production";
 
-try {
+/*try {
   // const disabled = window?.location?.pathname === "/public/widget/brand";
   const disabled = window?.location?.pathname?.startsWith("/public");
   if (isProduction) {
@@ -39,13 +39,13 @@ try {
       ];
     }
   }
-} catch (e) {}
+} catch (e) {}*/
 
 export const reportAPI = (url, success, time, status, message = "") => {
   logger && logger.api(url, success, time, status, message);
-  if (!isProduction) {
+  /*if (!isProduction) {
     console.log("[REPORT_API]", [url, success, time, status, message]);
-  }
+  }*/
 };
 
 export const formatArmsStatusTextByCache = (statusText, isCache) => {
