@@ -120,7 +120,7 @@ class ChartSettingFieldsPartition extends React.Component {
                     ref={provided.innerRef}
                     isDragSource={!!snapshot.draggingFromThisWith}
                   >
-                    {columns.length === 0 ? (
+                    {!columns || columns.length === 0 ? (
                       <EmptyColumnPlaceholder>{t`Drag fields here`}</EmptyColumnPlaceholder>
                     ) : (
                       columns.map((col, index) => (

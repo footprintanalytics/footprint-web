@@ -16,6 +16,7 @@ import {
   SCOPE,
   CATEGORY, SERIES_CATEGORY,
 } from "metabase-lib/types/constants";
+import { get } from "lodash";
 
 /**
  * Is x the same as, or a descendant type of, y?
@@ -109,6 +110,9 @@ export const isScope = isFieldType.bind(null, SCOPE);
 export const isCategory = isFieldType.bind(null, CATEGORY);
 export const isSeriesCategory = isFieldType.bind(null, SERIES_CATEGORY);
 export const isLocation = isFieldType.bind(null, LOCATION);
+
+export const isDimensionByPivotTable = col =>
+  col && !["type/BigInteger", "type/Float", "type/Integer"].includes(get(col, "base_type"));
 
 export const isDimension = col =>
   // col && !isDescription(col);
@@ -212,3 +216,13 @@ export function hasLatitudeAndLongitudeColumns(cols) {
   }
   return hasLatitude && hasLongitude;
 }
+
+export const pivotGroupingCol = {
+  base_type: "type/Integer",
+  name: "pivot-grouping",
+  display_name: "pivot-grouping",
+  expression_name: "pivot-grouping",
+  field_ref: ["expression", "pivot-grouping"],
+  source: "breakout",
+  effective_type: "type/Integer"
+};
