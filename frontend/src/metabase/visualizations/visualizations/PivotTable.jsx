@@ -29,7 +29,7 @@ import { columnSettings } from "metabase/visualizations/lib/settings/column";
 import { ChartSettingIconRadio } from "metabase/visualizations/components/settings/ChartSettingIconRadio";
 
 import { PLUGIN_SELECTORS } from "metabase/plugins";
-import { isDimension } from "metabase-lib/types/utils/isa";
+import { isDimension, isDimensionByPivotTable } from "metabase-lib/types/utils/isa";
 import {
   PivotTableRoot,
   PivotTableCell,
@@ -93,13 +93,13 @@ class PivotTable extends Component {
   static isSensible({ cols }, query) {
     return (
       cols.length >= 2 &&
-      cols.every(isColumnValid) &&
+      // cols.every(isColumnValid) &&
       this.databaseSupportsPivotTables(query)
     );
   }
 
   static checkRenderable([{ data, card }], settings, query) {
-    if (data.cols.length < 2 || !data.cols.every(isColumnValid)) {
+    if (data.cols.length < 2) {
       throw new Error(
         t`Pivot tables can only be used with aggregated queries.`,
       );
@@ -138,7 +138,8 @@ class PivotTable extends Component {
       persistDefault: true,
       getHidden: ([{ data }]) =>
         // hide the setting widget if there are invalid columns
-        !data || data.cols.some(col => !isColumnValid(col)),
+        !data,
+        // || data.cols.some(col => !isColumnValid(col)),
       getProps: ([{ data }], settings) => ({
         partitions,
         columns: data == null ? [] : data.cols,
@@ -156,7 +157,7 @@ class PivotTable extends Component {
         if (storedValue == null) {
           const [dimensions, values] = _.partition(
             columnsToPartition,
-            isDimension,
+            isDimensionByPivotTable,
           );
           const [first, second, ...rest] = _.sortBy(dimensions, col =>
             getIn(col, ["fingerprint", "global", "distinct-count"]),
@@ -321,7 +322,7 @@ class PivotTable extends Component {
       isNightMode,
       isDashboard,
     } = this.props;
-    if (data == null || !data.cols.some(isPivotGroupColumn)) {
+    if (data == null) {
       return null;
     }
 
@@ -349,6 +350,9 @@ class PivotTable extends Component {
       pivoted = multiLevelPivot(data, settings);
     } catch (e) {
       console.warn(e);
+    }
+    if (!pivoted) {
+      return <div className={"flex justify-center align-center text-centered h-full w-full"}><h4>The pivot table cannot be generated, please contact to admin. <br/>Or switch to table type first.</h4></div>
     }
     const {
       leftHeaderItems,

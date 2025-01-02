@@ -4,6 +4,7 @@ import { t } from "ttag";
 import { makeCellBackgroundGetter } from "metabase/visualizations/lib/table_format";
 
 import { formatValue, formatColumn } from "metabase/lib/formatting";
+import { isDimensionByPivotTable, pivotGroupingCol } from "metabase-lib/types/utils/isa";
 
 export function isPivotGroupColumn(col) {
   return col.name === "pivot-grouping";
@@ -93,7 +94,7 @@ export function multiLevelPivot(data, settings) {
           value,
           column: columns[index],
         }))
-        .filter(({ column }) => column.source === "breakout"),
+        .filter(({ column }) => column?.source === "breakout"),
     };
   }
 
@@ -217,11 +218,21 @@ export function multiLevelPivot(data, settings) {
 // There's a column indicating which breakouts were used to compute that row.
 // We use that column to split apart the data and convert the field refs to indexes.
 function splitPivotData(data) {
-  const groupIndex = data.cols.findIndex(isPivotGroupColumn);
-  const columns = data.cols.filter(col => !isPivotGroupColumn(col));
+  let rows = data.rows;
+  let cols = [...data.cols];
+
+  // Add pivot grouping column if missing, indicating it's a native SQL query
+  if (!data.cols.some(isPivotGroupColumn)) {
+    const result = addPivotGroupingForNativeQuery(data);
+    cols = result.cols;
+    rows = result.rows;
+  }
+  const groupIndex = cols.findIndex(isPivotGroupColumn);
+
+  const columns = cols.filter(col => !isPivotGroupColumn(col));
   const breakouts = columns.filter(col => col.source === "breakout");
 
-  const pivotData = _.chain(data.rows)
+  const pivotData = _.chain(rows)
     .groupBy(row => row[groupIndex])
     .pairs()
     .map(([key, rows]) => {
@@ -669,4 +680,124 @@ class SortState {
       }
     }
   }
+}
+
+function addPivotGroupingForNativeQuery(data) {
+  const { cols, rows } = data;
+  const groupColumnCount = cols.findIndex(col => !isDimensionByPivotTable(col));
+
+  // Set source for grouping columns
+  setBreakoutSourceForGroupColumns(cols, groupColumnCount);
+
+  // Add pivot-grouping column
+  const updatedCols = insertPivotGroupingColumn(cols, groupColumnCount);
+
+  // Add grouping flags
+  const rowsWithGrouping = addGroupingFlagToRows(rows, groupColumnCount);
+
+  // Generate group summary data
+  const { sumRows, grandTotal } = generateGroupSummaries(rowsWithGrouping, updatedCols, groupColumnCount);
+
+  return {
+    cols: updatedCols,
+    rows: [...sumRows, grandTotal]
+  };
+}
+
+function setBreakoutSourceForGroupColumns(cols, groupColumnCount) {
+  for (let i = 0; i < groupColumnCount; i++) {
+    cols[i].source = "breakout";
+  }
+}
+
+function insertPivotGroupingColumn(cols, groupColumnCount) {
+  const updatedCols = [...cols];
+  updatedCols.splice(groupColumnCount, 0, pivotGroupingCol);
+  return updatedCols;
+}
+
+function addGroupingFlagToRows(rows, groupColumnCount) {
+  return rows.map(row => {
+    const newRow = [...row];
+    newRow.splice(groupColumnCount, 0, 0);
+    return newRow;
+  });
+}
+
+function generateGroupCombinations(groupColumnCount) {
+  const result = [];
+
+  const backtrack = (start, current) => {
+    if (current.length >= 1) {
+      result.push([...current].sort((a, b) => a - b));
+    }
+    for (let i = start; i < groupColumnCount; i++) {
+      current.push(i);
+      backtrack(i + 1, current);
+      current.pop();
+    }
+  };
+
+  backtrack(0, []);
+  return result.sort((a, b) => {
+    if (b.length !== a.length) {
+      return b.length - a.length;
+    }
+    return b[0] - a[0];
+  });
+}
+
+function generateGroupSummaries(rows, cols, groupColumnCount) {
+  const sumRows = [];
+  const combinations = generateGroupCombinations(groupColumnCount);
+
+  // Generate summaries for each level
+  for (const [level, groupByColumns] of combinations.entries()) {
+    const levelSums = calculateLevelSums(rows, cols, groupColumnCount, groupByColumns, level);
+    sumRows.push(...levelSums);
+  }
+
+  // Generate grand total row
+  const grandTotal = calculateGrandTotal(rows, cols, groupColumnCount);
+
+  return { sumRows, grandTotal };
+}
+
+function calculateLevelSums(rows, cols, groupColumnCount, groupByColumns, level) {
+  const groupedData = _.groupBy(rows, row =>
+    groupByColumns.map(colIndex => row[colIndex]).join('|')
+  );
+
+  return Object.entries(groupedData).map(([key, group]) => {
+    const sumRow = new Array(cols.length).fill(null);
+    const groupValues = key.split('|');
+
+    // Fill in group column values
+    groupByColumns.forEach((colIndex, i) => {
+      sumRow[colIndex] = groupValues[i];
+    });
+
+    // Calculate summary values
+    for (let i = groupColumnCount; i < cols.length; i++) {
+      sumRow[i] = group.reduce((sum, row) => sum + (row[i] || 0), 0);
+    }
+
+    // Add grouping flag
+    sumRow[groupColumnCount] = level;
+    return sumRow;
+  });
+}
+
+function calculateGrandTotal(rows, cols, groupColumnCount) {
+  const grandTotal = new Array(cols.length).fill(null);
+
+  // Calculate summary values
+  for (let i = groupColumnCount; i < cols.length; i++) {
+    grandTotal[i] = rows.reduce((sum, row) => sum + (row[i] || 0), 0);
+  }
+
+  // Use bit operations to calculate grouping flag for grand total row
+  grandTotal[groupColumnCount] = (1 << groupColumnCount) - 1;
+
+  return grandTotal;
 }
