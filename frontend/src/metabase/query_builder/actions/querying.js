@@ -26,6 +26,7 @@ import {
 
 import { updateUrl } from "./navigation";
 import { CardApi, PublicApi } from "../../services";
+import { get } from "lodash";
 
 export const SET_DOCUMENT_TITLE = "metabase/qb/SET_DOCUMENT_TITLE";
 const setDocumentTitle = createAction(SET_DOCUMENT_TITLE);
@@ -223,9 +224,10 @@ export const queryCompleted = (question, queryResults) => {
       }
       // Only update the display if the question is new or has been changed.
       // Otherwise, trust that the question was saved with the correct display.
-      const createMethod = question.card().create_method;
+      // const createMethod = question.card().create_method;
       // const newGuide = canShowNewGuideStart(getState().currentUser);
-      if (createMethod !== "template" && createMethod !== "preview" && createMethod !== "GPT") {
+      const isNewQuestion = !get(question, "_card.create_method");
+      if (isNewQuestion) {
         question = question
           // if we are going to trigger autoselection logic, check if the locked display no longer is "sensible".
           .maybeUnlockDisplay(
