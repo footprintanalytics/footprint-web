@@ -29,12 +29,12 @@ const ResearchContent2 = props => {
           link: "/research/gamefi/game-overview/game-market",
           icon: ReactIcons.gameTokensIcon,
         },
-        {
+        /*{
           title: "Chain Stats",
           desc: "Discover popular games across different blockchains.",
           link: "/research/gamefi/game-overview/chain-stats?series_date-79658=past90days~",
           icon: ReactIcons.hotGamesIcon,
-        },
+        },*/
         {
           title: "Single Game Stats",
           desc: "In-depth stats of the game's transaction, token, NFT etc.",
