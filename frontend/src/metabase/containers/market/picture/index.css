@@ -15,12 +15,14 @@
 
 .market__list {
   flex: 1;
+  padding: 40px;
 }
 
 .market__display {
   flex: 2;
   background: #f7f7f7;
   height: 100%;
+  padding: 20px;
 }
 
 .market__display img {
@@ -43,3 +45,212 @@
   justify-content: center;
   align-items: center;
 }
+
+.market__picture_root {
+  height: 540px;
+  width: 960px;
+  display: flex;
+  flex-wrap: wrap;
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  position: relative;
+  font-family: "Montserrat", serif;
+}
+
+.market__picture_title {
+  color: white;
+  font-size: 52px;
+  font-weight: 900;
+  margin-bottom: -10px;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+  font-family: "Arial Black", "Helvetica Black", sans-serif;
+  letter-spacing: -1px;
+}
+
+.market__picture_left {
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 150px;
+  padding-left: 40px;
+}
+
+.market__picture_title_sub {
+  color: white;
+  font-size: 26px;
+  font-weight: bold;
+  white-space: pre-line;
+  margin-bottom: 20px;
+  font-family: "Arial Black", "Helvetica Black", sans-serif;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.market__picture_title_sub_template2 {
+  color: white;
+  font-size: 26px;
+  font-weight: bold;
+  white-space: pre-line;
+  margin-bottom: 20px;
+  font-family: "Arial Black", "Helvetica Black", sans-serif;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 6px;
+  left: 0;
+}
+
+.market__picture_title_date {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  position: absolute;
+  font-family: "Arial Black", "Helvetica Black", sans-serif;
+  top: 350px;
+  left: 110px;
+}
+
+.market__picture_title_date_template2 {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  position: absolute;
+  font-family: "Montserrat", serif;
+  bottom: 10px;
+  right: 50px;
+}
+
+.market__picture_table {
+  flex: 1;
+  padding-top: 10px;
+  margin-left: 20px;
+  color: white;
+  font-family: "Montserrat", serif;
+}
+
+.market__picture_table_template2 {
+  padding: 60px 0;
+  font-family: "Montserrat", serif;
+}
+
+.market__picture_table_header {
+  display: flex;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 15px;
+}
+
+.market__picture_table_header_item {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.market__picture_table_header_item:nth-child(1) {
+  flex: 2;
+}
+
+.market__picture_table_header_item:nth-child(2),
+.market__picture_table_header_item:nth-child(3) {
+  flex: 1;
+  text-align: right;
+}
+
+.market__picture_table_row {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.market__picture_table_cell {
+  font-size: 16px;
+  color: white;
+}
+
+.market__picture_table_name {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.market__picture_table_change,
+.market__picture_table_users {
+  flex: 1;
+  text-align: right;
+}
+
+.market__picture_table_logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: white;
+}
+
+
+.market__picture_table .ant-table {
+  background-color: transparent;
+  color: white;
+}
+
+.market__picture_table .ant-table-thead > tr > th {
+  background-color: transparent;
+  color: white;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.market__picture_table_template2 .ant-table-thead > tr > th {
+  background-color: transparent;
+  color: white;
+  padding: 8px 10px;
+  font-size: 16px;
+}
+
+.market__picture_table .ant-table-tbody > tr > td {
+  background-color: transparent;
+  color: white;
+  padding: 8px 10px;
+}
+
+.market__picture_table_template2 .ant-table-tbody > tr > td {
+  background-color: transparent;
+  color: white;
+  padding: 5px 10px;
+}
+
+
+.market__picture_table .ant-table-tbody > tr:hover > td {
+  background-color: transparent;
+}
+
+
+.market__picture_table .ant-table-cell {
+  background-color: transparent !important;
+}
+
+.market__picture_table .ant-table-wrapper table {
+  width: 520px;
+}
+
+.market__picture_table_template2 .ant-table-wrapper table {
+  width: 900px;
+}
+
+.market__picture_table .ant-table-cell::before {
+  width: 0 !important;
+}
+
+.market__picture_table_custom {
+  width: 100%;
+}
+
+.market__picture_table_template2 .ant-table-wrapper .ant-table-thead >tr>th,
+.market__picture_table_template2 .ant-table-wrapper .ant-table-thead >tr>td,
+.market__picture_table_template2 .ant-table-thead > tr > th,
+.market__picture_table_template2 .ant-table-tbody > tr > td {
+  border: none !important;
+}
+

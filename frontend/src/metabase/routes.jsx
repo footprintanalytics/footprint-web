@@ -793,8 +793,8 @@ export const getRoutes = store => (
             component={LazyLoad.Upgrade}
           />
           <Route
-            title={t`Picture`}
-            path="picture"
+            title={t`Week Report`}
+            path="week-report"
             component={LazyLoad.Market}
           />
         </Route>
