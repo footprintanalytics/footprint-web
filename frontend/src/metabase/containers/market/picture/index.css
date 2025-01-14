@@ -104,11 +104,13 @@
 .market__picture_title_date {
   color: white;
   font-size: 16px;
-  font-weight: bold;
   position: absolute;
-  font-family: "Arial Black", "Helvetica Black", sans-serif;
+  font-family: "Montserrat", sans-serif;
   top: 350px;
-  left: 110px;
+  left: 42px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .market__picture_title_date_template2 {
@@ -118,7 +120,10 @@
   position: absolute;
   font-family: "Montserrat", serif;
   bottom: 10px;
-  right: 50px;
+  right: 120px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .market__picture_table {

@@ -53,7 +53,7 @@ const array = [
   {
     title: "by Active User Growth \nWoW",
     template: "template1",
-    background: "https://static.footprint.network/img_market_picture_ranking.png",
+    background: "https://static.footprint.network/img_market_picture_ranking_v3.png",
     tableColumnFunction: (item) => getColumnsSettingByTemplate1(item),
     getApiUrl: (ignoreCache, dateValue) => {
       return getPublicCardUrl({
@@ -100,7 +100,7 @@ const array = [
   {
     title: "by New User Growth \nWoW",
     template: "template1",
-    background: "https://static.footprint.network/img_market_picture_ranking.png",
+    background: "https://static.footprint.network/img_market_picture_ranking_v3.png",
     tableColumnFunction: (item) => getColumnsSettingByTemplate1(item),
     getApiUrl: (ignoreCache, dateValue) => {
       return getPublicCardUrl({
@@ -147,7 +147,7 @@ const array = [
   {
     title: "by New User Retention \nWoW",
     template: "template1",
-    background: "https://static.footprint.network/img_market_picture_ranking.png",
+    background: "https://static.footprint.network/img_market_picture_ranking_v3.png",
     tableColumnFunction: (item) => getColumnsSettingByTemplate1(item),
     getApiUrl: (ignoreCache, dateValue) => {
       return getPublicCardUrl({
@@ -194,7 +194,7 @@ const array = [
   {
     title: "Top Games Ranked by Token Price WoW Growth Rate",
     template: "template2",
-    background: "https://static.footprint.network/img_market_picture_ranking_template2.png",
+    background: "https://static.footprint.network/img_market_picture_ranking_template2_v6.png",
     tableColumnFunction: (item) => getColumnsSettingByTemplate2(item),
     getApiUrl: (ignoreCache, dateValue) => {
       return getPublicCardUrl({
@@ -291,7 +291,7 @@ export const getColumnsSettingByTemplate1 = (item) => {
         if (!text) {
           return <span>-</span>
         }
-        return <span style={{ fontFamily: 'Montserrat, sans-serif' }}>{Number((text * 100).toFixed(2)).toLocaleString()}%</span>
+        return <span style={{ fontFamily: 'Montserrat, sans-serif' }}>{Number((text * 100).toFixed(1)).toLocaleString()}%</span>
       }
     },
     {
@@ -402,10 +402,11 @@ export const getColumnsSettingByTemplate2 = (item) => {
               position: 'relative',
               display: "flex",
               gap: 10,
+              alignItems: 'center',
             }}>
               <div style={{
                 width: `${260 * percentage}px`,
-                height: '100%',
+                height: '14px',
                 background: '#6D9FEC',
                 borderRadius: '3px',
                 display: 'flex',
@@ -418,7 +419,7 @@ export const getColumnsSettingByTemplate2 = (item) => {
                 fontSize: '14px',
                 color: 'white'
               }}>
-                {(value * 100).toFixed(2)}%
+                {(value * 100).toFixed(1)}%
               </span>
             </div>
           </div>

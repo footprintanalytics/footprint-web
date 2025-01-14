@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { message, Radio, Button, Table, Form, DatePicker, Input } from "antd";
-import { saveAs } from "file-saver";
-import html2canvas from "html2canvas";
 import "./index.css";
 import array from "metabase/containers/market/picture/data/data";
 import { getUser } from "metabase/selectors/user";
 import connect from "react-redux/lib/connect/connect";
 import moment from "moment-timezone";
+import { CalendarOutlined } from "@ant-design/icons";
+import { Checkbox } from 'metabase/core/components/CheckBox';
 const Market = props => {
   const { user } = props;
 
@@ -41,13 +41,13 @@ const Market = props => {
         {item?.template === "template1" && (<div className="market__picture_left">
             <span className="market__picture_title">Top Games</span>
             <span className="market__picture_title_sub">{title}</span>
-            <span className="market__picture_title_date">{startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, {endDate.getFullYear()}</span>
+            <span className="market__picture_title_date"><CalendarOutlined />{startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, {endDate.getFullYear()}</span>
           </div>
         )}
         {item?.template === "template2" && (
           <div>
             <span className="market__picture_title_sub_template2">{title}</span>
-            <span className="market__picture_title_date_template2">{startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, {endDate.getFullYear()}</span>
+            <span className="market__picture_title_date_template2"><CalendarOutlined />{startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, {endDate.getFullYear()}</span>
           </div>
         )}
         <div className={`market__picture_table ${item?.template === "template1" ? "market__picture_table_template1" : "market__picture_table_template2"}`}>
@@ -86,7 +86,7 @@ const Market = props => {
     setTitle(undefined);
 
     try {
-      const data = await item.parseData(item.getApiUrl(false, settingValues.date), settingValues.hideRow);
+      const data = await item.parseData(item.getApiUrl(settingValues.ignoreCache === "yes" ? true : false, settingValues.date), settingValues.hideRow);
       console.log("data", data)
       setData(data)
       setItem({...item, data})
@@ -103,6 +103,7 @@ const Market = props => {
       <div className="market__list">
         <Form
           onFinish={(values) => {
+            console.log("values", values)
             setSettingValues({
               ...values,
               date: values.date?.format('YYYY-MM-DD') || defaultDateStr,
@@ -125,6 +126,16 @@ const Market = props => {
             <Input
               placeholder="Enter row numbers to hide (e.g. 0,2,6)"
             />
+          </Form.Item>
+
+          <Form.Item
+            label="Ignore Cache"
+            name="ignoreCache"
+          >
+            <Radio.Group defaultValue={"no"}>
+              <Radio key="no" value={"no"}>No</Radio>
+              <Radio key="yes" value={"yes"}>Yes</Radio>
+            </Radio.Group>
           </Form.Item>
 
           <Form.Item
