@@ -259,7 +259,7 @@ export const getColumnsSettingByTemplate1 = (item) => {
     },
     {
       ...item?.tableColumns?.[1],
-      width: 240,
+      width: 200,
       render: (text) => {
         if (!text) {
           return <span>-</span>
@@ -275,7 +275,7 @@ export const getColumnsSettingByTemplate1 = (item) => {
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               display: 'block',
-              maxWidth: '240px'
+              maxWidth: '200px'
             }}
           >
             {text}
@@ -285,19 +285,17 @@ export const getColumnsSettingByTemplate1 = (item) => {
     },
     {
       ...item?.tableColumns?.[2],
-      width: 240,
       align: 'right',
       render: (text) => {
         if (!text) {
           return <span>-</span>
         }
-        return <span style={{ fontFamily: 'Montserrat, sans-serif' }}>{Number((text * 100).toFixed(1)).toLocaleString()}%</span>
+        return <span style={{ fontFamily: 'Montserrat, sans-serif' }}>{(text * 100).toFixed(1)}%</span>
       }
     },
     {
       ...item?.tableColumns?.[3],
       align: 'right',
-      width: 240,
       render: (text) => {
         if (!text) {
           return <span>-</span>
