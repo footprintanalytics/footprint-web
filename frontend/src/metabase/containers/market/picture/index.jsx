@@ -36,18 +36,35 @@ const Market = props => {
     const startDate = new Date(settingValues.date);
     startDate.setDate(endDate.getDate() - 6); // 获取前6天作为开始日期
 
+    function formatDateRange(startDate, endDate) {
+      const options = { month: 'short', day: 'numeric' };
+      const startYear = startDate.getFullYear();
+      const endYear = endDate.getFullYear();
+
+      const startStr = startDate.toLocaleDateString('en-US', options);
+      const endStr = endDate.toLocaleDateString('en-US', options);
+
+      if (startYear !== endYear) {
+        return `${startStr}, ${startYear} - ${endStr}, ${endYear}`;
+      } else if (startDate.getMonth() !== endDate.getMonth()) {
+        return `${startStr} - ${endStr}, ${endYear}`;
+      } else {
+        return `${startStr} - ${endStr}, ${endYear}`;
+      }
+    }
+
     return (
       <div id="snapshot" className="market__picture_root" style={{ backgroundImage: `url(${item.background})`}}>
         {item?.template === "template1" && (<div className="market__picture_left">
             <span className="market__picture_title">Top Games</span>
             <span className="market__picture_title_sub">{title}</span>
-            <span className="market__picture_title_date"><CalendarOutlined />{startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, {endDate.getFullYear()}</span>
+            <span className="market__picture_title_date"><CalendarOutlined />{formatDateRange(startDate, endDate)}</span>
           </div>
         )}
         {item?.template === "template2" && (
           <div>
             <span className="market__picture_title_sub_template2">{title}</span>
-            <span className="market__picture_title_date_template2"><CalendarOutlined />{startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, {endDate.getFullYear()}</span>
+            <span className="market__picture_title_date_template2"><CalendarOutlined />{formatDateRange(startDate, endDate)}</span>
           </div>
         )}
         <div className={`market__picture_table ${item?.template === "template1" ? "market__picture_table_template1" : "market__picture_table_template2"}`}>
