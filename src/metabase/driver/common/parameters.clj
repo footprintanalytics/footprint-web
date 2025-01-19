@@ -73,6 +73,11 @@
   (pretty [_]
     (list (pretty/qualify-symbol-for-*ns* `->DateRange) start end)))
 
+(p.types/defrecord+ StrRange [start end]
+  pretty/PrettyPrintable
+  (pretty [_]
+          (list (pretty/qualify-symbol-for-*ns* `->StrRange) start end)))
+
 ;; List of numbers to faciliate things like using params in a SQL `IN` clause. This is supported by both regular
 ;; filter clauses (e.g. `IN ({{ids}})` and in field filters. Field filters also support sequences of values other than
 ;; numbers, but these don't have a special record type. (TODO - we don't need a record type here, either. Just use a

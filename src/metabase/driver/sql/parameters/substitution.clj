@@ -7,6 +7,7 @@
      ;; ; any prepared statement args (values for `?` placeholders) needed for the replacement snippet
      :prepared-statement-args [#t \"2017-01-01\"]}"
   (:require [clojure.string :as str]
+            [clojure.tools.logging :as log]
             [honeysql.core :as hsql]
             [metabase.driver :as driver]
             [metabase.driver.common.parameters :as params]
@@ -29,7 +30,7 @@
            honeysql.types.SqlCall
            java.time.temporal.Temporal
            java.util.UUID
-           [metabase.driver.common.parameters CommaSeparatedNumbers Date DateRange FieldFilter MultipleValues ReferencedCardQuery ReferencedQuerySnippet]))
+           [metabase.driver.common.parameters CommaSeparatedNumbers Date StrRange DateRange FieldFilter MultipleValues ReferencedCardQuery ReferencedQuerySnippet]))
 
 ;;; ------------------------------------ ->prepared-substitution & default impls -------------------------------------
 
@@ -191,6 +192,22 @@
       {:replacement-snippet     (format "BETWEEN %s AND %s" (:sql-string start) (:sql-string end))
        :prepared-statement-args (concat (:param-values start) (:param-values end))})))
 
+(defmethod ->replacement-snippet-info [:sql StrRange]
+  [driver {:keys [start end]}]
+  (cond
+    (= start end)
+    (prepared-ts-subs driver \= start)
+
+    (nil? start)
+    (prepared-ts-subs driver \< end)
+
+    (nil? end)
+    (prepared-ts-subs driver \> start)
+
+    :else
+    {:replacement-snippet (format "BETWEEN '%s' AND '%s'" start end)
+     :prepared-statement-args []}))
+
 
 ;;; ------------------------------------- Field Filter replacement snippet info --------------------------------------
 
@@ -202,10 +219,37 @@
 
 ;; for relative dates convert the param to a `DateRange` record type and call `->replacement-snippet-info` on it
 (s/defn ^:private date-range-field-filter->replacement-snippet-info :- ParamSnippetInfo
-  [driver value]
-  (->> (params.dates/date-string->range value)
-       params/map->DateRange
-       (->replacement-snippet-info driver)))
+  [driver value base_type]
+  (if (and (string? value) (str/starts-with? value "past"))
+    (let [[main-part from-part] (str/split value #"-from-")
+          [_ amount unit suffix] (re-find #"past(\d+)(days|weeks|months|years)(~)?" main-part)
+          [_ from-amount from-unit] (when from-part
+                                    (re-find #"(\d+)(days|weeks|months|years)" from-part))
+          to-days (fn [n unit]
+                   (case unit
+                     "days" (Integer/parseInt n)
+                     "weeks" (* (Integer/parseInt n) 7)
+                     "months" (* (Integer/parseInt n) 30)
+                     "years" (* (Integer/parseInt n) 365)))
+          days (to-days amount unit)
+          from-days (when from-amount
+                     (to-days from-amount from-unit))
+          inclusive? (= suffix "~")
+          start (format "date_add('day', -%d, current_date)"
+                       (if from-days
+                         (+ days from-days)
+                         days))
+          end (format "date_add('day', %d, current_date)"
+                     (if from-days
+                       (* -1 (if (= base_type :type/Date) (+ from-days 1) from-days))
+                       (if (= base_type :type/Date)
+                         (if inclusive? 0 -1)
+                         (if inclusive? 1 0))))]
+      {:replacement-snippet (format "BETWEEN %s AND %s" start end)
+       :prepared-statement-args []})
+    (->> (params.dates/date-string->range value)
+         params/map->DateRange
+         (->replacement-snippet-info driver))))
 
 (s/defn ^:private field-filter->equals-clause-sql :- ParamSnippetInfo
   [driver value]
@@ -284,7 +328,7 @@
         {:replacement-snippet snippet, :prepared-statement-args (vec args)})
       ;; convert date ranges to DateRange record types
       (params.dates/date-range-type? param-type) (prepend-field
-                                                  (date-range-field-filter->replacement-snippet-info driver value))
+                                                  (date-range-field-filter->replacement-snippet-info driver value (:base_type field)))
       ;; convert all other dates to `= <date>`
       (params.dates/date-type? param-type)       (prepend-field
                                                   (field-filter->equals-clause-sql driver (params/map->Date {:s value})))
