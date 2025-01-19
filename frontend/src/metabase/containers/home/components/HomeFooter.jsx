@@ -15,7 +15,7 @@ import { FooterData } from "metabase/containers/home/data";
 const HomeFooter = props => {
   const { style } = props;
   // const emailRef = React.createRef();
-
+  const year = new Date().getFullYear();
   return (
     <footer className="home-footer-container footprint-primary-text" style={style}>
       <div className="home-footer">
@@ -31,7 +31,7 @@ const HomeFooter = props => {
             Disclaimer: All data and articles on Footprint Analytics are for informational purposes only, and do not constitute any investment advice.
           </span>
           <div className="flex align-baseline" style={{ gap: 24 }}>
-            <span>© 2024 Footprint Analytics</span>
+            <span>© {year} Footprint Analytics</span>
             <div className="flex" style={{ gap: 16 }}>
               <Link to={"https://static.footprint.network/site/privacy-policy.html"} target="_blank">
                 <span>Privacy Policy</span>
