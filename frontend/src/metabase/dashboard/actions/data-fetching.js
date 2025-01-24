@@ -420,6 +420,18 @@ export const fetchCardData = createThunkAction(
   },
 );
 
+function calculateConcurrency(length) {
+  let concurrency = 6;
+  const step = 20;
+
+  if (length > step) {
+    const decrement = Math.floor(length / step) * 2;
+    concurrency = Math.max(1, concurrency - decrement);
+  }
+
+  return concurrency;
+}
+
 export const fetchDashboardCardData = createThunkAction(
   FETCH_DASHBOARD_CARD_DATA,
   options => (dispatch, getState) => {
@@ -432,11 +444,11 @@ export const fetchDashboardCardData = createThunkAction(
       })
       .filter(p => !!p)
       .filter(p => !options.cardIds || options.cardIds?.includes(p.card?.id));
-    // Optimized requests, concurrent 8
+    // Optimized requests, concurrent 6, and reduce the concurrency by 2 for every 20 charts, finally to 1
     if (tasks.length) {
       dispatch(setDocumentTitle(t`0/${tasks.length} loaded`));
-
-      const limit = promiseLimit(8)
+      const concurrency = calculateConcurrency(tasks.length);
+      const limit = promiseLimit(concurrency);
       Promise.all(
         tasks.map(({ card, dashcard }, inx) => {
           return limit(() => doPromise(card, dashcard, inx))
