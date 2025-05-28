@@ -106,6 +106,10 @@ export const FooterData = [
         label: "YouTube",
         url: "https://www.youtube.com/channel/UCKwZbKyuhWveetGhZcNtSTg",
       },
+      {
+        label: "OmniMCP",
+        url: "https://www.omnimcp.ai",
+      },
     ],
   },
 ];
