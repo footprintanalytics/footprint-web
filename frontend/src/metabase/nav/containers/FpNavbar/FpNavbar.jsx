@@ -108,6 +108,12 @@ const leftMenuData = [
         link: "https://growthly.footprint.network/admin",
         externalLink: true,
       },
+      {
+        title: "OmniMCP",
+        desc: "AI agent + blockchain data + Web3 MCP Marketplace for next-gen Agentic apps.",
+        link: "https://www.omnimcp.ai",
+        externalLink: true,
+      }
     ],
   },
   {
