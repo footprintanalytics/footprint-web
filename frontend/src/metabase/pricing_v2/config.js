@@ -90,70 +90,70 @@ export const getComparePlans = ({
       //   ],
       // },
     },
-    {
-      label: "Business",
-      value: "business",
-      desc: "Build Advanced on-chain & off-chain analytics",
-      price: "$299",
-      unit: "month",
-      yearlyPrice: "$239",
-      yearlySaving: "20%",
-      currentSubscriptionProductId: getCurrentSubscriptionProductId({
-        subscriptionDetailList,
-        service: "footprint",
-        groupType: "business",
-      }),
-      isSubscribe: isStripeSubscribe({
-        subscriptionDetailList,
-        service: "footprint",
-        groupType: "business",
-      }),
-      btnText:
-        !isStripeSubscribe({
-          subscriptionDetailList,
-          service: "footprint",
-          groupType: "business",
-        }) && canBusinessSevenTrial
-          ? "$29 for 7-day Trial"
-          : "Renewal",
-      btnAction: "subscribe",
-      btnDisabled: isStripeSubscribe({
-        subscriptionDetailList,
-        service: "footprint",
-        groupType: "business",
-      }),
-      features: [
-        "Access to full history data",
-        "10G data limit per query",
-        "Unlimited CSV uploads",
-        "Unlimited API uploads",
-        "Unlimited CSV downloads",
-      ],
-      benefits: {
-        title: "All the benefits of Free, plus:",
-        list: [
-          "Keep uploaded data private",
-          "Keep dashboard private",
-          "Remove dashboard watermarks",
-          "Reference Data",
-        ],
-      },
-      // dataApi: {
-      //   title: "Data API (Growth)",
-      //   list: [
-      //     "300K calls per month",
-      //     "10000 calls per day",
-      //     "10 calls per second",
-      //     "6 months historical data",
-      //     "10 rows data return (static endpoint)",
-      //     "100 rows data return (non-static endpoint)",
-      //     "Quick performance",
-      //     "Community support",
-      //     "REST API: Easy to access",
-      //     "24hrs support response time",
-      //   ],
-      // },
-    },
+    // {
+    //   label: "Business",
+    //   value: "business",
+    //   desc: "Build Advanced on-chain & off-chain analytics",
+    //   price: "$299",
+    //   unit: "month",
+    //   yearlyPrice: "$239",
+    //   yearlySaving: "20%",
+    //   currentSubscriptionProductId: getCurrentSubscriptionProductId({
+    //     subscriptionDetailList,
+    //     service: "footprint",
+    //     groupType: "business",
+    //   }),
+    //   isSubscribe: isStripeSubscribe({
+    //     subscriptionDetailList,
+    //     service: "footprint",
+    //     groupType: "business",
+    //   }),
+    //   btnText:
+    //     !isStripeSubscribe({
+    //       subscriptionDetailList,
+    //       service: "footprint",
+    //       groupType: "business",
+    //     }) && canBusinessSevenTrial
+    //       ? "$29 for 7-day Trial"
+    //       : "Renewal",
+    //   btnAction: "subscribe",
+    //   btnDisabled: isStripeSubscribe({
+    //     subscriptionDetailList,
+    //     service: "footprint",
+    //     groupType: "business",
+    //   }),
+    //   features: [
+    //     "Access to full history data",
+    //     "10G data limit per query",
+    //     "Unlimited CSV uploads",
+    //     "Unlimited API uploads",
+    //     "Unlimited CSV downloads",
+    //   ],
+    //   benefits: {
+    //     title: "All the benefits of Free, plus:",
+    //     list: [
+    //       "Keep uploaded data private",
+    //       "Keep dashboard private",
+    //       "Remove dashboard watermarks",
+    //       "Reference Data",
+    //     ],
+    //   },
+    //   // dataApi: {
+    //   //   title: "Data API (Growth)",
+    //   //   list: [
+    //   //     "300K calls per month",
+    //   //     "10000 calls per day",
+    //   //     "10 calls per second",
+    //   //     "6 months historical data",
+    //   //     "10 rows data return (static endpoint)",
+    //   //     "100 rows data return (non-static endpoint)",
+    //   //     "Quick performance",
+    //   //     "Community support",
+    //   //     "REST API: Easy to access",
+    //   //     "24hrs support response time",
+    //   //   ],
+    //   // },
+    // },
     {
       label: "Team",
       value: "team",

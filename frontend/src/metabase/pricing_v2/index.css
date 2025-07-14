@@ -119,11 +119,11 @@
   padding-top: calc((1320px - 1260px) / 2px + 50px);
 }
 
-.Pricing__select-item:last-child {
+/* .Pricing__select-item:last-child {
   border-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
-}
+} */
 
 .Pricing__select-item h2 {
   font-size: 36px;
@@ -153,9 +153,9 @@
   color: #3434b2;
 }
 
-.Pricing__select-item:last-child .Pricing__select-price-main b {
+/* .Pricing__select-item:last-child .Pricing__select-price-main b {
   font-size: 36px;
-}
+} */
 
 .Pricing__select-price-main small {
   font-size: 14px;

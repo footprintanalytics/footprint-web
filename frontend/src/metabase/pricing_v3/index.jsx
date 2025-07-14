@@ -25,10 +25,10 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
   const [status, setStatus] = useState(location?.query?.type || "batch-download");
 
   const tabData = [
-    {
-      title: "Batch Download",
-      value: "batch-download",
-    },
+    // {
+    //   title: "Batch Download",
+    //   value: "batch-download",
+    // },
     {
       title: "Footprint Analytics",
       value: "footprint",
