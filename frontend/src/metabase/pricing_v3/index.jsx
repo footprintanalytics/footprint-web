@@ -22,8 +22,8 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
   const sign = () =>
     setLoginModalShow({ show: true, from: "handle_pay_data_api" });
 
-  const [status, setStatus] = useState(location?.query?.type || "batch-download");
-
+  const [status, setStatus] = useState(location?.query?.type || "footprint");
+  
   const tabData = [
     // {
     //   title: "Batch Download",
