@@ -49,7 +49,7 @@ A variety of chart types to choose from, such as line, bar, pie, area, etc. Disp
 ![footprint web visualisation](https://static.footprint.network/github/footprint-web-visualisation.png)
 * [Dashboards](https://docs.footprint.network/docs/create)
 
-Different charts can be added to the dashboad, arranging their position and size in order to better display the data. Filtering conditions are also supported. Dashboard can be embedded into other websites.
+Different charts can be added to the dashboard, arranging their position and size in order to better display the data. Filtering conditions are also supported. Dashboard can be embedded into other websites.
 
 ![footprint web dashboard](https://static.footprint.network/github/footprint-web-dashboard.png)
 
@@ -82,7 +82,7 @@ On a most recent stable Ubuntu/Debian, all the tools above, with the exception o
 $ sudo apt install openjdk-11-jdk nodejs && sudo npm install --global yarn
 ``` 
     
-If you have multiple JDK versions installed in your machine, be sure to switch your JDK before building with:
+If you have multiple JDK versions installed on your machine, be sure to switch your JDK before building with:
 
 ```
 $ sudo update-alternatives --config java
