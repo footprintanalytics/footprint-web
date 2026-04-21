@@ -204,9 +204,9 @@ export default class SelectionModule extends Component {
       });
 
       let searchBar;
-      if (this._enableSearch()) {
-        searchBar = <SearchBar onFilter={this._filterSelections} />;
-      }
+      // if (this._enableSearch()) {
+      //   searchBar = <SearchBar onFilter={this._filterSelections} />;
+      // }
 
       return (
         <Popover

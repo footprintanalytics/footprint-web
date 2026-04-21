@@ -760,13 +760,13 @@ class FpNavbar extends Component {
           </div>
           <div className="flex">
             <LeftMenu />
-            <div className="Nav__search-bar">
-              <SearchBar
-                location={location}
-                onChangeLocation={onChangeLocation}
-                isDark={isDark()}
-              />
-            </div>
+            {/*<div className="Nav__search-bar">*/}
+            {/*  <SearchBar*/}
+            {/*    location={location}*/}
+            {/*    onChangeLocation={onChangeLocation}*/}
+            {/*    isDark={isDark()}*/}
+            {/*  />*/}
+            {/*</div>*/}
             <div className="Nav__mobile-logo">
               <Link
                 className="Nav__logo"
