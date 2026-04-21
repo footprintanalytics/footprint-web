@@ -44,6 +44,15 @@ export const FooterData = [
         url: "/submit/contract",
         startNewPanel: true,
       },
+      {
+        label: "Maybe AI",
+        url: "https://www.maybe.ai",
+        startNewPanel: true,
+      },
+      {
+        label: "OmniMCP",
+        url: "https://www.omnimcp.ai",
+      },
     ],
   },
   {
@@ -105,10 +114,6 @@ export const FooterData = [
       {
         label: "YouTube",
         url: "https://www.youtube.com/channel/UCKwZbKyuhWveetGhZcNtSTg",
-      },
-      {
-        label: "OmniMCP",
-        url: "https://www.omnimcp.ai",
       },
     ],
   },
